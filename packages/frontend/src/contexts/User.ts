@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import { makeAutoObservable } from 'mobx'
 import { ZkIdentity, Strategy, stringifyBigInts } from '@unirep/utils'
 import { UserState } from '@unirep/core'
-import { DataProof } from '@unirep-app/circuits'
+import { DataProof } from '@unirep-app/circuits/'
 import { provider, UNIREP_ADDRESS, APP_ADDRESS, SERVER } from '../config'
 import prover from './prover'
 
