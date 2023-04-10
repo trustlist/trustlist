@@ -20,7 +20,7 @@ yarn build &&
 yarn start
 ```
 
-Then the frontend will be running at: http://localhost:3000/
+Then the frontend will be running at: http://127.0.0.1:3000/
 
 ## 2.2 Start with each daemon
 
@@ -58,4 +58,4 @@ in new terminal window, from root:
 yarn frontend start
 ```
 
-It will be running at: http://localhost:3000/
+It will be running at: http://127.0.0.1:3000/
