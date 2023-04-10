@@ -1,0 +1,99 @@
+p {
+  font-size: 0.9rem;
+  font-weight: 100;
+  margin: 0.5rem;
+}
+
+.content {
+    border-radius: 0.5rem;
+    border: 0.2rem solid rgb(238, 235, 235);
+    display: grid;
+    grid-template-columns: 15% 15% 70%;
+    margin: 1rem 4rem;
+}
+
+.sections {
+    background-color: rgb(238, 235, 235);
+    text-align: right;
+}
+
+.section-item {
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+}
+
+.categories {
+    padding: 1.2rem 2rem;
+}
+
+.category-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.message {
+    font-size: 1.2rem;
+    padding: 1.2rem 4rem;
+}
+
+.dark-bg {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.centered {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal {
+  width: 800px;
+  height: 500px;
+  padding: 1.5rem;
+  background: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+input[type=submit] {
+  border: 0.15rem blue solid;
+  border-radius: 0.3rem;
+  color: blue;
+  padding: 0.8rem 2rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.close-btn {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid blue;
+  font-size: 18px;
+  background: white;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-self: flex-end;
+  margin-top: -7px;
+  margin-right: -7px;
+}
+
+.close-btn:hover {
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  transform: translate(-4px, 4px);
+}

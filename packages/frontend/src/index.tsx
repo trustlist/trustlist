@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './pages/Header'
-import Start from './pages/Start'
+import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import './index.css'
 
@@ -11,7 +11,7 @@ export default function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Header />}>
-                    <Route index element={<Start />} />
+                    <Route index element={<Home />} />
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>
             </Routes>

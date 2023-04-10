@@ -6,14 +6,16 @@
 }
 
 .button-inner {
-    border-radius: 32px;
+    border-radius: 0.3rem;
+    border: 0.15rem blue solid;
     cursor: pointer;
     font-weight: 600;
     user-select: none;
     text-align: center;
-    font-size: 20px;
-    background-color: #a0d8db;
-    padding: 16px 48px;
+    font-size: 1rem;
+    color: blue;
+    background-color: rgb(189, 187, 187);
+    padding: 0.7rem 2rem;
     -webkit-user-select: none;
     -ms-user-select: none;
 }
