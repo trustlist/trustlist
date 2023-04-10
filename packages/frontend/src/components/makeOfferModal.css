@@ -1,0 +1,35 @@
+.nested {
+  width: 730px;
+  height: 280px;
+  padding: 1.5rem;
+  background: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+.offer-content {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: 60% 40%;
+  color: blue;
+}
+
+.offer-container {
+  width: 80%;
+  background-color: rgb(238, 235, 235);
+  border-radius: 0.4rem;
+  margin: 2rem 0 2rem 3rem;
+  padding: 2rem;
+}
+
+.offer-input {
+  width: 200px;
+  margin: 0.3rem;
+}
+
+.offer-buttons {
+  display: flex;
+  flex-direction: column;
+}
