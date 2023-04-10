@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MemberDashboardModal from '../components/MemberDashboardModal';
-// import NewListingModal from '../components/NewListingModal';
+import NewListingModal from '../components/NewListingModal';
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip';
 import './header.css'
@@ -14,7 +14,7 @@ export default observer(() => {
   const user = React.useContext(User)
 
   const [remainingTime, setRemainingTime] = React.useState<number | string>(0)
-  const [newListingIsOpen, setNewListingIsOpen] = React.useState<boolean>(false)
+  const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
   const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
 
   const updateTimer = () => {
@@ -69,8 +69,8 @@ export default observer(() => {
             <div className='action-item'>
                 {user.hasSignedUp ? (
                   <>
-                    <button onClick={()=> setNewListingIsOpen(true)}>list 🖌️</button>
-                    {/* {newListingIsOpen && <NewListingModal setNewListingIsOpen={setNewListingIsOpen}/>} */}
+                    <button onClick={()=> setShowNewListing(true)}>list 🖌️</button>
+                    {showNewListing && <NewListingModal setShowNewListing={setShowNewListing}/>}
                   </>
                 ) : (
                   <button style={{cursor: 'not-allowed'}}>list 🖌️</button>
