@@ -55,13 +55,6 @@ h5:hover {
   font-weight: 600;
 }
 
-.graffiti {
-  color: rgb(41, 40, 40);
-  font-weight: 600;
-  margin-left: 50px;
-  word-break: break-all;
-}
-
 .transition {
   display: flex;
   align-items: center;

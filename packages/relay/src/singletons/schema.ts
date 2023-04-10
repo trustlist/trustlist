@@ -20,6 +20,31 @@ const _schema = [
             ['nonce', 'Int'],
         ],
     },
+    {
+        name: 'for sale',
+        primaryKey: '_id',
+        rows: [
+            ['section', 'String'],
+            ['category', 'String'],
+            ['title', 'String'],
+            ['amount', 'String'],
+            ['amountType', 'String'],
+            ['description', 'String'],
+            ['posterId', 'String'],
+            ['score1', 'String'],
+            ['score2', 'String'],
+            ['score3', 'String'],
+            ['score4', 'String'],
+            ['responderId', 'String'],
+            ['offerAmount', 'String'],
+            ['rScore1', 'String'],
+            ['rScore2', 'String'],
+            ['rScore3', 'String'],
+            ['rScore4', 'String'],
+            ['dealOpened', 'Bool'],
+            ['dealClosed', 'Bool'],
+        ],
+    },
 ]
 
 export default _schema
