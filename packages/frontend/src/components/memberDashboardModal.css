@@ -1,0 +1,75 @@
+h3 {
+  color: blue;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+h5 {
+  color: rgb(41, 40, 40);
+  font-size: 0.8rem;
+  font-weight: 200;
+  margin: 0.4rem;
+  cursor: pointer;
+}
+
+h5:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
+.dash-content {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  column-gap: 1.5rem;
+}
+
+.stats-container {
+  background-color: rgb(244, 241, 241);
+  border-radius: 0.4rem;
+  border: 2px solid rgb(218, 217, 217);
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: 1fr 20% 1fr;
+}
+
+.scroll-container {
+  background-color: rgb(249, 246, 246);
+  border-radius: 0.4rem;
+  border: 2px solid rgb(238, 235, 235);
+  height: 4.7rem;
+  overflow: scroll;
+  margin: 0.1rem 0rem 1.2rem 0.5rem;
+  padding: 0.2rem 1rem;
+}
+
+.info-item {
+  color: rgb(41, 40, 40);
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+  align-items: center; 
+}
+
+.stat {
+  font-weight: 600;
+}
+
+.graffiti {
+  color: rgb(41, 40, 40);
+  font-weight: 600;
+  margin-left: 50px;
+  word-break: break-all;
+}
+
+.transition {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.line {
+  background-color: blue;
+  height: 0.1rem;
+  width: 100%;
+}

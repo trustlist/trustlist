@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-// import MemberDashboardModal from '../components/MemberDashboardModal';
+import MemberDashboardModal from '../components/MemberDashboardModal';
 // import NewListingModal from '../components/NewListingModal';
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip';
@@ -14,8 +14,8 @@ export default observer(() => {
   const user = React.useContext(User)
 
   const [remainingTime, setRemainingTime] = React.useState<number | string>(0)
-  const [newListingIsOpen, setNewListingIsOpen] = React.useState(false)
-  const [memberDashIsOpen, setMemberDashIsOpen] = React.useState(false)
+  const [newListingIsOpen, setNewListingIsOpen] = React.useState<boolean>(false)
+  const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
 
   const updateTimer = () => {
     if (!user.userState) {
@@ -38,7 +38,7 @@ export default observer(() => {
           <div style={{display: 'flex'}}>
             <div className='app-title'><Link to='/'>trustlist</Link></div>
             {/* <div className='app-title'><Link to='/'>zk<span style={{fontSize: '1.5rem', fontWeight: '200'}}>lassified</span></Link></div> */}
-            {/* <Link to='/dashboard'><button>old dashboard</button></Link> */}
+            <Link to='/dashboard'><button>old dashboard</button></Link>
             {/* <Tooltip text='time until next epoch; all current listings will expire at the end of this epoch'></Tooltip> */}
             <div style={{paddingLeft: '2rem'}}>
               <div>epoch: {user.userState?.sync.calcCurrentEpoch()}</div>
@@ -59,8 +59,8 @@ export default observer(() => {
             <div className='action-item'>
                 {user.hasSignedUp ? (
                     <>
-                      <button onClick={()=> setMemberDashIsOpen(true)}>my TL</button>
-                      {/* {memberDashIsOpen && <MemberDashboardModal setMemberDashIsOpen={setMemberDashIsOpen}/>} */}
+                      <button onClick={()=> setShowMemberDash(true)}>my TL</button>
+                      {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>}
                     </>
                 ) : (
                       <button style={{cursor: 'not-allowed'}}>my TL</button>

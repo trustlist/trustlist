@@ -1,0 +1,28 @@
+.form-content {
+  display: grid;
+  grid-template-columns: 15% 15% 70%;
+}
+
+.form-container {
+  background-color: rgb(238, 235, 235);
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.form-flex {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem 0;
+}
+
+.form-input-sm {
+  width: 200px;
+  margin-right: 0.8rem;
+}
+
+.form-textarea {
+  width: 450px;
+  height: 100px;
+  margin-top: 0;
+}
