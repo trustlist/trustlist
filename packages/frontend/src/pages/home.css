@@ -75,6 +75,15 @@ input[type=submit] {
   cursor: pointer;
 }
 
+.blocked {
+  border: 0.15rem rgb(154, 152, 152) solid;
+  border-radius: 0.3rem;
+  color: rgb(154, 152, 152);
+  padding: 0.8rem 2rem;
+  margin-left: 0.5rem;
+  cursor: not-allowed;
+}
+
 .close-btn {
   cursor: pointer;
   font-weight: 500;
