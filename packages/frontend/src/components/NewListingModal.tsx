@@ -148,7 +148,7 @@ export default observer(({ setShowNewListing }: Props) => {
                             .map((_, i) => {
                                 return (
                                     <div key={i}>
-                                        <label htmlFor={`score${i +1}`}>prove Score {i + 1}</label>
+                                        <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label>
                                         <input
                                             style={{width: '6rem'}}
                                             type='text'

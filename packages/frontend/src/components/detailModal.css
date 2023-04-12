@@ -6,7 +6,7 @@
 .action-bar {
   display: flex;
   justify-content: space-between;
-  padding: 0 7rem 1rem 0;
+  padding: 0 17rem 2rem 0;
 }
 
 .action-item {
@@ -31,6 +31,8 @@
 }
 
 .trust-item {
+  display: flex;
+  justify-content: space-between;
   background-color: rgb(244, 241, 241);
   border-radius: 0.3rem;
   border: 1px solid rgb(218, 217, 217);
@@ -40,7 +42,12 @@
   padding: 0.2rem;
 }
 
-.trust-scroll {
+.offers-container {
+  margin: 2rem 4rem;
+  width: 80%;
+}
+
+.offer-scroll {
   background-color: rgb(249, 246, 246);
   border-radius: 0.4rem;
   border: 2px solid rgb(238, 235, 235);
@@ -48,6 +55,7 @@
   overflow: scroll;
   margin: 0.1rem 0rem 1.2rem 0.5rem;
   padding: 0.2rem 1rem;
+  font-size: 0.8rem;
 }
 
 .accept {

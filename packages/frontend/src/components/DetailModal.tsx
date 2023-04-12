@@ -78,39 +78,57 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 <div>{listing.description}</div>
               </div>
               <div className='trust-container'>
-                <div className='trust-item'>score1: <span style={{fontWeight: '600'}}>{listing.score1}</span></div>
-                <div className='trust-item'>score2: <span style={{fontWeight: '600'}}>{listing.score2}</span></div>
-                <div className='trust-item'>score3: <span style={{fontWeight: '600'}}>{listing.score3}</span></div>
-                <div className='trust-item'>score4: <span style={{fontWeight: '600'}}>{listing.score4}</span></div>
+                <div className='trust-item'>
+                  <div>Score 1: </div>
+                  <div style={{fontWeight: '600'}}>{listing.score1}</div>
+                  <Tooltip text='explain what this score represents'/>
+                </div>
+                <div className='trust-item'>
+                  <div>Score 2: </div>
+                  <div style={{fontWeight: '600'}}>{listing.score2}</div>
+                  <Tooltip text='explain what this score represents'/>
+                </div>
+                <div className='trust-item'>
+                  <div>Score 3: </div>
+                  <div style={{fontWeight: '600'}}>{listing.score3}</div>
+                  <Tooltip text='explain what this score represents'/>
+                </div>
+                <div className='trust-item'>
+                  <div>Score 4: </div>
+                  <div style={{fontWeight: '600'}}>{listing.score4}</div>
+                  <Tooltip text='explain what this score represents'/>
+                </div>
               </div>  
             </div>
 
-            <div style={{color: 'blue'}}>pending offers</div>
-            <div className='trust-scroll'>
-                {listing.responderId ? 
-                  <div>
-                    ${listing.offerAmount} - member: {listing.responderId} - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
-                    <Link to={`deal/${listing._id}`}>
-                      <button 
-                        className='accept' 
-                        onClick={() => {
-                          app.updateDeal(listing._id, 'open')
-                          setDealIsActive(true)
-                        }}
-                      >
-                        accept deal
-                      </button>
-                    </Link>
-                    {dealIsActive ? 
-                      <>
-                        <hr/>
-                        <div style={{color: 'red'}}>your deal is now active!</div>
-                        <div>use your dashboard to submit your attestation before the end of this epoch</div>
-                        {/* <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button> */}
-                      </> : null}
+            <div className='offers-container'>
+              <div style={{color: 'blue'}}>pending offers</div>
+              <div className='offer-scroll'>
+                  {listing.responderId ? 
+                    <div>
+                      ${listing.offerAmount} - member: {listing.responderId} - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
+                      <Link to={`deal/${listing._id}`}>
+                        <button 
+                          className='accept' 
+                          onClick={() => {
+                            app.updateDeal(listing._id, 'open')
+                            setDealIsActive(true)
+                          }}
+                        >
+                          accept deal
+                        </button>
+                      </Link>
+                      {dealIsActive ? 
+                        <>
+                          <hr/>
+                          <div style={{color: 'red'}}>your deal is now active!</div>
+                          <div>use your dashboard to submit your attestation before the end of this epoch</div>
+                          {/* <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button> */}
+                        </> : null}
 
-                  </div>
-                  : 'no offers yet' }
+                    </div>
+                    : 'no offers yet' }
+              </div>
             </div>
             
             <button className='close-btn' onClick={() => setShowDetail(false)}>X</button>

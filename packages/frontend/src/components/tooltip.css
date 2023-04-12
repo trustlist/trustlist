@@ -4,8 +4,8 @@
 
 .tooltip-popup {
     padding: 12px;
-    background: black;
-    z-index: 100000;
+    background: blue;
+    z-index: 10;
     position: absolute;
     border-radius: 8px;
     display: flex;
@@ -15,5 +15,5 @@
     font-size: 12px;
     font-weight: normal;
     line-height: 20px;
-    color: #a0d8db;
+    color: white;
 }
