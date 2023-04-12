@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import Button from '../components/Button'
-// import DetailModal from './DetailModal'
+import DetailModal from './DetailModal'
 import './memberDashboardModal.css'
 
 import Trustlist from '../contexts/Trustlist'
@@ -14,6 +14,13 @@ type Props = {
 export default observer(({ setShowMemberDash }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
+
+  React.useEffect(() => {
+    const loadData = async () => {
+      await app.loadMemberActivity('', '12345', '09876')
+    }
+    loadData()
+  }, [])
 
   return (
     <div 
