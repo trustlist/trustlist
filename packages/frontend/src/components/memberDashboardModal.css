@@ -5,6 +5,13 @@ h3 {
   margin-top: 2rem;
 }
 
+h4 {
+  color: blue;
+  font-size: 1rem;
+  font-weight: 200;
+  margin: 0.1rem;
+}
+
 h5 {
   color: rgb(41, 40, 40);
   font-size: 0.8rem;
@@ -20,24 +27,31 @@ h5:hover {
 
 .dash-content {
   display: grid;
-  grid-template-columns: 35% 1fr;
+  grid-template-columns: 38% 1fr;
   column-gap: 1.5rem;
+  padding: 1rem;
 }
 
 .stats-container {
   background-color: rgb(244, 241, 241);
   border-radius: 0.4rem;
   border: 2px solid rgb(218, 217, 217);
-  padding: 1rem;
+  padding: 0.25rem 1rem;
   display: grid;
   grid-template-rows: 1fr 20% 1fr;
+}
+
+.activity-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .scroll-container {
   background-color: rgb(249, 246, 246);
   border-radius: 0.4rem;
   border: 2px solid rgb(238, 235, 235);
-  height: 4.7rem;
+  height: 5.7rem;
   overflow: scroll;
   margin: 0.1rem 0rem 1.2rem 0.5rem;
   padding: 0.2rem 1rem;
@@ -45,10 +59,12 @@ h5:hover {
 
 .info-item {
   color: rgb(41, 40, 40);
+  font-size: 1rem;
   display: flex;
   flex-direction:row;
   justify-content: space-between;
   align-items: center; 
+  padding: 0 3rem 0 2rem;
 }
 
 .stat {
@@ -58,7 +74,7 @@ h5:hover {
 .transition {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin: 3rem 0 4rem;
 }
 
 .line {

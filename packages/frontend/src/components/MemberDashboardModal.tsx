@@ -27,38 +27,24 @@ export default observer(({ setShowMemberDash }: Props) => {
               
               <div className="stats-container"> 
                 <div>  
-                  <div className='info-item'>
+                  <div>
                     <h3>my latest trust scores:</h3>
                   </div>
                   {user.data.map((data, i) => {
                     return (
                       <div key={i} className="info-item">
-                        <div>Score {i}</div>
-                        <div className="stat">
-                          {(data || 0).toString()}
-                        </div>
+                        {i < 4 ? (
+                          <>
+                            <div>Score {i + 1}</div>
+                            <div className="stat">
+                              {(data || 0).toString()}
+                            </div>
+                          </>
+                        ) : null }
                       </div>
                     )
                   })}
-                  {/* <div className='info-item'>
-                    <div>score 1</div>
-                    <div className='stat'>{user.reputation.posRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 2</div>
-                    <div className='stat'>{user.reputation.negRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 3</div>
-                    <div className='stat'>{user.reputation.posRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 4</div>
-                    <div className='stat'>{user.reputation.negRep?.toString()}</div>
-                  </div> */}
-                </div>
-
-                
+                </div>                
 
                 <div className='transition'>
                   <div className='line'></div>
@@ -67,70 +53,46 @@ export default observer(({ setShowMemberDash }: Props) => {
                 </div>
 
                 <div>
-                  <div className='info-item'>
+                  <div>
                     <h3>my provable trust scores:</h3>
                   </div>
                   {user.provableData.map((data, i) => {
                     return (
                       <div key={i} className="info-item">
-                        <div>Scores {i}</div>
-                        <div className="stat">
-                          {(data || 0).toString()}
-                        </div>
+                        {i < 4 ? (
+                          <>
+                            <div>Score {i + 1}</div>
+                            <div className="stat">
+                              {(data || 0).toString()}
+                            </div>
+                          </>
+                        ) : null }
                       </div>
                     )
                   })}
-                  {/* <div className='info-item'>
-                    <div>score 1</div>
-                    <div className='stat'>{user.provableReputation.posRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 2</div>
-                    <div className='stat'>{user.provableReputation.negRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 3</div>
-                    <div className='stat'>{user.reputation.posRep?.toString()}</div>
-                  </div>
-                  <div className='info-item'>
-                    <div>score 4</div>
-                    <div className='stat'>{user.reputation.negRep?.toString()}</div>
-                  </div> */}
-
                 </div>
               </div>
 
               <div className='activity-container'>
-                <div>awaiting my review</div>
+                <h4>awaiting my review</h4>
                 <div className='scroll-container'>
                   <h5>$  title of some listing / $250</h5>
                   <h5>$  the title of a different listing / $50</h5>
-                  <h5>$  some other listing with a short description/ $100</h5>
-                  <h5>$  hopefully i can figure out how to open these from here / $20</h5>
-                  <h5>$  title of some listing / $250</h5>
-                  <h5>$  title of some listing / $250</h5>
+                  
                 </div> 
-                <div>my open listings</div>
+                <h4>my open listings</h4>
                 <div className='scroll-container'>
                   <h5>$  the title of a different listing / $50</h5>
                   <h5>$  some other listing with a short description/ $100</h5>
                 </div>
-                <div>my pending offers</div>
+                <h4>my pending offers</h4>
                 <div className='scroll-container'>
                   <h5>$  the title of a different listing / $50</h5>
                   <h5>$  some other listing with a short description/ $100</h5>
-                </div>
-                <div>my closed deals</div>
-                <div className='scroll-container'>
-                  <h5>$  title of some listing / $250</h5>
-                  <h5>$  the title of a different listing / $50</h5>
                   <h5>$  some other listing with a short description/ $100</h5>
-                  <h5>$  hopefully i can figure out how to open these from here / $20</h5>
-                  <h5>$  title of some listing / $250</h5>
                   <h5>$  title of some listing / $250</h5>
                 </div>
-              </div>
-              
+              </div>             
             </div>
 
             <button className='close-btn' onClick={() => setShowMemberDash(false)}>X</button>

@@ -13,13 +13,13 @@ export default observer(() => {
 
   const user = React.useContext(User)
 
-  const [remainingTime, setRemainingTime] = React.useState<number | string>(0)
+  const [remainingTime, setRemainingTime] = React.useState<number>(0)
   const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
   const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
 
   const updateTimer = () => {
     if (!user.userState) {
-      setRemainingTime('Loading...')
+      setRemainingTime(0)
       return
     }
     const time = user.userState.sync.calcEpochRemainingTime()
@@ -32,6 +32,13 @@ export default observer(() => {
     }, 1000)
   }, [])
 
+const hours = Math.floor(remainingTime / 3600);
+const minutes = Math.floor((remainingTime - (hours * 3600)) / 60);
+const seconds = remainingTime - (hours * 3600) - (minutes * 60);
+const timeString = hours.toString().padStart(2, '0') + ':' + 
+      minutes.toString().padStart(2, '0') + ':' + 
+      seconds.toString().padStart(2, '0');
+
   return (
     <>
       <div className="header">
@@ -42,7 +49,7 @@ export default observer(() => {
             {/* <Tooltip text='time until next epoch; all current listings will expire at the end of this epoch'></Tooltip> */}
             <div style={{paddingLeft: '2rem'}}>
               <div>epoch: {user.userState?.sync.calcCurrentEpoch()}</div>
-              <div>next epoch in: <span style={{color: 'red'}}>{remainingTime}</span></div>
+              <div>next epoch in: <span style={{color: 'red'}}>{timeString}</span></div>
             </div>          
           </div>
 
