@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip';
-import './home.css'
+import './deal.css'
 
 import Trustlist from '../contexts/Trustlist';
 import User from '../contexts/User'
@@ -61,116 +61,210 @@ export default observer(() => {
   return (
     <div>
       <hr style={{margin: '3rem'}}></hr>
-      <div>{id}</div>
+      <div style={{textAlign: 'center'}}>deal id: {id}</div>
       {deal ? 
         <>
-        <div>
-          {/* {deal._id} */}
-          {deal.title} / {deal.posterId} / {deal.responderId}
+        <div style={{textAlign: 'center'}}>
+          <div>{deal.title} / {deal.posterId} / {deal.responderId}</div>
           {deal.dealOpened ?
           <button onClick={() => app.updateDeal(id, 'close')}>complete deal and attest to interaction</button>  
           : null }
         </div>
+      
+      <div style={{display: 'flex'}}>
 
-<hr style={{margin: '3rem'}}></hr>
+        <div className="attestation-container">
+          <div className="icon">
+              <h2>Deal review / Attestation</h2>
+              <Tooltip text="Create an attestation by rating your experience with this member." />
+          </div>
+          <div
+              style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+              }}
+          >
+              {Array(
+                  user.userState.sync.settings.sumFieldCount
+              )
+                  .fill(0)
+                  .map((_, i) => {
+                      return (
+                          <div key={i} style={{ margin: '4px' }}>
+                              <p>
+                                  Score {i}
+                              </p>
+                              <input
+                                  value={reqData[i] ?? ''}
+                                  onChange={(event) => {
+                                      if (
+                                          !/^\d*$/.test(
+                                              event.target.value
+                                          )
+                                      )
+                                          return
+                                      setReqData(() => ({
+                                          ...reqData,
+                                          [i]: event.target.value,
+                                      }))
+                                  }}
+                              />
+                          </div>
+                      )
+                  })}
+          </div>
+          <div className="icon">
+              <p style={{ marginRight: '8px' }}>
+                  Epoch key nonce
+              </p>
+              <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
+          </div>
+          <select
+              value={reqInfo.nonce ?? 0}
+              onChange={(event) => {
+                  setReqInfo((v) => ({
+                      ...v,
+                      nonce: Number(event.target.value),
+                  }))
+              }}
+          >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+          </select>
+          <p style={{ fontSize: '12px' }}>
+              Requesting data with epoch key:
+          </p>
+          <p
+              style={{
+                  maxWidth: '650px',
+                  wordBreak: 'break-all',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+              }}
+          >
+              {user.epochKey(reqInfo.nonce ?? 0)}
+          </p>
 
-        <div>
-        <div className="action-container">
-                        <div className="icon">
-                            <h2>Change Data</h2>
-                            <Tooltip text="You can request changes to data here. The demo attester will freely change your data." />
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'flex-start',
-                            }}
-                        >
-                            {Array(
-                                user.userState.sync.settings.fieldCount
-                            )
-                                .fill(0)
-                                .map((_, i) => {
-                                    return (
-                                        <div key={i} style={{ margin: '4px' }}>
-                                            <p>
-                                                Data {i} ({fieldType(i)})
-                                            </p>
-                                            <input
-                                                value={reqData[i] ?? ''}
-                                                onChange={(event) => {
-                                                    if (
-                                                        !/^\d*$/.test(
-                                                            event.target.value
-                                                        )
-                                                    )
-                                                        return
-                                                    setReqData(() => ({
-                                                        ...reqData,
-                                                        [i]: event.target.value,
-                                                    }))
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                })}
-                        </div>
-                        <div className="icon">
-                            <p style={{ marginRight: '8px' }}>
-                                Epoch key nonce
-                            </p>
-                            <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
-                        </div>
-                        <select
-                            value={reqInfo.nonce ?? 0}
-                            onChange={(event) => {
-                                setReqInfo((v) => ({
-                                    ...v,
-                                    nonce: Number(event.target.value),
-                                }))
-                            }}
-                        >
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <p style={{ fontSize: '12px' }}>
-                            Requesting data with epoch key:
-                        </p>
-                        <p
-                            style={{
-                                maxWidth: '650px',
-                                wordBreak: 'break-all',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {user.epochKey(reqInfo.nonce ?? 0)}
-                        </p>
-
-                        <Button
-                            onClick={async () => {
-                                if (
-                                    user.userState &&
-                                    user.userState.sync.calcCurrentEpoch() !==
-                                        (await user.userState.latestTransitionedEpoch())
-                                ) {
-                                    throw new Error('Needs transition')
-                                }
-                                await user.requestReputation(
-                                    reqData,
-                                    reqInfo.nonce ?? 0
-                                )
-                                setReqData({})
-                            }}
-                        >
-                            Attest
-                        </Button>
-                    </div>
+          <Button
+              onClick={async () => {
+                  if (
+                      user.userState &&
+                      user.userState.sync.calcCurrentEpoch() !==
+                          (await user.userState.latestTransitionedEpoch())
+                  ) {
+                      throw new Error('Needs transition')
+                  }
+                  await user.requestReputation(
+                      reqData,
+                      reqInfo.nonce ?? 0
+                  )
+                  setReqData({})
+              }}
+          >
+              Submit
+          </Button>
         </div>
-        </>
-        : 'deal not found' }  
+
+        <div className="attestation-container">
+          <div className="icon">
+              <h2>Deal review / Attestation</h2>
+              <Tooltip text="Create an attestation by rating your experience with this member." />
+          </div>
+          <div
+              style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+              }}
+          >
+              {Array(
+                  user.userState.sync.settings.sumFieldCount
+              )
+                  .fill(0)
+                  .map((_, i) => {
+                      return (
+                          <div key={i} style={{ margin: '4px' }}>
+                              <p>
+                                  Score {i}
+                              </p>
+                              <input
+                                  value={reqData[i] ?? ''}
+                                  onChange={(event) => {
+                                      if (
+                                          !/^\d*$/.test(
+                                              event.target.value
+                                          )
+                                      )
+                                          return
+                                      setReqData(() => ({
+                                          ...reqData,
+                                          [i]: event.target.value,
+                                      }))
+                                  }}
+                              />
+                          </div>
+                      )
+                  })}
+          </div>
+          <div className="icon">
+              <p style={{ marginRight: '8px' }}>
+                  Epoch key nonce
+              </p>
+              <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
+          </div>
+          <select
+              value={reqInfo.nonce ?? 0}
+              onChange={(event) => {
+                  setReqInfo((v) => ({
+                      ...v,
+                      nonce: Number(event.target.value),
+                  }))
+              }}
+          >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+          </select>
+          <p style={{ fontSize: '12px' }}>
+              Requesting data with epoch key:
+          </p>
+          <p
+              style={{
+                  maxWidth: '650px',
+                  wordBreak: 'break-all',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+              }}
+          >
+              {user.epochKey(reqInfo.nonce ?? 0)}
+          </p>
+
+          <Button
+              onClick={async () => {
+                  if (
+                      user.userState &&
+                      user.userState.sync.calcCurrentEpoch() !==
+                          (await user.userState.latestTransitionedEpoch())
+                  ) {
+                      throw new Error('Needs transition')
+                  }
+                  await user.requestReputation(
+                      reqData,
+                      reqInfo.nonce ?? 0
+                  )
+                  setReqData({})
+              }}
+          >
+              Submit
+          </Button>
+        </div>
+
+      </div>  
+
+    </>
+    : 'deal not found' }  
         
     </div>
   )

@@ -45,7 +45,7 @@ const timeString = hours.toString().padStart(2, '0') + ':' +
           <div style={{display: 'flex'}}>
             <div className='app-title'><Link to='/'>trustlist</Link></div>
             {/* <div className='app-title'><Link to='/'>zk<span style={{fontSize: '1.5rem', fontWeight: '200'}}>lassified</span></Link></div> */}
-            <Link to='/dashboard'><button>old dashboard</button></Link>
+            {/* <Link to='/dashboard'><button>old dashboard</button></Link> */}
             {/* <Tooltip text='time until next epoch; all current listings will expire at the end of this epoch'></Tooltip> */}
             <div style={{paddingLeft: '2rem'}}>
               <div>epoch: {user.userState?.sync.calcCurrentEpoch()}</div>

@@ -1,0 +1,9 @@
+.attestation-container {
+  width: 100%;
+  height: fit-content;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 16px 16px 30px;
+  margin:  3rem;
+  font-weight: 300;
+}
