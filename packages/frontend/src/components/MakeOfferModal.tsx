@@ -13,6 +13,10 @@ type Props = {
   setShowMakeOffer: (value: boolean) => void;
 }
 
+type ReqInfo = {
+  nonce: number
+}
+
 type ProofInfo = {
   publicSignals: string[]
   proof: string[]
@@ -23,6 +27,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
+  const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
   const [proveData, setProveData] = React.useState<{
     [key: number]: number | string
   }>({})
@@ -36,7 +41,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
   const [score2, setScore2] = React.useState('')
   const [score3, setScore3] = React.useState('')
   const [score4, setScore4] = React.useState('')
-  const responderId = '12345'
+  const [responderId, setResponderId] = React.useState('12345')
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -46,7 +51,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
     <div className='dark-bg'>
       <div className='centered'>
         <div className='nested'>
-          {/* <form> */}
+          <form>
             <div className='offer-content'>
               {/* <div>{listingId}</div> */}
               <div className='offer-container'>
@@ -137,9 +142,44 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
                           className='offer-input'
                         />
                       </div> */}
+
+                  
               </div>
 
               <div className='offer-buttons'>
+                  <div>
+                    <div style={{display: 'flex'}}>
+                        <select
+                            value={reqInfo.nonce ?? 0}
+                            onChange={(event) => {
+                                setReqInfo((v) => ({
+                                    ...v,
+                                    nonce: Number(event.target.value),
+                                }))
+                                setResponderId(user.epochKey(reqInfo.nonce ?? 0))
+                            }}
+                        >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                        <p style={{ fontSize: '12px' }}>
+                            submit offer with epoch key:
+                        </p>
+                    </div>
+                        <p
+                            style={{
+                                maxWidth: '180px',
+                                wordBreak: 'break-all',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}
+                        >
+                            {/* {user.epochKey(reqInfo.nonce ?? 0)} */}
+                            {responderId}
+                        </p>
+                  </div>
+
                 <Button
                   onClick={async () => {
                     const proof = await user.proveData(
@@ -181,7 +221,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
 
                 
           <button className='close-btn' onClick={() => setShowMakeOffer(false)}>X</button>
-          {/* </form> */}
+          </form>
         </div>
       </div>
     </div>

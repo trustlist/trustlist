@@ -106,7 +106,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='offer-scroll'>
                   {listing.responderId ? 
                     <div>
-                      ${listing.offerAmount} - member: {listing.responderId} - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
+                      ${listing.offerAmount} - member: {listing.responderId.slice(0, 30)}... - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
                       <Link to={`deal/${listing._id}`}>
                         <button 
                           className='accept' 

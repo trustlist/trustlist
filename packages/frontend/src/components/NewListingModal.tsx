@@ -11,6 +11,10 @@ type Props = {
   setShowNewListing: (value: boolean) => void;
 }
 
+type ReqInfo = {
+  nonce: number
+}
+
 type ProofInfo = {
   publicSignals: string[]
   proof: string[]
@@ -21,6 +25,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
+  const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
   const [proveData, setProveData] = React.useState<{
     [key: number]: number | string
   }>({})
@@ -39,7 +44,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const [score2, setScore2] = React.useState('')
   const [score3, setScore3] = React.useState('')
   const [score4, setScore4] = React.useState('')
-  const posterId = '09876'
+  const [posterId, setPosterId] = React.useState('09876')
 
   const fieldType = (i: number) => {
     if (i < user.sumFieldCount) {
@@ -60,7 +65,7 @@ export default observer(({ setShowNewListing }: Props) => {
       >
       <div className='centered'>
         <div className='modal'>
-          {/* <form > */}
+          <form >
             <div className='form-content'>
               <div>
                 <p style={{fontWeight: '600'}}>listing type:</p>
@@ -212,6 +217,38 @@ export default observer(({ setShowNewListing }: Props) => {
                         />
                     </div> */}
                   </div>
+                  <div>
+                    <div style={{display: 'flex'}}>
+                        <select
+                            value={reqInfo.nonce ?? 0}
+                            onChange={(event) => {
+                                setReqInfo((v) => ({
+                                    ...v,
+                                    nonce: Number(event.target.value),
+                                }))
+                                setPosterId(user.epochKey(reqInfo.nonce ?? 0))
+                            }}
+                        >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                        <p style={{ fontSize: '12px' }}>
+                            Create listing with epoch key:
+                        </p>
+                    </div>
+                        <p
+                            style={{
+                                maxWidth: '650px',
+                                wordBreak: 'break-all',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}
+                        >
+                            {/* {user.epochKey(reqInfo.nonce ?? 0)} */}
+                            {posterId}
+                        </p>
+                  </div>
                 </div>
 
                 <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -244,7 +281,7 @@ export default observer(({ setShowNewListing }: Props) => {
             </div>
 
             
-          {/* </form> */}
+          </form>
           <button className='close-btn' onClick={() => setShowNewListing(false)}>X</button>
         </div>
       </div>

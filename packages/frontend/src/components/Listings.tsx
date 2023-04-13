@@ -56,7 +56,7 @@ export default observer(({ section, category }: Props) => {
     <div className='listings'>
       {listings ? null : <div className='message'>this section is under construction.</div>}
       {listings ? 
-        listings.map((listing: Listing) => (
+        listings.slice().reverse().map((listing: Listing) => (
           <>
             <div className='listing-item' key={listing._id} onClick={() => setShowDetail(true)}>
               <div className='thumbnail'>TL</div>

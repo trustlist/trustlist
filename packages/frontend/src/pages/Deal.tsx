@@ -12,11 +12,11 @@ type ReqInfo = {
   nonce: number
 }
 
-type ProofInfo = {
-  publicSignals: string[]
-  proof: string[]
-  valid: boolean
-}
+// type ProofInfo = {
+//   publicSignals: string[]
+//   proof: string[]
+//   valid: boolean
+// }
 
 export default observer(() => {
 
@@ -28,14 +28,14 @@ export default observer(() => {
     [key: number]: number | string
   }>({})
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
-  const [proveData, setProveData] = React.useState<{
-      [key: number]: number | string
-  }>({})
-  const [repProof, setRepProof] = React.useState<ProofInfo>({
-      publicSignals: [],
-      proof: [],
-      valid: false,
-  })
+  // const [proveData, setProveData] = React.useState<{
+  //     [key: number]: number | string
+  // }>({})
+  // const [repProof, setRepProof] = React.useState<ProofInfo>({
+  //     publicSignals: [],
+  //     proof: [],
+  //     valid: false,
+  // })
 
   const fieldType = (i: number) => {
     if (i < user.sumFieldCount) {
