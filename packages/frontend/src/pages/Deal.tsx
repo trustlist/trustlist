@@ -24,7 +24,10 @@ export default observer(() => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
-  const [reqData, setReqData] = React.useState<{
+  const [reqData1, setReqData1] = React.useState<{
+    [key: number]: number | string
+  }>({})
+  const [reqData2, setReqData2] = React.useState<{
     [key: number]: number | string
   }>({})
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
@@ -60,22 +63,24 @@ export default observer(() => {
 
   return (
     <div>
-      <hr style={{margin: '3rem'}}></hr>
-      <div style={{textAlign: 'center'}}>deal id: {id}</div>
+      <hr style={{margin: '1rem'}}></hr>
+      {/* <div style={{textAlign: 'center'}}>deal id: {id}</div> */}
       {deal ? 
         <>
         <div style={{textAlign: 'center'}}>
-          <div>{deal.title} / {deal.posterId} / {deal.responderId}</div>
-          {deal.dealOpened ?
+          <div>{deal.title}</div>
+          {/* <div>member1: {deal.posterId}</div> */}
+          {/* <div>member2: {deal.responderId}</div> */}
+          {/* {deal.dealOpened ?
           <button onClick={() => app.updateDeal(id, 'close')}>complete deal and attest to interaction</button>  
-          : null }
+          : null } */}
         </div>
       
       <div style={{display: 'flex'}}>
 
         <div className="attestation-container">
           <div className="icon">
-              <h2>Deal review / Attestation</h2>
+              <h2>member1 attestation</h2>
               <Tooltip text="Create an attestation by rating your experience with this member." />
           </div>
           <div
@@ -96,7 +101,7 @@ export default observer(() => {
                                   Score {i}
                               </p>
                               <input
-                                  value={reqData[i] ?? ''}
+                                  value={reqData1[i] ?? ''}
                                   onChange={(event) => {
                                       if (
                                           !/^\d*$/.test(
@@ -104,8 +109,8 @@ export default observer(() => {
                                           )
                                       )
                                           return
-                                      setReqData(() => ({
-                                          ...reqData,
+                                      setReqData1(() => ({
+                                          ...reqData1,
                                           [i]: event.target.value,
                                       }))
                                   }}
@@ -157,10 +162,10 @@ export default observer(() => {
                       throw new Error('Needs transition')
                   }
                   await user.requestReputation(
-                      reqData,
+                      reqData1,
                       reqInfo.nonce ?? 0
                   )
-                  setReqData({})
+                  setReqData1({})
               }}
           >
               Submit
@@ -169,7 +174,7 @@ export default observer(() => {
 
         <div className="attestation-container">
           <div className="icon">
-              <h2>Deal review / Attestation</h2>
+              <h2>member2 attestation</h2>
               <Tooltip text="Create an attestation by rating your experience with this member." />
           </div>
           <div
@@ -190,7 +195,7 @@ export default observer(() => {
                                   Score {i}
                               </p>
                               <input
-                                  value={reqData[i] ?? ''}
+                                  value={reqData2[i] ?? ''}
                                   onChange={(event) => {
                                       if (
                                           !/^\d*$/.test(
@@ -198,8 +203,8 @@ export default observer(() => {
                                           )
                                       )
                                           return
-                                      setReqData(() => ({
-                                          ...reqData,
+                                      setReqData2(() => ({
+                                          ...reqData2,
                                           [i]: event.target.value,
                                       }))
                                   }}
@@ -251,10 +256,10 @@ export default observer(() => {
                       throw new Error('Needs transition')
                   }
                   await user.requestReputation(
-                      reqData,
+                      reqData2,
                       reqInfo.nonce ?? 0
                   )
-                  setReqData({})
+                  setReqData2({})
               }}
           >
               Submit

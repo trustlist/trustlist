@@ -137,6 +137,10 @@ class Trustlist {
     // this.activityByMemberId.set()
   }
 
+  async removeListing(id: string) {
+    const data = await fetch(`${SERVER}/api/removeListing/${id}`).then((r) => r.json())
+  }
+
 }
 
 export default createContext(new Trustlist())

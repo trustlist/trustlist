@@ -37,7 +37,7 @@ export default observer(() => {
       </div>
 
       <Listings section={selectedSection} category={selectedCategory}/>
-    
+      
     </div>
   )
 })

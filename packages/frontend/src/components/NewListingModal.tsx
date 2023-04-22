@@ -44,7 +44,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const [score2, setScore2] = React.useState('')
   const [score3, setScore3] = React.useState('')
   const [score4, setScore4] = React.useState('')
-  const [posterId, setPosterId] = React.useState('09876')
+  const [posterId, setPosterId] = React.useState('')
 
   const fieldType = (i: number) => {
     if (i < user.sumFieldCount) {
@@ -218,7 +218,7 @@ export default observer(({ setShowNewListing }: Props) => {
                     </div> */}
                   </div>
                   <div>
-                    <div style={{display: 'flex'}}>
+                    <div style={{display: 'flex', paddingTop: '1rem'}}>
                         <select
                             value={reqInfo.nonce ?? 0}
                             onChange={(event) => {

@@ -41,7 +41,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
   const [score2, setScore2] = React.useState('')
   const [score3, setScore3] = React.useState('')
   const [score4, setScore4] = React.useState('')
-  const [responderId, setResponderId] = React.useState('12345')
+  const [responderId, setResponderId] = React.useState('')
 
   if (!user.userState) {
     return <div className="container">Loading...</div>

@@ -56,7 +56,7 @@ export default observer(({ section, category }: Props) => {
     <div className='listings'>
       {listings ? null : <div className='message'>this section is under construction.</div>}
       {listings ? 
-        listings.slice().reverse().map((listing: Listing) => (
+        listings.map((listing: Listing) => (
           <>
             <div className='listing-item' key={listing._id} onClick={() => setShowDetail(true)}>
               <div className='thumbnail'>TL</div>
@@ -64,6 +64,7 @@ export default observer(({ section, category }: Props) => {
                 <div className='listing-title'>{listing.title}</div>
                     <div>reserve amount: ${listing.amount}</div>
                     <div style={{marginRight: '200px'}}>current offers: 1</div>
+                    <div style={{fontSize: '0.4rem'}}onClick={() => app.removeListing(listing._id)}>delete</div>
               </div>
               <div>
                 <div className='score-container'>
