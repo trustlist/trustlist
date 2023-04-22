@@ -17,10 +17,10 @@ type Props = {
     amount: string;
     amountType: string;
     description: string;
-    score1: string;
-    score2: string;
-    score3: string;
-    score4: string;
+    pScore1: string;
+    pScore2: string;
+    pScore3: string;
+    pScore4: string;
     responderId: string;
     offerAmount: string;
     rScore1: string;
@@ -80,22 +80,22 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='trust-container'>
                 <div className='trust-item'>
                   <div>Score 1: </div>
-                  <div style={{fontWeight: '600'}}>{listing.score1}</div>
+                  <div style={{fontWeight: '600'}}>{listing.pScore1}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 2: </div>
-                  <div style={{fontWeight: '600'}}>{listing.score2}</div>
+                  <div style={{fontWeight: '600'}}>{listing.pScore2}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 3: </div>
-                  <div style={{fontWeight: '600'}}>{listing.score3}</div>
+                  <div style={{fontWeight: '600'}}>{listing.pScore3}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 4: </div>
-                  <div style={{fontWeight: '600'}}>{listing.score4}</div>
+                  <div style={{fontWeight: '600'}}>{listing.pScore4}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
               </div>  

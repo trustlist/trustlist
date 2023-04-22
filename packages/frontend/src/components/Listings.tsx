@@ -20,10 +20,10 @@ type Listing = {
   amount: string;
   amountType: string;
   description: string;
-  score1: string;
-  score2: string;
-  score3: string;
-  score4: string;
+  pScore1: string;
+  pScore2: string;
+  pScore3: string;
+  pScore4: string;
   responderId: string;
   offerAmount: string;
   rScore1: string;
@@ -73,12 +73,12 @@ export default observer(({ section, category }: Props) => {
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.score1}</div>
-                      <div className='score-item'>{listing.score2}</div>
+                      <div className='score-item'>{listing.pScore1}</div>
+                      <div className='score-item'>{listing.pScore2}</div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.score3}</div>
-                      <div className='score-item'>{listing.score4}</div>
+                      <div className='score-item'>{listing.pScore3}</div>
+                      <div className='score-item'>{listing.pScore4}</div>
                     </div>
                   </div>
                 </div>
@@ -90,17 +90,17 @@ export default observer(({ section, category }: Props) => {
                   <div>
                     <div className='listing-title'>{listing.title}</div>
                         <div>reserve amount: ${listing.amount}</div>
-                        <div style={{marginRight: '200px', color: 'red'}}>EXPIRED</div>
+                        <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
                         <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.score1}</div>
-                      <div className='score-item'>{listing.score2}</div>
+                      <div className='score-item'>{listing.pScore1}</div>
+                      <div className='score-item'>{listing.pScore2}</div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.score3}</div>
-                      <div className='score-item'>{listing.score4}</div>
+                      <div className='score-item'>{listing.pScore3}</div>
+                      <div className='score-item'>{listing.pScore4}</div>
                     </div>
                   </div>
                 </div>

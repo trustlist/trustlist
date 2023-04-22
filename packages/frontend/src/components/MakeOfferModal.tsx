@@ -37,10 +37,10 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
-  const [score1, setScore1] = React.useState('')
-  const [score2, setScore2] = React.useState('')
-  const [score3, setScore3] = React.useState('')
-  const [score4, setScore4] = React.useState('')
+  const [rScore1, setRScore1] = React.useState('')
+  const [rScore2, setRScore2] = React.useState('')
+  const [rScore3, setRScore3] = React.useState('')
+  const [rScore4, setRScore4] = React.useState('')
   const [responderId, setResponderId] = React.useState('')
 
   if (!user.userState) {
@@ -92,10 +92,10 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
                                               ...proveData,
                                               [i]: event.target.value,
                                           }))
-                                          if (i === 0) {setScore1(event.target.value)}
-                                          if (i === 1) {setScore2(event.target.value)}
-                                          if (i === 2) {setScore3(event.target.value)}
-                                          if (i === 3) {setScore4(event.target.value)}
+                                          if (i === 0) {setRScore1(event.target.value)}
+                                          if (i === 1) {setRScore2(event.target.value)}
+                                          if (i === 2) {setRScore3(event.target.value)}
+                                          if (i === 3) {setRScore4(event.target.value)}
                                       }}
                                   />
                               </div>
@@ -200,7 +200,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
                     style={{marginTop: '1rem'}}
                     type='submit'
                     value='submit offer'
-                    onClick={() => app.submitOffer(listingId, section, responderId, offerAmount, score1, score2, score3, score4)}
+                    onClick={() => app.submitOffer(listingId, section, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)}
                   />
                 ) : (
                     <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button>

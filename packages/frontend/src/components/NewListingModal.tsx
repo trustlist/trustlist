@@ -40,10 +40,10 @@ export default observer(({ setShowNewListing }: Props) => {
   const [amount, setAmount] = React.useState('')
   const [amountType, setAmountType] = React.useState('one time')
   const [description, setDescription] = React.useState('')
-  const [score1, setScore1] = React.useState('')
-  const [score2, setScore2] = React.useState('')
-  const [score3, setScore3] = React.useState('')
-  const [score4, setScore4] = React.useState('x')
+  const [pScore1, setPScore1] = React.useState('')
+  const [pScore2, setPScore2] = React.useState('')
+  const [pScore3, setPScore3] = React.useState('')
+  const [pScore4, setPScore4] = React.useState('x')
   const [posterId, setPosterId] = React.useState('')
 
   const fieldType = (i: number) => {
@@ -171,10 +171,10 @@ export default observer(({ setShowNewListing }: Props) => {
                                                     ...proveData,
                                                     [i]: event.target.value,
                                                 }))
-                                                if (i === 0) {setScore1(event.target.value)}
-                                                if (i === 1) {setScore2(event.target.value)}
-                                                if (i === 2) {setScore3(event.target.value)}
-                                                if (i === 3) {setScore4(event.target.value)}
+                                                if (i === 0) {setPScore1(event.target.value)}
+                                                if (i === 1) {setPScore2(event.target.value)}
+                                                if (i === 2) {setPScore3(event.target.value)}
+                                                if (i === 3) {setPScore4(event.target.value)}
                                             }}
                                         />
                                     </div>
@@ -271,7 +271,7 @@ export default observer(({ setShowNewListing }: Props) => {
                     <input 
                       type='submit'
                       value='POST'
-                      onClick={() => app.createNewListing(user.userState?.sync.calcCurrentEpoch(), section, category, title, amount, amountType, description, posterId, score1, score2, score3, score4)}
+                      onClick={() => app.createNewListing(user.userState?.sync.calcCurrentEpoch(), section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)}
                     />
                   ) : (
                      <button className='blocked'>POST</button>

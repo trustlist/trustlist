@@ -5,7 +5,7 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/submitOffer', async (req, res) => {
     try {
-      const { listingId, section, responderId, offerAmount, score1, score2, score3, score4 } = req.body
+      const { listingId, section, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4 } = req.body
       await db.update(`${section}`, {
         where: {
           _id: listingId,
@@ -13,10 +13,10 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
         update: {
           responderId,
           offerAmount,
-          rScore1: score1,
-          rScore2: score2,
-          rScore3: score3,
-          rScore4: score4,
+          rScore1,
+          rScore2,
+          rScore3,
+          rScore4,
         },
       })
       res.json({ message: 'success!' })

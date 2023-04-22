@@ -5,7 +5,7 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/addListing', async (req, res) => {
     try {
-      const { epoch, section, category, title, amount, amountType, description, posterId, score1, score2, score3, score4 } = req.body
+      const { epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4 } = req.body
       await db.create(`${section}`, {
         epoch,
         section,
@@ -15,10 +15,10 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
         amountType,
         description,
         posterId,
-        score1,
-        score2,
-        score3,
-        score4,
+        pScore1,
+        pScore2,
+        pScore3,
+        pScore4,
         responderId: '',
         offerAmount: '',
         rScore1: '',
