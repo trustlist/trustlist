@@ -43,7 +43,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const [score1, setScore1] = React.useState('')
   const [score2, setScore2] = React.useState('')
   const [score3, setScore3] = React.useState('')
-  const [score4, setScore4] = React.useState('')
+  const [score4, setScore4] = React.useState('x')
   const [posterId, setPosterId] = React.useState('')
 
   const fieldType = (i: number) => {
@@ -271,7 +271,7 @@ export default observer(({ setShowNewListing }: Props) => {
                     <input 
                       type='submit'
                       value='POST'
-                      onClick={() => app.createNewListing(section, category, title, amount, amountType, description, posterId, score1, score2, score3, score4)}
+                      onClick={() => app.createNewListing(user.userState?.sync.calcCurrentEpoch(), section, category, title, amount, amountType, description, posterId, score1, score2, score3, score4)}
                     />
                   ) : (
                      <button className='blocked'>POST</button>
