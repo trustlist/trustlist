@@ -38,13 +38,27 @@ export default observer(({ setShowMemberDash }: Props) => {
                     <h3>my latest trust scores:</h3>
                   </div>
                   {user.data.map((data, i) => {
+                    const expected = data ? Number(data >> BigInt(23)) : 0
+                    const received = data ? Number(data % BigInt(128)) : 0 
                     return (
-                      <div key={i} className="info-item">
-                        {i < 4 ? (
+                      <div key={i}>
+                        {i < 3 ? (
                           <>
                             <div>Score {i + 1}</div>
-                            <div className="stat">
-                              {(data || 0).toString()}
+                            <div className="score-detail">
+                              <div>{(data || 0).toString()}</div>
+                              <div>{expected}/{received}</div>
+                              <div>{Math.floor(received / expected * 100)}%</div>
+                            </div>
+                          </>
+                        ) : null }
+                        {i === 3 ? (
+                          <>
+                            <div>Score {i + 1}</div>
+                            <div className="score-detail">
+                              <div>{(data || 0).toString()}</div>
+                              <div>{expected}/{received}</div>
+                              <div>{Math.floor(((received / expected) / 5) * 100)}%</div>
                             </div>
                           </>
                         ) : null }
@@ -64,16 +78,31 @@ export default observer(({ setShowMemberDash }: Props) => {
                     <h3>my provable trust scores:</h3>
                   </div>
                   {user.provableData.map((data, i) => {
+                    const expected = data ? Number(data >> BigInt(23)) : 0
+                    const received = data ? Number(data % BigInt(128)) : 0 
                     return (
-                      <div key={i} className="info-item">
-                        {i < 4 ? (
+                      <div key={i}>
+                        {i < 3 ? (
                           <>
                             <div>Score {i + 1}</div>
-                            <div className="stat">
-                              {(data || 0).toString()}
+                            <div className="score-detail">
+                              <div>{(data || 0).toString()}</div>
+                              <div>{expected}/{received}</div>
+                              <div>{Math.floor(received / expected * 100)}%</div>
                             </div>
                           </>
                         ) : null }
+                        {i === 3 ? (
+                          <>
+                            <div>Score {i + 1}</div>
+                            <div className="score-detail">
+                              <div>{(data || 0).toString()}</div>
+                              <div>{expected}/{received}</div>
+                              <div>{Math.floor(((received / expected) / 5) * 100)}%</div>
+                            </div>
+                          </>
+                        ) : null }
+
                       </div>
                     )
                   })}
