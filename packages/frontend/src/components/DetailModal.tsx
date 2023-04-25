@@ -80,22 +80,22 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='trust-container'>
                 <div className='trust-item'>
                   <div>Score 1: </div>
-                  <div style={{fontWeight: '600'}}>{listing.pScore1}</div>
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 2: </div>
-                  <div style={{fontWeight: '600'}}>{listing.pScore2}</div>
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 3: </div>
-                  <div style={{fontWeight: '600'}}>{listing.pScore3}</div>
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
                 <div className='trust-item'>
                   <div>Score 4: </div>
-                  <div style={{fontWeight: '600'}}>{listing.pScore4}</div>
+                  <div style={{fontWeight: '600'}}>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
                   <Tooltip text='explain what this score represents'/>
                 </div>
               </div>  
