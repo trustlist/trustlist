@@ -24,7 +24,7 @@ const _schema = [
         name: 'for sale',
         primaryKey: '_id',
         rows: [
-            ['epoch', 'Number'],
+            ['epoch', 'Int'],
             ['section', 'String'],
             ['category', 'String'],
             ['title', 'String'],

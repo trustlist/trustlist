@@ -65,7 +65,7 @@ export default observer(({ setShowNewListing }: Props) => {
       >
       <div className='centered'>
         <div className='modal'>
-          <form >
+          {/* <form > */}
             <div className='form-content'>
               <div>
                 <p style={{fontWeight: '600'}}>listing type:</p>
@@ -271,7 +271,11 @@ export default observer(({ setShowNewListing }: Props) => {
                     <input 
                       type='submit'
                       value='POST'
-                      onClick={() => app.createNewListing(user.userState?.sync.calcCurrentEpoch(), section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)}
+                      // it's not passing the epoch # here??
+                      onClick={() => {
+                        const epoch = user.userState?.sync.calcCurrentEpoch()
+                        app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                      }}
                     />
                   ) : (
                      <button className='blocked'>POST</button>
@@ -281,7 +285,7 @@ export default observer(({ setShowNewListing }: Props) => {
             </div>
 
             
-          </form>
+          {/* </form> */}
           <button className='close-btn' onClick={() => setShowNewListing(false)}>X</button>
         </div>
       </div>
