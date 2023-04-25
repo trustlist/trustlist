@@ -1,6 +1,6 @@
 .listing-item {
   display: grid;
-  grid-template-columns: 17% 68% 15%;
+  grid-template-columns: 17% 65% 18%;
   align-items: center;
   background-color: rgb(235, 232, 232);
   border-radius: 0.5rem;
@@ -9,7 +9,7 @@
 
 .listing-expired {
   display: grid;
-  grid-template-columns: 17% 68% 15%;
+  grid-template-columns: 17% 65% 18%;
   align-items: center;
   background-color: rgb(230, 228, 228);
   border-radius: 0.5rem;
@@ -38,15 +38,17 @@
 .score-container {
   display: flex;
   justify-items: right;
+  margin-right: 1rem;
 }
 
 .score-item {
   background-color: white;
   border-radius: 0.3rem;
   border: 1px solid rgb(218, 217, 217);
+  width: 5.5rem;
   text-align: center;
   margin: 0.1rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   font-weight: 600;
   font-size: 0.9rem;
 }

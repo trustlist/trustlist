@@ -73,12 +73,12 @@ export default observer(({ section, category }: Props) => {
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.pScore1}</div>
-                      <div className='score-item'>{listing.pScore2}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.pScore3}</div>
-                      <div className='score-item'>{listing.pScore4}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
+                      <div className='score-item'>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
                     </div>
                   </div>
                 </div>
@@ -95,12 +95,12 @@ export default observer(({ section, category }: Props) => {
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.pScore1}</div>
-                      <div className='score-item'>{listing.pScore2}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{listing.pScore3}</div>
-                      <div className='score-item'>{listing.pScore4}</div>
+                      <div className='score-item'>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
+                      <div className='score-item'>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
                     </div>
                   </div>
                 </div>
