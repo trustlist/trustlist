@@ -120,17 +120,16 @@ class Trustlist {
     this.listingsById.set(id, data)
   }
 
-
-  async loadMemberActivity(epk1: string, epk2: string, epk3: string) {
+  async loadMemberActivity(epk0: string, epk1: string, epk2: string) {
     const data = await fetch(`${SERVER}/api/loadActivity`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
+        epk0,
         epk1,
         epk2,
-        epk3,
       })
     }).then((r) => r.json())
     console.log(data)

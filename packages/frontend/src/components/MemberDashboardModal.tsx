@@ -17,7 +17,10 @@ export default observer(({ setShowMemberDash }: Props) => {
 
   React.useEffect(() => {
     const loadData = async () => {
-      await app.loadMemberActivity('', '12345', '09876')
+      const epk0 = user.epochKey(0)
+      const epk1 = user.epochKey(1)
+      const epk2 = user.epochKey(2)
+      await app.loadMemberActivity(epk0, epk1, epk2)
     }
     loadData()
   }, [])

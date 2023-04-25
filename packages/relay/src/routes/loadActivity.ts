@@ -5,15 +5,15 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/loadActivity', async (req, res) => {
     try {
-      const { epk1, epk2, epk3 } = req.body
+      const { epk0, epk1, epk2 } = req.body
       const listings = await db.findMany('for sale', {
         where: {
-          posterId: epk1 || epk2 || epk3,
+          posterId: epk0 || epk1 || epk2,
         },
       })
       const offers = await db.findMany('for sale', {
         where: {
-          responderId: epk1 || epk2 || epk3,
+          responderId: epk0 || epk1 || epk2,
         },
       })
       res.json({listings, offers})
