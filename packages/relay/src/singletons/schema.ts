@@ -21,7 +21,7 @@ const _schema = [
         ],
     },
     {
-        name: 'for sale',
+        name: 'Listings',
         primaryKey: '_id',
         rows: [
             ['epoch', 'Int'],
@@ -38,12 +38,22 @@ const _schema = [
             ['pScore4', 'String'],
             ['responderId', 'String'],
             ['offerAmount', 'String'],
+            ['dealOpened', 'Bool'],
+            ['dealClosed', 'Bool'],
+        ],
+    },
+    {
+        name: 'Offers',
+        primaryKey: '_id',
+        rows: [
+            ['epoch', 'Int'],
+            ['listingId', 'String'],
+            ['offerAmount', 'String'],
+            ['responderId', 'String'],
             ['rScore1', 'String'],
             ['rScore2', 'String'],
             ['rScore3', 'String'],
             ['rScore4', 'String'],
-            ['dealOpened', 'Bool'],
-            ['dealClosed', 'Bool'],
         ],
     },
 ]

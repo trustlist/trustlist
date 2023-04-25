@@ -7,7 +7,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     try {
       const { id, action } = req.body
       if (action === 'open') {
-        await db.update('for sale', {
+        await db.update('Listings', {
           where: {
             _id: id,
           },
@@ -16,7 +16,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
           },
         })
       } else {
-        await db.update('for sale', {
+        await db.update('Listings', {
           where: {
             _id: id,
           },

@@ -7,9 +7,10 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     try {
       const { section, category } = req.params
       console.log(section, category)
-      const listings = await db.findMany(`${section}`, {
+      const listings = await db.findMany('Listings', {
         where: {
-          category: category,
+          section,
+          category,
         },
       })
       console.log(listings)

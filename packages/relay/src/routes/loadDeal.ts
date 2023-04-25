@@ -6,7 +6,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.get('/api/loadDeal/:id', async (req, res) => {
     try {
       const { id } = req.params
-      const deal = await db.findOne('for sale', {
+      const deal = await db.findOne('Listings', {
         where: {
           _id: id,
         },

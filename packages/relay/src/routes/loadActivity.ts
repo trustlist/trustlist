@@ -6,12 +6,12 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/loadActivity', async (req, res) => {
     try {
       const { epk0, epk1, epk2 } = req.body
-      const listings = await db.findMany('for sale', {
+      const listings = await db.findMany('Listings', {
         where: {
           posterId: epk0 || epk1 || epk2,
         },
       })
-      const offers = await db.findMany('for sale', {
+      const offers = await db.findMany('Offers', {
         where: {
           responderId: epk0 || epk1 || epk2,
         },
