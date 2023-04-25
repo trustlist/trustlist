@@ -121,12 +121,12 @@ export default observer(({ listing, setShowDetail }: Props) => {
                   {offers ? 
                     offers.map((offer: Offer) => (
                     <div>
-                      ${offer.offerAmount} - member: {offer.responderId.slice(0, 30)}... - scores: {offer.rScore1} / {offer.rScore2} / {offer.rScore3} / {offer.rScore4} 
+                      ${offer.offerAmount}  - scores: {offer.rScore1} / {offer.rScore2} / {offer.rScore3} / {offer.rScore4} 
                       <Link to={`deal/${listing._id}`}>
                         <button 
                           className='accept' 
                           onClick={() => {
-                            app.updateDeal(listing._id, 'open')
+                            app.updateDeal(listing._id, offer.offerAmount, offer.responderId, 'open')
                             setDealIsActive(true)
                           }}
                         >

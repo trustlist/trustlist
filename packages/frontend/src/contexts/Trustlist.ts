@@ -81,7 +81,7 @@ class Trustlist {
     console.log(data.message)
   }
 
-  async updateDeal(id: string, action: string) {
+  async updateDeal(id: string, offerAmount: string, responderId: string, action: string) {
     const data = await fetch(`${SERVER}/api/updateDeal`, {
       method: 'POST',
       headers: {
@@ -89,6 +89,8 @@ class Trustlist {
       },
       body: JSON.stringify({
         id,
+        offerAmount,
+        responderId,
         action,
       })
     }).then(r => r.json())

@@ -68,9 +68,9 @@ export default observer(() => {
       {deal ? 
         <>
         <div style={{textAlign: 'center'}}>
-          <div>{deal.title}</div>
-          {/* <div>member1: {deal.posterId}</div> */}
-          {/* <div>member2: {deal.responderId}</div> */}
+          <div>{deal.title} : ${deal.offerAmount}</div>
+          <div>member1: {deal.posterId}</div>
+          <div>member2: {deal.responderId}</div>
           {/* {deal.dealOpened ?
           <button onClick={() => app.updateDeal(id, 'close')}>complete deal and attest to interaction</button>  
           : null } */}

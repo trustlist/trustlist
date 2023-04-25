@@ -5,13 +5,15 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/updateDeal', async (req, res) => {
     try {
-      const { id, action } = req.body
+      const { id, offerAmount, responderId, action } = req.body
       if (action === 'open') {
         await db.update('Listings', {
           where: {
             _id: id,
           },
           update: {
+            offerAmount,
+            responderId,
             dealOpened: true,
           },
         })
