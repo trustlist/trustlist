@@ -28,11 +28,28 @@ type Props = {
   setShowDetail: (value: boolean) => void;
 }
 
+type Offer = {
+  offerAmount: string;
+  responderId: string;
+  rScore1: string;
+  rScore2: string;
+  rScore3: string;
+  rScore4: string;
+}
+
 export default observer(({ listing, setShowDetail }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
   const [showMakeOffer, setShowMakeOffer] = React.useState<boolean>(false)
   const [dealIsActive, setDealIsActive] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    const loadData = async () => {
+      await app.loadOffers(listing._id)
+    }
+    loadData()
+  }, [])
+  const offers = app.offersByListingId.get(listing._id)
 
   return (
     <div className='dark-bg'>
@@ -101,9 +118,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
             <div className='offers-container'>
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
-                  {/* {listing.responderId ? 
+                  {offers ? 
+                    offers.map((offer: Offer) => (
                     <div>
-                      ${listing.offerAmount} - member: {listing.responderId.slice(0, 30)}... - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
+                      ${offer.offerAmount} - member: {offer.responderId.slice(0, 30)}... - scores: {offer.rScore1} / {offer.rScore2} / {offer.rScore3} / {offer.rScore4} 
                       <Link to={`deal/${listing._id}`}>
                         <button 
                           className='accept' 
@@ -120,11 +138,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
                           <hr/>
                           <div style={{color: 'red'}}>your deal is now active!</div>
                           <div>use your dashboard to submit your attestation before the end of this epoch</div>
-                          <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button>
+                          {/* <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button> */}
                         </> : null}
 
                     </div>
-                    : 'no offers yet' } */}
+                  )) : 'no offers yet' }
               </div>
             </div>
             

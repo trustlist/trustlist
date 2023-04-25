@@ -151,7 +151,7 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                     {repProof.valid ? '✅' : '❌'}
                   </>
                 ) : null}
-                {repProof.valid ? (
+                {/* {repProof.valid ? ( */}
                   <input 
                     style={{marginTop: '1rem'}}
                     type='submit'
@@ -161,9 +161,9 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                       app.submitOffer(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
                     }}
                   />
-                ) : (
-                    <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button>
-                )}
+                {/* ) : ( */}
+                    {/* <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button> */}
+                {/* )} */}
               </div>
               
               {/* <div className='offer-buttons'>

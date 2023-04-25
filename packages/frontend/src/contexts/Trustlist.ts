@@ -14,10 +14,10 @@ class Trustlist {
   categoriesBySection = new Map()
   listingsById = new Map()
   forSaleByCategory = new Map()
-  wantedByCategory = new Map()
   jobsByCategory = new Map()
   servicesByCategory = new Map()
   housingByCategory = new Map()
+  offersByListingId = new Map()
   activityByMemberId = new Map()
 
   constructor() {
@@ -113,6 +113,11 @@ class Trustlist {
     } else {
       this.servicesByCategory.set(category, listings)
     }
+  }
+
+  async loadOffers(id: string) {
+    const data = await fetch(`${SERVER}/api/loadOffers/${id}`).then((r) => r.json())
+    this.offersByListingId.set(id, data)
   }
 
   async loadDealById(id: string) {
