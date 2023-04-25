@@ -21,12 +21,9 @@ type Props = {
     pScore2: string;
     pScore3: string;
     pScore4: string;
-    responderId: string;
     offerAmount: string;
-    rScore1: string;
-    rScore2: string;
-    rScore3: string;
-    rScore4: string;
+    dealOpened: boolean;
+    dealClosed: boolean;
   };
   setShowDetail: (value: boolean) => void;
 }
@@ -48,7 +45,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 {user.hasSignedUp ? (
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
-                      {showMakeOffer && <MakeOfferModal listingId={listing._id} section={listing.section} setShowMakeOffer={setShowMakeOffer}/>}
+                      {showMakeOffer && <MakeOfferModal listingId={listing._id} setShowMakeOffer={setShowMakeOffer}/>}
                   </>
                 ) : (
                   <button style={{cursor: 'not-allowed'}}>make an offer</button>
@@ -104,7 +101,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
             <div className='offers-container'>
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
-                  {listing.responderId ? 
+                  {/* {listing.responderId ? 
                     <div>
                       ${listing.offerAmount} - member: {listing.responderId.slice(0, 30)}... - scores: {listing.rScore1} / {listing.rScore2} / {listing.rScore3} / {listing.rScore4} 
                       <Link to={`deal/${listing._id}`}>
@@ -123,11 +120,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
                           <hr/>
                           <div style={{color: 'red'}}>your deal is now active!</div>
                           <div>use your dashboard to submit your attestation before the end of this epoch</div>
-                          {/* <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button> */}
+                          <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button>
                         </> : null}
 
                     </div>
-                    : 'no offers yet' }
+                    : 'no offers yet' } */}
               </div>
             </div>
             

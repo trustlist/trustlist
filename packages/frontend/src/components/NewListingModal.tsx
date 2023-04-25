@@ -271,7 +271,6 @@ export default observer(({ setShowNewListing }: Props) => {
                     <input 
                       type='submit'
                       value='POST'
-                      // it's not passing the epoch # here??
                       onClick={() => {
                         const epoch = user.userState?.sync.calcCurrentEpoch()
                         app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)

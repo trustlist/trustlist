@@ -24,12 +24,9 @@ type Listing = {
   pScore2: string;
   pScore3: string;
   pScore4: string;
-  responderId: string;
   offerAmount: string;
-  rScore1: string;
-  rScore2: string;
-  rScore3: string;
-  rScore4: string;
+  dealOpened: boolean;
+  dealClosed: boolean;
 }
 
 export default observer(({ section, category }: Props) => {
@@ -61,8 +58,8 @@ export default observer(({ section, category }: Props) => {
       {listings ? 
         listings.map((listing: Listing) => (
           <>
-            {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
-              <>
+            {/* {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
+              <> */}
                 <div className='listing-item' key={listing._id} onClick={() => setShowDetail(true)}>
                   <div className='thumbnail'>TL</div>
                   <div>
@@ -83,7 +80,7 @@ export default observer(({ section, category }: Props) => {
                   </div>
                 </div>
                 {showDetail && <DetailModal listing={listing} key={listing._id} setShowDetail={setShowDetail} />}
-              </> : 
+              {/* </> : 
               <>
                 <div className='listing-expired' key={listing._id}>
                   <div className='thumbnail'>TL</div>
@@ -104,7 +101,7 @@ export default observer(({ section, category }: Props) => {
                     </div>
                   </div>
                 </div>
-              </> }
+              </> } */}
           </>
 
         )) : null}

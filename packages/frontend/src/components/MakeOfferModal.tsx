@@ -9,7 +9,6 @@ import User from '../contexts/User'
 
 type Props = {
   listingId: string;
-  section: string;
   setShowMakeOffer: (value: boolean) => void;
 }
 
@@ -23,7 +22,7 @@ type ProofInfo = {
   valid: boolean
 }
 
-export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
+export default observer(({ listingId, setShowMakeOffer }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
@@ -37,11 +36,11 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
+  const [responderId, setResponderId] = React.useState('')
   const [rScore1, setRScore1] = React.useState('')
   const [rScore2, setRScore2] = React.useState('')
   const [rScore3, setRScore3] = React.useState('')
   const [rScore4, setRScore4] = React.useState('')
-  const [responderId, setResponderId] = React.useState('')
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -100,50 +99,7 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
                                   />
                               </div>
                           )
-                      })}
-
-                    {/* <div>
-                        <label htmlFor='score1'>reveal score1</label>
-                        <input 
-                          type='text' 
-                          id='score1' 
-                          name='score1' 
-                          onChange={(e) => setScore1(e.target.value)}
-                          className='offer-input'
-                        />
-                     </div>
-                     <div>   
-                        <label htmlFor='score2'>reveal score2</label>
-                        <input 
-                          type='text' 
-                          id='score2' 
-                          name='score2' 
-                          onChange={(e) => setScore2(e.target.value)}
-                          className='offer-input'
-                        />
-                     </div>
-                     <div>   
-                        <label htmlFor='score3'>reveal score3</label>
-                        <input 
-                          type='text' 
-                          id='score3' 
-                          name='score3' 
-                          onChange={(e) => setScore3(e.target.value)}
-                          className='offer-input'
-                        />
-                     </div>
-                     <div>
-                        <label htmlFor='score4'>reveal score4</label>
-                        <input 
-                          type='text' 
-                          id='score4' 
-                          name='score4' 
-                          onChange={(e) => setScore4(e.target.value)}
-                          className='offer-input'
-                        />
-                      </div> */}
-
-                  
+                      })}                  
               </div>
 
               <div className='offer-buttons'>
@@ -200,7 +156,10 @@ export default observer(({ listingId, section, setShowMakeOffer }: Props) => {
                     style={{marginTop: '1rem'}}
                     type='submit'
                     value='submit offer'
-                    onClick={() => app.submitOffer(listingId, section, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)}
+                    onClick={() => {
+                      const epoch = user.userState?.sync.calcCurrentEpoch()
+                      app.submitOffer(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
+                    }}
                   />
                 ) : (
                     <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button>
