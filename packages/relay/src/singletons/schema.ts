@@ -39,7 +39,8 @@ const _schema = [
             ['responderId', 'String'],
             ['offerAmount', 'String'],
             ['dealOpened', 'Bool'],
-            ['dealClosed', 'Bool'],
+            ['posterDealClosed', 'Bool'],
+            ['responderDealClosed', 'Bool'],
         ],
     },
     {

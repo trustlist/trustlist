@@ -131,8 +131,7 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                                 textOverflow: 'ellipsis',
                             }}
                         >
-                            {/* {user.epochKey(reqInfo.nonce ?? 0)} */}
-                            {responderId}
+                            {user.epochKey(reqInfo.nonce ?? 0)}
                         </p>
                   </div>
 

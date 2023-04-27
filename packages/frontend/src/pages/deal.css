@@ -7,3 +7,7 @@
   margin:  3rem;
   font-weight: 300;
 }
+
+input.checked {
+  accent-color: rgb(7, 156, 7);
+}
