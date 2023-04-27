@@ -126,7 +126,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                         <button 
                           className='accept' 
                           onClick={() => {
-                            app.updateDeal(listing._id, offer.offerAmount, offer.responderId, 'open')
+                            app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
                             setDealIsActive(true)
                           }}
                         >

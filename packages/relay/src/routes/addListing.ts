@@ -22,7 +22,8 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
         responderId: '',
         offerAmount: '',
         dealOpened: false,
-        dealClosed: false,
+        posterDealClosed: false,
+        responderDealClosed: false,
       })
       res.json({ message: 'success!' })
     } catch (error: any) {

@@ -81,8 +81,8 @@ class Trustlist {
     console.log(data.message)
   }
 
-  async updateDeal(id: string, offerAmount: string, responderId: string, action: string) {
-    const data = await fetch(`${SERVER}/api/updateDeal`, {
+  async dealOpen(id: string, offerAmount: string, responderId: string) {
+    const data = await fetch(`${SERVER}/api/dealOpen`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -91,7 +91,20 @@ class Trustlist {
         id,
         offerAmount,
         responderId,
-        action,
+      })
+    }).then(r => r.json())
+    console.log(data.message)
+  }
+
+  async dealClose(id: string, member: string) {
+    const data = await fetch(`${SERVER}/api/dealClose`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        id,
+        member,
       })
     }).then(r => r.json())
     console.log(data.message)

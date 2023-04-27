@@ -57,7 +57,7 @@ export default observer(() => {
                     id='complete1'
                     name='complete1'
                     className='checked'
-                    onClick={() => app.updateDeal(deal._id, deal.offerAmount, deal.responderId, 'close1')}
+                    onClick={() => app.dealClose(deal._id, 'poster')}
                   />
                 ) : (
                   <input 
@@ -72,12 +72,13 @@ export default observer(() => {
               </div>
               <div>
                 <div>member2: {deal.responderId.slice(0,6)}...</div>
-                {memberKeys.includes('my key') ? (
+                {memberKeys.includes(deal.responderId) ? (
                   <input
                     type='checkbox'
                     id='complete2'
                     name='complete2'
-                    onClick={() => app.updateDeal(deal._id, deal.offerAmount, deal.responderId, 'close2')}
+                    className='checked'
+                    onClick={() => app.dealClose(deal._id, 'responder')}
                   />
                 ) : (
                   <input 
