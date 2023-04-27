@@ -24,7 +24,6 @@ type ProofInfo = {
 export default observer(({ setShowNewListing }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
-
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
   const [proveData, setProveData] = React.useState<{
     [key: number]: number | string
@@ -179,43 +178,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                         />
                                     </div>
                                 )
-                            })}
-
-                        {/* <label htmlFor='score1'>reveal score1</label>
-                        <input 
-                          type='text' 
-                          id='score1' 
-                          name='score1' 
-                          onChange={(e) => setScore1(e.target.value)}
-                          className='form-input-sm'
-                        />
-                        <label htmlFor='score2'>reveal score2</label>
-                        <input 
-                          type='text' 
-                          id='score2' 
-                          name='score2' 
-                          onChange={(e) => setScore2(e.target.value)}
-                          className='form-input-sm'
-                        />
-                    </div> */}
-                    {/* <div className='form-flex'>
-                        <label htmlFor='score3'>reveal score3</label>
-                        <input 
-                          type='text' 
-                          id='score3' 
-                          name='score3' 
-                          onChange={(e) => setScore3(e.target.value)}
-                          className='form-input-sm'
-                        />
-                        <label htmlFor='score4'>reveal score4</label>
-                        <input 
-                          type='text' 
-                          id='score4' 
-                          name='score4' 
-                          onChange={(e) => setScore4(e.target.value)}
-                          className='form-input-sm'
-                        />
-                    </div> */}
+                            })}                   
                   </div>
                   <div>
                     <div style={{display: 'flex', paddingTop: '1rem'}}>
@@ -245,8 +208,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                 textOverflow: 'ellipsis',
                             }}
                         >
-                            {/* {user.epochKey(reqInfo.nonce ?? 0)} */}
-                            {posterId}
+                            {user.epochKey(reqInfo.nonce ?? 0)}
                         </p>
                   </div>
                 </div>
@@ -271,9 +233,20 @@ export default observer(({ setShowNewListing }: Props) => {
                     <input 
                       type='submit'
                       value='POST'
-                      onClick={() => {
-                        const epoch = user.userState?.sync.calcCurrentEpoch()
-                        app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                      onClick={async () => {                       
+                          if (
+                            user.userState &&
+                            user.userState.sync.calcCurrentEpoch() !==
+                              (await user.userState.latestTransitionedEpoch())
+                          ) {
+                              throw new Error('Needs transition')
+                          }
+                          await user.requestReputation(
+                            {[0]:'10000000'},
+                            reqInfo.nonce ?? 0
+                          )
+                          const epoch = user.userState?.sync.calcCurrentEpoch()
+                          app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
                       }}
                     />
                   ) : (
