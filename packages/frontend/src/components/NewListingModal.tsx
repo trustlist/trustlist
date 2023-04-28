@@ -43,7 +43,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const [pScore2, setPScore2] = React.useState('')
   const [pScore3, setPScore3] = React.useState('')
   const [pScore4, setPScore4] = React.useState('x')
-  const [posterId, setPosterId] = React.useState('')
+  // const [posterId, setPosterId] = React.useState('')
 
   const fieldType = (i: number) => {
     if (i < user.sumFieldCount) {
@@ -189,7 +189,6 @@ export default observer(({ setShowNewListing }: Props) => {
                                     ...v,
                                     nonce: Number(event.target.value),
                                 }))
-                                setPosterId(user.epochKey(reqInfo.nonce ?? 0))
                             }}
                         >
                             <option value="0">0</option>
@@ -246,6 +245,8 @@ export default observer(({ setShowNewListing }: Props) => {
                             reqInfo.nonce ?? 0
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
+                          const posterId = user.epochKey(reqInfo.nonce)
+                          console.log(posterId)
                           app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
                       }}
                     />

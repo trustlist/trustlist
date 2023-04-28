@@ -57,7 +57,21 @@ export default observer(() => {
                     id='complete1'
                     name='complete1'
                     className='checked'
-                    onClick={() => app.dealClose(deal._id, 'poster')}
+                    onClick={async () => {
+                      // won't need transition, but will error if deal's epoch has expired
+                      if (
+                        user.userState &&
+                        user.userState.sync.calcCurrentEpoch() !==
+                          (await user.userState.latestTransitionedEpoch())
+                      ) {
+                          throw new Error('Needs transition')
+                      }
+                      await user.requestReputation(
+                        {[0]:'00000001', [1]:'10000000'},
+                        reqInfo.nonce ?? 0
+                      )
+                      app.dealClose(deal._id, 'poster')
+                    }}
                   />
                 ) : (
                   <input 
@@ -78,7 +92,20 @@ export default observer(() => {
                     id='complete2'
                     name='complete2'
                     className='checked'
-                    onClick={() => app.dealClose(deal._id, 'responder')}
+                    onClick={async () => {
+                      if (
+                        user.userState &&
+                        user.userState.sync.calcCurrentEpoch() !==
+                          (await user.userState.latestTransitionedEpoch())
+                      ) {
+                          throw new Error('Needs transition')
+                      }
+                      await user.requestReputation(
+                        {[1]:'10000000'},
+                        reqInfo.nonce ?? 0
+                      )
+                      app.dealClose(deal._id, 'responder')
+                    }}
                   />
                 ) : (
                   <input 

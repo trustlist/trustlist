@@ -36,7 +36,7 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
-  const [responderId, setResponderId] = React.useState('')
+  // const [responderId, setResponderId] = React.useState('')
   const [rScore1, setRScore1] = React.useState('')
   const [rScore2, setRScore2] = React.useState('')
   const [rScore3, setRScore3] = React.useState('')
@@ -112,7 +112,6 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                                     ...v,
                                     nonce: Number(event.target.value),
                                 }))
-                                setResponderId(user.epochKey(reqInfo.nonce ?? 0))
                             }}
                         >
                             <option value="0">0</option>
@@ -157,6 +156,8 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                     value='submit offer'
                     onClick={() => {
                       const epoch = user.userState?.sync.calcCurrentEpoch()
+                      const responderId = user.epochKey(reqInfo.nonce ?? 0)
+                      console.log(responderId)
                       app.submitOffer(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
                     }}
                   />
