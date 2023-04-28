@@ -18,6 +18,8 @@ export default observer(() => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
+  const [sentiment, setSentiment] = React.useState(3)
+  const [dealAgain, setDealAgain] = React.useState(1)
   const [reqData1, setReqData1] = React.useState<{
     [key: number]: number | string
   }>({})
@@ -25,6 +27,7 @@ export default observer(() => {
     [key: number]: number | string
   }>({})
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
+  const sentiments = ['hard no', 'not really', 'whatever idc', 'yeah mostly', '100 percent']
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -121,195 +124,134 @@ export default observer(() => {
             </div>
           </div>
       
-          <div style={{display: 'flex'}}>
-            <div className="attestation-container">
+          <div className='attestation-container'>
+            <div className="attestation-input">
               <div className="icon">
-                  <h2>member1 attestation</h2>
-                  <Tooltip text="Create an attestation by rating your experience with this member." />
+                  <h2>member1 review</h2>
+                  <Tooltip text="Create an attestation by rating your experience dealing with this member." />
               </div>
-              <div
-                  style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      justifyContent: 'flex-start',
-                  }}
-              >
-                  {Array(
-                      user.userState.sync.settings.sumFieldCount
-                  )
-                      .fill(0)
-                      .map((_, i) => {
-                          return (
-                              <div key={i} style={{ margin: '4px' }}>
-                                  <p>
-                                      Score {i}
-                                  </p>
-                                  <input
-                                      value={reqData1[i] ?? ''}
-                                      onChange={(event) => {
-                                          if (
-                                              !/^\d*$/.test(
-                                                  event.target.value
-                                              )
-                                          )
-                                              return
-                                          setReqData1(() => ({
-                                              ...reqData1,
-                                              [i]: event.target.value,
-                                          }))
-                                      }}
-                                  />
-                              </div>
-                          )
-                      })}
+              <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
+              <div style={{display: 'flex', flexDirection:'column-reverse'}}>
+                {sentiments.map((sentiment) => (
+                    <div>
+                      <input 
+                        type='radio' 
+                        id={sentiment} 
+                        name='sentiment' 
+                        value={sentiment}
+                        onChange={(e) => setSentiment(sentiments.indexOf(e.target.value) + 1)}
+                      />
+                      <label htmlFor={sentiment}></label>{sentiment}<br/>
+                    </div>
+                ))}
               </div>
-              <div className="icon">
-                  <p style={{ marginRight: '8px' }}>
-                      Epoch key nonce
-                  </p>
-                  <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
+              <p>I would</p>
+              <div style={{paddingLeft: '3rem'}}>
+                <input
+                  type='radio' 
+                  id='gladly' 
+                  name='again' 
+                  value='gladly'
+                  onChange={(e) => setDealAgain(1)}
+                />
+                <label htmlFor='gladly'></label>GLADLY<br/>
+                <input
+                  type='radio' 
+                  id='never' 
+                  name='again' 
+                  value='never'
+                  onChange={(e) => setDealAgain(0)}
+                />
+                <label htmlFor='gladly'></label>NEVER<br/>
               </div>
-              <select
-                  value={reqInfo.nonce ?? 0}
-                  onChange={(event) => {
-                      setReqInfo((v) => ({
-                          ...v,
-                          nonce: Number(event.target.value),
-                      }))
-                  }}
-              >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-              </select>
-              <p style={{ fontSize: '12px' }}>
-                  Requesting data with epoch key:
-              </p>
-              <p
-                  style={{
-                      maxWidth: '650px',
-                      wordBreak: 'break-all',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                  }}
-              >
-                  {user.epochKey(reqInfo.nonce ?? 0)}
-              </p>
-
-              <Button
-                  onClick={async () => {
-                      if (
-                          user.userState &&
-                          user.userState.sync.calcCurrentEpoch() !==
-                              (await user.userState.latestTransitionedEpoch())
-                      ) {
-                          throw new Error('Needs transition')
-                      }
-                      await user.requestReputation(
-                          reqData1,
-                          reqInfo.nonce ?? 0
-                      )
-                      setReqData1({})
-                  }}
-              >
-                  Submit
-              </Button>
+              <p style={{paddingLeft: '7rem'}}>deal with this member again</p>
+              
+              <div style={{display: 'flex', justifyContent: 'center', paddingTop: '2rem'}}>
+                <Button
+                    onClick={async () => {
+                        if (
+                            user.userState &&
+                            user.userState.sync.calcCurrentEpoch() !==
+                                (await user.userState.latestTransitionedEpoch())
+                        ) {
+                            throw new Error('Needs transition')
+                        }
+                        const index2 = 10000000 + dealAgain
+                        const index3 = 10000000 + sentiment
+                        await user.requestReputation(
+                            {[1]:'00000001', [2]:index2, [3]:index3},
+                            memberKeys.indexOf(deal.posterId) ?? 0
+                        )
+                    }}
+                >
+                    Submit
+                </Button>
+              </div>
             </div>
 
-            <div className="attestation-container">
+            <div className="attestation-input">
               <div className="icon">
-                  <h2>member2 attestation</h2>
-                  <Tooltip text="Create an attestation by rating your experience with this member." />
+                  <h2>member2 review</h2>
+                  <Tooltip text="Create an attestation by rating your experience dealing with this member." />
               </div>
-              <div
-                  style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      justifyContent: 'flex-start',
-                  }}
-              >
-                  {Array(
-                      user.userState.sync.settings.sumFieldCount
-                  )
-                      .fill(0)
-                      .map((_, i) => {
-                          return (
-                              <div key={i} style={{ margin: '4px' }}>
-                                  <p>
-                                      Score {i}
-                                  </p>
-                                  <input
-                                      value={reqData2[i] ?? ''}
-                                      onChange={(event) => {
-                                          if (
-                                              !/^\d*$/.test(
-                                                  event.target.value
-                                              )
-                                          )
-                                              return
-                                          setReqData2(() => ({
-                                              ...reqData2,
-                                              [i]: event.target.value,
-                                          }))
-                                      }}
-                                  />
-                              </div>
-                          )
-                      })}
+              <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
+              <div style={{display: 'flex', flexDirection:'column-reverse'}}>
+                {sentiments.map((sentiment) => (
+                    <div>
+                      <input 
+                        type='radio' 
+                        id={sentiment} 
+                        name='sentiment' 
+                        value={sentiment}
+                        onChange={(e) => setSentiment(sentiments.indexOf(e.target.value) + 1)}
+                      />
+                      <label htmlFor={sentiment}></label>{sentiment}<br/>
+                    </div>
+                ))}
               </div>
-              <div className="icon">
-                  <p style={{ marginRight: '8px' }}>
-                      Epoch key nonce
-                  </p>
-                  <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
+              <p>I would</p>
+              <div style={{paddingLeft: '3rem'}}>
+                <input
+                  type='radio' 
+                  id='gladly' 
+                  name='again' 
+                  value='gladly'
+                  onChange={(e) => setDealAgain(1)}
+                />
+                <label htmlFor='gladly'></label>GLADLY<br/>
+                <input
+                  type='radio' 
+                  id='never' 
+                  name='again' 
+                  value='never'
+                  onChange={(e) => setDealAgain(0)}
+                />
+                <label htmlFor='gladly'></label>NEVER<br/>
               </div>
-              <select
-                  value={reqInfo.nonce ?? 0}
-                  onChange={(event) => {
-                      setReqInfo((v) => ({
-                          ...v,
-                          nonce: Number(event.target.value),
-                      }))
-                  }}
-              >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-              </select>
-              <p style={{ fontSize: '12px' }}>
-                  Requesting data with epoch key:
-              </p>
-              <p
-                  style={{
-                      maxWidth: '650px',
-                      wordBreak: 'break-all',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                  }}
-              >
-                  {user.epochKey(reqInfo.nonce ?? 0)}
-              </p>
-
-              <Button
-                  onClick={async () => {
-                      if (
-                          user.userState &&
-                          user.userState.sync.calcCurrentEpoch() !==
-                              (await user.userState.latestTransitionedEpoch())
-                      ) {
-                          throw new Error('Needs transition')
-                      }
-                      await user.requestReputation(
-                          reqData2,
-                          reqInfo.nonce ?? 0
-                      )
-                      setReqData2({})
-                  }}
-              >
-                  Submit
-              </Button>
+              <p style={{paddingLeft: '7rem'}}>deal with this member again</p>
+              
+              <div style={{display: 'flex', justifyContent: 'center', paddingTop: '2rem'}}>
+                <Button
+                    onClick={async () => {
+                        if (
+                            user.userState &&
+                            user.userState.sync.calcCurrentEpoch() !==
+                                (await user.userState.latestTransitionedEpoch())
+                        ) {
+                            throw new Error('Needs transition')
+                        }
+                        const index2 = 10000000 + dealAgain
+                        const index3 = 10000000 + sentiment
+                        await user.requestReputation(
+                            {[1]:'00000001', [2]:index2, [3]:index3},
+                            memberKeys.indexOf(deal.responderId) ?? 0
+                        )
+                    }}
+                >
+                    Submit
+                </Button>
+              </div>
             </div>
-
           </div>  
         </>
       : 'deal not found' }         

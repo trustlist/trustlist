@@ -72,12 +72,12 @@ export default observer(({ setShowNewListing }: Props) => {
                   <div>
                     <input 
                       type='radio' 
-                      id='section' 
+                      id={section} 
                       name='section' 
                       value={section}
                       onChange={(e) => setSection(e.target.value)}
                     />
-                    <label htmlFor='section'></label>{section}<br/>
+                    <label htmlFor={section}></label>{section}<br/>
                   </div>
                 ))}
               </div> 
@@ -88,12 +88,12 @@ export default observer(({ setShowNewListing }: Props) => {
                   <div style={{fontSize: '0.8rem'}}>
                     <input 
                       type='radio' 
-                      id='category' 
+                      id={category} 
                       name='category' 
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     />
-                    <label htmlFor='category'></label>{category}<br/>
+                    <label htmlFor={category}></label>{category}<br/>
                   </div>
                 ))}
               </div>
