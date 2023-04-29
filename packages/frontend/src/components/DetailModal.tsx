@@ -121,7 +121,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
                   {offers ? 
                     offers.map((offer: Offer) => (
                     <div>
-                      ${offer.offerAmount}  - scores: {offer.rScore1} / {offer.rScore2} / {offer.rScore3} / {offer.rScore4} 
+                      ${offer.offerAmount}  - 
+                       scores: {Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
+                       / {Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}
+                       / {Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}
+                       / {Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)} 
                       <Link to={`deal/${listing._id}`}>
                         <button 
                           className='accept' 
