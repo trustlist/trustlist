@@ -1,5 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
+import { Link } from 'react-router-dom'
 import Button from '../components/Button'
 import DetailModal from './DetailModal'
 import './memberDashboardModal.css'
@@ -18,6 +19,7 @@ type CurrentListing = {
   category: string;
   title: string;
   amount: string;
+  offerAmount: string,
   // amountType: string;
   // description: string;
   // pScore1: string;
@@ -25,28 +27,33 @@ type CurrentListing = {
   // pScore3: string;
   // pScore4: string;
   // offerAmount: string;
-  // dealOpened: boolean;
-  // dealClosed: boolean;
+  dealOpened: boolean;
+  dealClosed: boolean;
 }
 
 type CurrentOffer = {
   _id: string,
+  listingId: string,
   offerAmount: string,
 }
 
 export default observer(({ setShowMemberDash }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
+  const [showDetail, setShowDetail] = React.useState<boolean>(false)
+  const [detailData, setDetailData] = React.useState<any>()
 
   React.useEffect(() => {
     const loadData = async () => {
       const epk0 = user.epochKey(0)
       const epk1 = user.epochKey(1)
       const epk2 = user.epochKey(2)
-      await app.loadMemberActivity(epk0, epk1, epk2)
+      const epoch = user.userState?.sync.calcCurrentEpoch()
+      await app.loadMemberActivity(epoch, epk0, epk1, epk2)
     }
     loadData()
   }, [])
+  const deals = app.memberActiveDeals
   const listings = app.memberActiveListings
   const offers = app. memberActiveOffers
 
@@ -140,23 +147,52 @@ export default observer(({ setShowMemberDash }: Props) => {
               <div className='activity-container'>
                 <h4>awaiting my review</h4>
                 <div className='scroll-container'>
-                  <h5>$  title of some listing / $250</h5>
-                  <h5>$  the title of a different listing / $50</h5>
-                  
+                  {deals.length > 0 ? 
+                    deals.map((deal: CurrentListing) => (
+                      <Link to={`deal/${deal._id}`}>
+                        <h5 key={deal._id} onClick={() => setShowMemberDash(false)}>
+                          {deal.dealClosed ? <span>CLOSED  - </span> : <span>OPEN  - </span>}
+                          {deal.section} - {deal.category} - {deal.title} / ${deal.offerAmount}
+                        </h5>
+                      </Link>
+                    )) : <h5>- no open deals in this epoch</h5> }         
                 </div> 
                 <h4>my open listings</h4>
                 <div className='scroll-container'>
-                  {listings ? 
+                  {listings.length > 0 ? 
                     listings.map((listing: CurrentListing) => (
-                      <h5 key={listing._id}>{listing.section} - {listing.category} - {listing.title} / ${listing.amount}</h5>
-                    )) : 'no listings in this epoch'}
+                      <>
+                      <h5 
+                        key={listing._id}
+                        onClick={() => {
+                          setDetailData(listing)
+                          setShowDetail(true)
+                        }}
+                      >
+                        {listing.section} - {listing.category} - {listing.title} / ${listing.amount}
+                      </h5>
+                      {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
+                      </>
+                    )) : <h5>- no listings in this epoch</h5> }
                 </div>
                 <h4>my pending offers</h4>
                 <div className='scroll-container'>
-                  {offers ? 
+                  {offers.length > 0 ? 
                     offers.map((offer: CurrentOffer) => (
-                    <h5 key={offer._id}>need to add desc to offer obj / ${offer.offerAmount}</h5>
-                    )) : 'no listings in this epoch'}
+                      <>
+                      <h5 
+                        key={offer._id}
+                        onClick={async () => {
+                          await app.loadDealById(offer.listingId)
+                          setDetailData(app.listingsById.get(offer.listingId))
+                          setShowDetail(true)
+                        }}
+                      >
+                        need to add desc to offer obj / ${offer.offerAmount}
+                      </h5>
+                      {showDetail && <DetailModal listing={detailData} key={offer.listingId} setShowDetail={setShowDetail} />}
+                      </>
+                    )) : <h5>- no listings in this epoch</h5>}
                 </div>
               </div>             
             </div>

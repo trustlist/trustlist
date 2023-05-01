@@ -19,6 +19,7 @@ class Trustlist {
   servicesByCategory = new Map()
   housingByCategory = new Map()
   offersByListingId = new Map()
+  memberActiveDeals = []
   memberActiveListings = []
   memberActiveOffers = []
   // activityByMemberId = new Map()
@@ -144,22 +145,24 @@ class Trustlist {
     this.listingsById.set(id, data)
   }
 
-  async loadMemberActivity(epk0: string, epk1: string, epk2: string) {
-    const { listings, offers } = await fetch(`${SERVER}/api/loadActivity`, {
+  async loadMemberActivity(epoch: number | undefined, epk0: string, epk1: string, epk2: string) {
+    console.log('epoch for activity:', epoch)
+    const { deals, listings, offers } = await fetch(`${SERVER}/api/loadActivity`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
+        epoch,
         epk0,
         epk1,
         epk2,
       })
     }).then((r) => r.json())
+    this .memberActiveDeals = deals
     this.memberActiveListings = listings
     this.memberActiveOffers = offers
-    console.log(this.memberActiveListings)
-    // this.activityByMemberId.set()
+    // console.log(this.memberActiveDeals)
   }
 
   async removeListing(id: string) {

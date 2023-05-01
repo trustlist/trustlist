@@ -201,6 +201,7 @@ export default observer(({ setShowNewListing }: Props) => {
                     </div>
                         <p
                             style={{
+                                fontSize: '14px',
                                 maxWidth: '650px',
                                 wordBreak: 'break-all',
                                 overflow: 'hidden',
