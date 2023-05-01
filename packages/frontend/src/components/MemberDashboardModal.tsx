@@ -11,6 +11,29 @@ type Props = {
   setShowMemberDash: (value: boolean) => void;
 }
 
+type CurrentListing = {
+  _id: string;
+  // epoch: number | undefined;
+  section: string;
+  category: string;
+  title: string;
+  amount: string;
+  // amountType: string;
+  // description: string;
+  // pScore1: string;
+  // pScore2: string;
+  // pScore3: string;
+  // pScore4: string;
+  // offerAmount: string;
+  // dealOpened: boolean;
+  // dealClosed: boolean;
+}
+
+type CurrentOffer = {
+  _id: string,
+  offerAmount: string,
+}
+
 export default observer(({ setShowMemberDash }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
@@ -24,6 +47,8 @@ export default observer(({ setShowMemberDash }: Props) => {
     }
     loadData()
   }, [])
+  const listings = app.memberActiveListings
+  const offers = app. memberActiveOffers
 
   return (
     <div 
@@ -121,15 +146,17 @@ export default observer(({ setShowMemberDash }: Props) => {
                 </div> 
                 <h4>my open listings</h4>
                 <div className='scroll-container'>
-                  <h5>$  the title of a different listing / $50</h5>
-                  <h5>$  some other listing with a short description/ $100</h5>
+                  {listings ? 
+                    listings.map((listing: CurrentListing) => (
+                      <h5 key={listing._id}>{listing.section} - {listing.category} - {listing.title} / ${listing.amount}</h5>
+                    )) : 'no listings in this epoch'}
                 </div>
                 <h4>my pending offers</h4>
                 <div className='scroll-container'>
-                  <h5>$  the title of a different listing / $50</h5>
-                  <h5>$  some other listing with a short description/ $100</h5>
-                  <h5>$  some other listing with a short description/ $100</h5>
-                  <h5>$  title of some listing / $250</h5>
+                  {offers ? 
+                    offers.map((offer: CurrentOffer) => (
+                    <h5 key={offer._id}>need to add desc to offer obj / ${offer.offerAmount}</h5>
+                    )) : 'no listings in this epoch'}
                 </div>
               </div>             
             </div>

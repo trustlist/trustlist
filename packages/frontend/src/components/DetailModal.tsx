@@ -30,6 +30,7 @@ type Props = {
 }
 
 type Offer = {
+  _id: string,
   offerAmount: string;
   responderId: string;
   rScore1: string;
@@ -121,7 +122,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='offer-scroll'>
                   {offers ? 
                     offers.map((offer: Offer) => (
-                    <div>
+                    <div key={offer._id}>
                       ${offer.offerAmount}  - 
                        scores: {Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
                        / {Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}

@@ -19,7 +19,9 @@ class Trustlist {
   servicesByCategory = new Map()
   housingByCategory = new Map()
   offersByListingId = new Map()
-  activityByMemberId = new Map()
+  memberActiveListings = []
+  memberActiveOffers = []
+  // activityByMemberId = new Map()
 
   constructor() {
     makeAutoObservable(this)
@@ -143,7 +145,7 @@ class Trustlist {
   }
 
   async loadMemberActivity(epk0: string, epk1: string, epk2: string) {
-    const data = await fetch(`${SERVER}/api/loadActivity`, {
+    const { listings, offers } = await fetch(`${SERVER}/api/loadActivity`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -154,7 +156,9 @@ class Trustlist {
         epk2,
       })
     }).then((r) => r.json())
-    console.log(data)
+    this.memberActiveListings = listings
+    this.memberActiveOffers = offers
+    console.log(this.memberActiveListings)
     // this.activityByMemberId.set()
   }
 
