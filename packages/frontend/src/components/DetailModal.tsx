@@ -12,6 +12,7 @@ import User from '../contexts/User'
 type Props = {
   listing: {
     _id: string;
+    epoch: number | undefined,
     section: string;
     title: string;
     amount: string;

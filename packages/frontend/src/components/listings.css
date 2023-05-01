@@ -4,7 +4,7 @@
   align-items: center;
   background-color: rgb(235, 232, 232);
   border-radius: 0.5rem;
-  margin: 1.5rem 2rem 0.5rem 0;
+  margin: 1rem 2rem 0 2rem;
 }
 
 .listing-expired {
@@ -14,7 +14,7 @@
   background-color: rgb(230, 228, 228);
   border-radius: 0.5rem;
   border: solid 1px rgb(98, 97, 97);
-  margin: 1.5rem 2rem 0.5rem 0;
+  margin: 1rem 2rem 0 2rem;
   opacity: 35%;
 }
 

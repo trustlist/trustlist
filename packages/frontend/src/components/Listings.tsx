@@ -34,6 +34,7 @@ export default observer(({ section, category }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
   const [showDetail, setShowDetail] = React.useState<boolean>(false)
+  const [detailData, setDetailData] = React.useState<any>()
   React.useEffect(() => {
     const loadData = async () => {
       await app.loadSelectedCategory(section, category)
@@ -56,11 +57,18 @@ export default observer(({ section, category }: Props) => {
     <div className='listings'>
       {listings ? null : <div className='message'>this section is under construction.</div>}
       {listings ? 
-        listings.map((listing: Listing) => (
+        listings.slice().reverse().map((listing: Listing) => (
           <>
-            {/* {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
-              <> */}
-                <div className='listing-item' key={listing._id} onClick={() => setShowDetail(true)}>
+            {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
+              <>
+                <div 
+                  className='listing-item' 
+                  key={listing._id} 
+                  onClick={() => {
+                    setDetailData(listing)
+                    setShowDetail(true)
+                  }}
+                >
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
@@ -79,8 +87,8 @@ export default observer(({ section, category }: Props) => {
                     </div>
                   </div>
                 </div>
-                {showDetail && <DetailModal listing={listing} key={listing._id} setShowDetail={setShowDetail} />}
-              {/* </> : 
+                {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
+              </> : 
               <>
                 <div className='listing-expired' key={listing._id}>
                   <div className='thumbnail'>TL</div>
@@ -101,7 +109,7 @@ export default observer(({ section, category }: Props) => {
                     </div>
                   </div>
                 </div>
-              </> } */}
+              </> }
           </>
 
         )) : null}
