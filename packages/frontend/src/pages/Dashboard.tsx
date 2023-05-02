@@ -66,9 +66,9 @@ export default observer(() => {
                 <div className="info-container">
                     <div className="info-item">
                         <h3>Epoch</h3>
-                        <Tooltip
+                        {/* <Tooltip
                             text={`An epoch is a unit of time, defined by the attester, with a state tree and epoch tree. User epoch keys are valid for 1 epoch before they change.`}
-                        />
+                        /> */}
                     </div>
                     <div className="info-item">
                         <div>Current epoch #</div>
@@ -91,7 +91,7 @@ export default observer(() => {
 
                     <div className="info-item">
                         <h3>Latest Reputation</h3>
-                        <Tooltip text="This is all the reputation the user has received. The user cannot prove reputation from the current epoch." />
+                        {/* <Tooltip text="This is all the reputation the user has received. The user cannot prove reputation from the current epoch." /> */}
                     </div>
                     {userContext.data.map((data, i) => {
                         return (
@@ -108,7 +108,7 @@ export default observer(() => {
 
                     <div className="info-item">
                         <h3>Provable Reputation</h3>
-                        <Tooltip text="This is the reputation the user has received up until their last transitioned epoch. This reputation can be proven in ZK." />
+                        {/* <Tooltip text="This is the reputation the user has received up until their last transitioned epoch. This reputation can be proven in ZK." /> */}
                     </div>
                     {userContext.provableData.map((data, i) => {
                         return (
@@ -126,7 +126,7 @@ export default observer(() => {
                     <div className="action-container">
                         <div className="icon">
                             <h2>Change Data</h2>
-                            <Tooltip text="You can request changes to data here. The demo attester will freely change your data." />
+                            {/* <Tooltip text="You can request changes to data here. The demo attester will freely change your data." /> */}
                         </div>
                         <div
                             style={{
@@ -168,7 +168,7 @@ export default observer(() => {
                             <p style={{ marginRight: '8px' }}>
                                 Epoch key nonce
                             </p>
-                            <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." />
+                            {/* <Tooltip text="Epoch keys are short lived identifiers for a user. They can be used to receive reputation and are valid only for 1 epoch." /> */}
                         </div>
                         <select
                             value={reqInfo.nonce ?? 0}
@@ -220,9 +220,9 @@ export default observer(() => {
                     <div className="action-container transition">
                         <div className="icon">
                             <h2>User State Transition</h2>
-                            <Tooltip
+                            {/* <Tooltip
                                 text={`The user state transition allows a user to insert a state tree leaf into the latest epoch. The user sums all the reputation they've received in the past and proves it in ZK.`}
-                            />
+                            /> */}
                         </div>
                         <Button onClick={() => userContext.stateTransition()}>
                             Transition
@@ -232,7 +232,7 @@ export default observer(() => {
                     <div className="action-container">
                         <div className="icon">
                             <h2>Prove Data</h2>
-                            <Tooltip text="Users can prove they control some amount of data without revealing exactly how much they control." />
+                            {/* <Tooltip text="Users can prove they control some amount of data without revealing exactly how much they control." /> */}
                         </div>
                         {Array(
                             userContext.userState.sync.settings.sumFieldCount

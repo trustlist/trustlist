@@ -6,10 +6,11 @@ import { observer } from 'mobx-react-lite'
 
 type Props = {
     text: string
+    content: any
     maxWidth?: number
 }
 
-export default observer(({ text, maxWidth, ...props }: Props) => {
+export default observer(({ text, content, maxWidth, ...props }: Props) => {
     const ui = React.useContext(UIContext)
     const containerEl: React.RefObject<any> = React.createRef()
     const [timer, setTimer] = useState<any>(null)
@@ -63,10 +64,11 @@ export default observer(({ text, maxWidth, ...props }: Props) => {
             {...props}
         >
             <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <img
+                {/* <img
                     src={require('../../public/info_icon.svg')}
                     alt="info icon"
-                />
+                /> */}
+                {content}
             </div>
             {showingPopup && (
                 <div

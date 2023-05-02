@@ -1,10 +1,14 @@
+.listings {
+  margin: 1.5rem 1.5rem 0.7rem 2rem;
+}
+
 .listing-item {
   display: grid;
   grid-template-columns: 17% 65% 18%;
   align-items: center;
   background-color: rgb(235, 232, 232);
   border-radius: 0.5rem;
-  margin: 1rem 2rem 0 2rem;
+  margin-bottom: 0.8rem;
 }
 
 .listing-expired {
@@ -14,7 +18,7 @@
   background-color: rgb(230, 228, 228);
   border-radius: 0.5rem;
   border: solid 1px rgb(98, 97, 97);
-  margin: 1rem 2rem 0 2rem;
+  margin-bottom: 0.8rem;
   opacity: 35%;
 }
 
@@ -51,4 +55,5 @@
   padding: 0.5rem 0;
   font-weight: 600;
   font-size: 0.9rem;
+  cursor: pointer;
 }

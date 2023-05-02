@@ -111,7 +111,7 @@ export default observer(({ setShowNewListing }: Props) => {
                   </div>
                   <div style={{display: 'flex'}}>
                     <div className='form-flex'>
-                      <label htmlFor='amount'>reserve amount</label>
+                      <label htmlFor='amount'>amount</label>
                       <input 
                         type='text' 
                         id='amount' 
@@ -213,7 +213,13 @@ export default observer(({ setShowNewListing }: Props) => {
                   </div>
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'center'}}>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  {repProof.proof.length ? (
+                    <div className='proof'>
+                      {repProof.valid ? '✅' : '❌'}
+                    </div>
+                  ) : null}
+                  
                   <Button
                     onClick={async () => {
                       const proof = await user.proveData(
@@ -224,11 +230,7 @@ export default observer(({ setShowNewListing }: Props) => {
                   >
                     prove trust scores
                   </Button>
-                  {repProof.proof.length ? (
-                    <>
-                      {repProof.valid ? '✅' : '❌'}
-                    </>
-                  ) : null}
+                  
                   {repProof.valid ? (
                     <input 
                       type='submit'

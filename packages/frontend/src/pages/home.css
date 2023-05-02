@@ -74,10 +74,17 @@ p {
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
+.proof {
+  margin-right: 0.5rem;
+  font-size: 2rem;
+}
+
 input[type=submit] {
-  border: 0.15rem blue solid;
+  border: 1px blue;
   border-radius: 0.3rem;
-  color: blue;
+  background-color: blue;
+  color: white;
+  font-size: 1rem;
   padding: 0.8rem 2rem;
   margin-left: 0.5rem;
   cursor: pointer;
@@ -97,9 +104,10 @@ input[type=submit] {
   font-weight: 500;
   padding: 4px 8px;
   border-radius: 8px;
-  border: 1px solid blue;
+  border: 3px solid white;
   font-size: 18px;
-  background: white;
+  background: blue;
+  color: white;
   transition: all 0.25s ease;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
   position: absolute;
@@ -110,7 +118,7 @@ input[type=submit] {
   margin-right: -7px;
 }
 
-.close-btn:hover {
+/* .close-btn:hover {
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
   transform: translate(-4px, 4px);
-}
+} */

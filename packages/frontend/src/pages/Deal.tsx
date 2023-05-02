@@ -128,7 +128,7 @@ export default observer(() => {
             <div className="attestation-input">
               <div className="icon">
                   <h2>member1 review</h2>
-                  <Tooltip text="Create an attestation by rating your experience dealing with this member." />
+                  {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
               </div>
               <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
               <div style={{display: 'flex', flexDirection:'column-reverse'}}>
@@ -192,7 +192,7 @@ export default observer(() => {
             <div className="attestation-input">
               <div className="icon">
                   <h2>member2 review</h2>
-                  <Tooltip text="Create an attestation by rating your experience dealing with this member." />
+                  {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
               </div>
               <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
               <div style={{display: 'flex', flexDirection:'column-reverse'}}>

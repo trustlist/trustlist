@@ -6,6 +6,7 @@ import './listings.css'
 
 import Trustlist from '../contexts/Trustlist';
 import User from '../contexts/User';
+import Tooltip from './Tooltip';
 
 type Props = {
   section: string;
@@ -58,7 +59,7 @@ export default observer(({ section, category }: Props) => {
 
   return (
     <div className='listings'>
-      {listings ? null : <div className='message'>this section is under construction.</div>}
+      {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
       {listings ? 
         listings.slice().reverse().map((listing: Listing) => (
           <>
@@ -75,18 +76,38 @@ export default observer(({ section, category }: Props) => {
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
-                        <div>reserve amount: ${listing.amount}</div>
-                        <div style={{marginRight: '200px'}}>current offers: 1</div>
+                        <div>${listing.amount}</div>
+                        <div style={{marginRight: '200px'}}>{listing.description}</div>
                         <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
+                      <div className='score-item'>
+                        <Tooltip 
+                          text='some text here'
+                          content={Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
+                        />
+                      </div>
+                      <div className='score-item'>
+                        <Tooltip 
+                          text='different text here'
+                          content={Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}
+                        />    
+                      </div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
-                      <div className='score-item'>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
+                      <div className='score-item'>
+                        <Tooltip
+                          text='other text'
+                          content={Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}
+                        />  
+                      </div>
+                      <div className='score-item'>
+                        <Tooltip
+                          text='differenter text'
+                          content={Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
