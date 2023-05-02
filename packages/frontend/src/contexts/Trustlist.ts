@@ -14,6 +14,7 @@ class Trustlist {
   sentiments: string[] = []
   categoriesBySection = new Map()
   listingsById = new Map()
+  // listingsBySectionAndCategory = new Map()
   forSaleByCategory = new Map()
   jobsByCategory = new Map()
   servicesByCategory = new Map()
@@ -36,8 +37,8 @@ class Trustlist {
     this.categoriesBySection.set('services', ['automotive', 'beauty', 'cell/mobile', 'computer', 'creative', 'event', 'financial', 'health', 'household', 'labor', 'legal', 'lessons', 'pet', 'real estate', 'skilled trade', 'travel'])
     this.categoriesBySection.forEach((value, key) => {this.sections.push(key)})
     this.sentiments = ['100 percent', 'yeah, mostly', 'whatever idc', 'not really', 'hard no']
-    this.forSaleByCategory.set('antiques', [{_id: '54321', epoch: 28, section: 'for sale', title: 'Really old chair', amount: '200', amountType: 'one time', pScore1: '56', pScore2: '77', pScore3: '67', pScore4: "81", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}, {_id: '12345', epoch: 10, section: 'for sale', title: 'Vintage Lamp', amount: '125', amountType: 'one time', pScore1: '44', pScore2: '87', pScore3: '66', pScore4: '99', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}])
-    this.forSaleByCategory.set('appliances', [{_id: '67890', section: 'for sale', title: 'Refrigerator: like new', amount: '600', amountType: 'one time', pScore1: '34', pScore2: '90', pScore3: '97', pScore4: "55", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}, {_id: '09876', section: 'for sale', title: 'Stacking washer/dryer combo', amount: '450', amountType: 'one time', pScore1: '52', pScore2: '56', pScore3: '33', pScore4: '78', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}])
+    // this.forSaleByCategory.set('antiques', [{_id: '54321', epoch: 28, section: 'for sale', title: 'Really old chair', amount: '200', amountType: 'one time', pScore1: '56', pScore2: '77', pScore3: '67', pScore4: "81", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}, {_id: '12345', epoch: 10, section: 'for sale', title: 'Vintage Lamp', amount: '125', amountType: 'one time', pScore1: '44', pScore2: '87', pScore3: '66', pScore4: '99', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}])
+    // this.forSaleByCategory.set('appliances', [{_id: '67890', section: 'for sale', title: 'Refrigerator: like new', amount: '600', amountType: 'one time', pScore1: '34', pScore2: '90', pScore3: '97', pScore4: "55", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}, {_id: '09876', section: 'for sale', title: 'Stacking washer/dryer combo', amount: '450', amountType: 'one time', pScore1: '52', pScore2: '56', pScore3: '33', pScore4: '78', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}])
   }
 
   async createNewListing(epoch: any, section: string, category: string, title: string, amount: string, amountType: string, description: string, posterId: string, pScore1: string, pScore2: string, pScore3: string, pScore4: string) {
@@ -116,7 +117,17 @@ class Trustlist {
   }
 
   async loadSelectedCategory(section: string, category: string) {
-    const listings = await fetch(`${SERVER}/api/loadListings/${section}/${category}`).then((r) => r.json())
+    console.log('hit app fx')
+    const listings = await fetch(`${SERVER}/api/loadListings`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        section,
+        category,
+      })
+    }).then((r) => r.json())
     console.log(listings)
     this.ingestListings(listings, section, category)
   }
@@ -124,6 +135,7 @@ class Trustlist {
   async ingestListings(_listings: string, section: string, category: string) {
     // console.log(_listings, section, category)
     const listings = [_listings].flat()
+    // this.listingsBySectionAndCategory.set(`${section}${category}`, listings)
     if (section === 'for sale') {
       this.forSaleByCategory.set(category, listings)
     } else if (section === 'housing') {

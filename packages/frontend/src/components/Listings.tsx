@@ -9,7 +9,7 @@ import User from '../contexts/User';
 
 type Props = {
   section: string;
-  category: string
+  category: string;
 }
 
 type Listing = {
@@ -35,6 +35,8 @@ export default observer(({ section, category }: Props) => {
   const user = React.useContext(User)
   const [showDetail, setShowDetail] = React.useState<boolean>(false)
   const [detailData, setDetailData] = React.useState<any>()
+  console.log(section, category)
+
   React.useEffect(() => {
     const loadData = async () => {
       await app.loadSelectedCategory(section, category)
@@ -52,6 +54,7 @@ export default observer(({ section, category }: Props) => {
   } else {
     listings = app.servicesByCategory.get(category)
   }
+  console.log(listings)
 
   return (
     <div className='listings'>
@@ -87,7 +90,7 @@ export default observer(({ section, category }: Props) => {
                     </div>
                   </div>
                 </div>
-                {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
+                {showDetail && <DetailModal listing={detailData} key={detailData._id} setShowDetail={setShowDetail} />}
               </> : 
               <>
                 <div className='listing-expired' key={listing._id}>

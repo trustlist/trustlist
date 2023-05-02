@@ -3,10 +3,10 @@ import { DB } from 'anondb/node'
 import { Synchronizer } from '@unirep/core'
 
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
-  app.get('/api/loadListings/:section/:category', async (req, res) => {
+  app.post('/api/loadListings', async (req, res) => {
     try {
-      const { section, category } = req.params
-      console.log(section, category)
+      const { section, category } = req.body
+      console.log('hit:', section, 'no cat?', category)
       const listings = await db.findMany('Listings', {
         where: {
           section,
