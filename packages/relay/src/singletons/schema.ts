@@ -49,6 +49,7 @@ const _schema = [
         rows: [
             ['epoch', 'Int'],
             ['listingId', 'String'],
+            ['listingTitle', 'String'],
             ['offerAmount', 'String'],
             ['responderId', 'String'],
             ['rScore1', 'String'],

@@ -64,7 +64,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 {user.hasSignedUp ? (
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
-                      {showMakeOffer && <MakeOfferModal listingId={listing._id} setShowMakeOffer={setShowMakeOffer}/>}
+                      {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
                   </>
                 ) : (
                   <button style={{cursor: 'not-allowed'}}>make an offer</button>

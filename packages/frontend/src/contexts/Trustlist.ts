@@ -66,7 +66,7 @@ class Trustlist {
     console.log(data.message)
   }
 
-  async submitOffer(epoch: any, listingId: string, responderId: string, offerAmount: string, rScore1: string, rScore2: string, rScore3: string, rScore4: string) {
+  async submitOffer(epoch: any, listingId: string, listingTitle: string, responderId: string, offerAmount: string, rScore1: string, rScore2: string, rScore3: string, rScore4: string) {
     console.log(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
     const data = await fetch(`${SERVER}/api/submitOffer`, {
       method: 'POST',
@@ -76,6 +76,7 @@ class Trustlist {
       body: JSON.stringify({
         epoch,
         listingId,
+        listingTitle,
         responderId,
         offerAmount,
         rScore1,

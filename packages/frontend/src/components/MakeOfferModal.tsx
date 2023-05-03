@@ -9,6 +9,7 @@ import User from '../contexts/User'
 
 type Props = {
   listingId: string;
+  listingTitle: string
   setShowMakeOffer: (value: boolean) => void;
 }
 
@@ -22,7 +23,7 @@ type ProofInfo = {
   valid: boolean
 }
 
-export default observer(({ listingId, setShowMakeOffer }: Props) => {
+export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
 
@@ -36,7 +37,6 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
-  // const [responderId, setResponderId] = React.useState('')
   const [rScore1, setRScore1] = React.useState('')
   const [rScore2, setRScore2] = React.useState('')
   const [rScore3, setRScore3] = React.useState('')
@@ -52,7 +52,6 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
         <div className='nested'>
           <form>
             <div className='offer-content'>
-              {/* <div>{listingId}</div> */}
               <div className='offer-container'>
                     <div className=''>
                         <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600'}}>amount: $</label>
@@ -158,27 +157,15 @@ export default observer(({ listingId, setShowMakeOffer }: Props) => {
                       const epoch = user.userState?.sync.calcCurrentEpoch()
                       const responderId = user.epochKey(reqInfo.nonce ?? 0)
                       console.log(responderId)
-                      app.submitOffer(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
+                      app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
                     }}
                   />
                 {/* ) : ( */}
                     {/* <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button> */}
                 {/* )} */}
               </div>
-              
-              {/* <div className='offer-buttons'>
-                  <Button>prove trust scores</Button>
-                  <button 
-                    style={{marginTop: '1rem'}}
-                    type='submit'
-                    onClick={() => app.submitOffer(listingId, section, responderId, offerAmount, score1, score2, score3, score4)}
-                  >
-                    submit offer
-                  </button>
-              </div> */}
-            </div>
 
-                
+            </div>       
           <button className='close-btn' onClick={() => setShowMakeOffer(false)}>X</button>
           </form>
         </div>
