@@ -45,11 +45,8 @@ export default observer(({ setShowMemberDash }: Props) => {
 
   React.useEffect(() => {
     const loadData = async () => {
-      const epk0 = user.epochKey(0)
-      const epk1 = user.epochKey(1)
-      const epk2 = user.epochKey(2)
-      const epoch = user.userState?.sync.calcCurrentEpoch()
-      await app.loadMemberActivity(epoch, epk0, epk1, epk2)
+      const epochKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
+      await app.loadMemberActivity(epochKeys)
     }
     loadData()
   }, [])
@@ -147,7 +144,7 @@ export default observer(({ setShowMemberDash }: Props) => {
               <div className='activity-container'>
                 <h4>awaiting my review</h4>
                 <div className='scroll-container'>
-                  {deals.length > 0 ? 
+                  {deals && deals.length > 0 ? 
                     deals.map((deal: CurrentListing) => (
                       <Link to={`deal/${deal._id}`}>
                         <h5 key={deal._id} onClick={() => setShowMemberDash(false)}>
@@ -159,7 +156,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                 </div> 
                 <h4>my open listings</h4>
                 <div className='scroll-container'>
-                  {listings.length > 0 ? 
+                  {listings && listings.length > 0 ? 
                     listings.map((listing: CurrentListing) => (
                       <>
                       <h5 
@@ -177,7 +174,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                 </div>
                 <h4>my pending offers</h4>
                 <div className='scroll-container'>
-                  {offers.length > 0 ? 
+                  {offers && offers.length > 0 ? 
                     offers.map((offer: CurrentOffer) => (
                       <>
                       <h5 

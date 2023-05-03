@@ -157,24 +157,19 @@ class Trustlist {
     this.listingsById.set(id, data)
   }
 
-  async loadMemberActivity(epoch: number | undefined, epk0: string, epk1: string, epk2: string) {
-    console.log('epoch for activity:', epoch)
+  async loadMemberActivity(epochKeys: string[]) {
     const { deals, listings, offers } = await fetch(`${SERVER}/api/loadActivity`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        epoch,
-        epk0,
-        epk1,
-        epk2,
+        epochKeys
       })
     }).then((r) => r.json())
-    this .memberActiveDeals = deals
+    this.memberActiveDeals = deals
     this.memberActiveListings = listings
     this.memberActiveOffers = offers
-    // console.log(this.memberActiveDeals)
   }
 
   async removeListing(id: string) {
