@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
-import Button from '../components/Button'
 import Tooltip from '../components/Tooltip'
 import './detailModal.css'
 
@@ -95,24 +94,32 @@ export default observer(({ listing, setShowDetail }: Props) => {
               </div>
               <div className='trust-container'>
                 <div className='trust-item'>
-                  <div>Score 1: </div>
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
-                  <Tooltip text='explain what this score represents' content={'x'}/>
+                  <Tooltip 
+                    text='Legitimate Poster score: this member has completed a transaction for 60% of the listings they have posted.' 
+                    content=' LP score : '
+                  />
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)} %</div>
                 </div>
                 <div className='trust-item'>
-                  <div>Score 2: </div>
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
-                  <Tooltip text='explain what this score represents' content={'x'}/>
+                  <Tooltip 
+                    text='Community Builder score: this member has submitted attestations for 100% of the transactions they have been involved in' 
+                    content=' CB score : '
+                  />
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)} %</div>
                 </div>
                 <div className='trust-item'>
-                  <div>Score 3: </div>
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
-                  <Tooltip text='explain what this score represents' content={'x'}/>
+                  <Tooltip 
+                    text='Trusted DealMaker: 100% of members who have transacted with this member would be happy to deal with them again' 
+                    content=' TD score : '
+                  />
+                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)} %</div>
                 </div>
                 <div className='trust-item'>
-                  <div>Score 4: </div>
-                  <div style={{fontWeight: '600'}}>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
-                  <Tooltip text='explain what this score represents' content={'x'}/>
+                  <Tooltip 
+                    text='Good Vibes score : others who have interacted with his member have given them 80% of all possible points for being friendly, communicative, and respectful' 
+                    content=' GV score : '
+                  />
+                  <div style={{fontWeight: '600'}}>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)} %</div>
                 </div>
               </div>  
             </div>
@@ -122,12 +129,12 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='offer-scroll'>
                   {offers ? 
                     offers.map((offer: Offer) => (
-                    <div key={offer._id}>
-                      ${offer.offerAmount}  - 
-                       scores: {Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
-                       / {Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}
-                       / {Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}
-                       / {Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)} 
+                    <div key={offer._id} className='offer'>
+                      <div>${offer.offerAmount}  --  member's scores: </div>
+                      <div className='offer-score'>{Math.floor((Number(offer.rScore1) % 128) / (Number(offer.rScore1) >> 23) * 100)}</div>
+                      <div className='offer-score'>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)}</div>
+                      <div className='offer-score'>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)}</div>
+                      <div className='offer-score'>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)}</div> 
                       <Link to={`deal/${listing._id}`}>
                         <button 
                           className='accept' 

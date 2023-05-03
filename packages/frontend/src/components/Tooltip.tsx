@@ -27,7 +27,7 @@ export default observer(({ text, content, maxWidth, ...props }: Props) => {
         setTextWidth(calcWidth)
         const { x } = containerEl.current.getBoundingClientRect()
         const screenMaxWidth = window.innerWidth - x
-        const minWidth = _maxWidth + 20
+        const minWidth = _maxWidth + 110
         setLeftOffset(screenMaxWidth > minWidth ? 0 : minWidth - screenMaxWidth)
     })
 

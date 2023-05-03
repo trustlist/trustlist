@@ -142,7 +142,7 @@ export default observer(({ setShowMemberDash }: Props) => {
               </div>
 
               <div className='activity-container'>
-                <h4>awaiting my review</h4>
+                <h4>deals awaiting my review</h4>
                 <div className='scroll-container'>
                   {deals && deals.length > 0 ? 
                     deals.map((deal: CurrentListing) => (
