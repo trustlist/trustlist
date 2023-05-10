@@ -1,18 +1,35 @@
+input.checked {
+  accent-color: rgb(7, 156, 7);
+}
+
+.deal-content {
+  border-radius: 0.5rem;
+  border: 0.2rem solid rgb(238, 235, 235);
+  margin: 1rem 4rem 4rem;
+  padding: 0rem 3rem 2rem;
+}
+
+.deal-info {
+  display: flex;
+  justify-content: space-between;
+}
+
 .attestation-container {
   display: flex;
   justify-content: space-between;
-  margin: 3rem 5rem;
+  padding-top: 1rem;
 }
 
-.attestation-input {
-  width: 350px;
+.attestation-form {
+  width: 42%;
   height: fit-content;
-  border: 1px solid black;
+  background-color: rgb(238, 235, 235);
   border-radius: 8px;
-  padding: 16px 16px 30px;
-  font-weight: 300;
+  padding: 0 1rem 1rem;
 }
 
-input.checked {
-  accent-color: rgb(7, 156, 7);
+.sentiments {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 0 1rem 2rem ;
 }

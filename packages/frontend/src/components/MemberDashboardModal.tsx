@@ -34,6 +34,7 @@ type CurrentListing = {
 type CurrentOffer = {
   _id: string,
   listingId: string,
+  listingTitle: string,
   offerAmount: string,
 }
 
@@ -185,7 +186,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                           setShowDetail(true)
                         }}
                       >
-                        need to add desc to offer obj / ${offer.offerAmount}
+                        {offer.listingTitle} / ${offer.offerAmount}
                       </h5>
                       {showDetail && <DetailModal listing={detailData} key={offer.listingId} setShowDetail={setShowDetail} />}
                       </>

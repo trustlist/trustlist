@@ -27,7 +27,7 @@ export default observer(() => {
     [key: number]: number | string
   }>({})
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
-  const sentiments = ['hard no', 'not really', 'whatever idc', 'yeah mostly', '100 percent']
+  const sentiments = ['hard no', 'not really', 'whatever idc', 'mostly', 'yeah def']
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -45,13 +45,12 @@ export default observer(() => {
   }
 
   return (
-    <div style={{color: 'black'}}>
-      <hr style={{margin: '1rem'}}></hr>
+    <div className='deal-content'>
       {deal ? 
         <>
-          <div style={{textAlign: 'center', padding: '0 5rem'}}>
-            <div>deal id: {deal._id} | {deal.title} | ${deal.offerAmount}</div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div style={{textAlign: 'center'}}>
+            <h3>{deal.title} | ${deal.offerAmount}</h3>
+            <div className='deal-info'>
               <div>
                 <div>member1: {deal.posterId.slice(0,6)}...</div>
                 {memberKeys.includes(deal.posterId) ? (
@@ -125,13 +124,13 @@ export default observer(() => {
           </div>
       
           <div className='attestation-container'>
-            <div className="attestation-input">
+            <div className="attestation-form">
               <div className="icon">
-                  <h2>member1 review</h2>
+                  <h2>member 1 review</h2>
                   {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
               </div>
-              <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
-              <div style={{display: 'flex', flexDirection:'column-reverse'}}>
+              <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
+              <div className='sentiments'>
                 {sentiments.map((sentiment) => (
                     <div>
                       <input 
@@ -146,7 +145,7 @@ export default observer(() => {
                 ))}
               </div>
               <p>I would</p>
-              <div style={{paddingLeft: '3rem'}}>
+              <div style={{paddingLeft: '2rem'}}>
                 <input
                   type='radio' 
                   id='gladly' 
@@ -154,7 +153,7 @@ export default observer(() => {
                   value='gladly'
                   onChange={(e) => setDealAgain(1)}
                 />
-                <label htmlFor='gladly'></label>GLADLY<br/>
+                <label htmlFor='gladly'>GLADLY</label><br/>
                 <input
                   type='radio' 
                   id='never' 
@@ -162,11 +161,11 @@ export default observer(() => {
                   value='never'
                   onChange={(e) => setDealAgain(0)}
                 />
-                <label htmlFor='gladly'></label>NEVER<br/>
+                <label htmlFor='gladly'>NEVER</label>
               </div>
-              <p style={{paddingLeft: '7rem'}}>deal with this member again</p>
+              <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
               
-              <div style={{display: 'flex', justifyContent: 'center', paddingTop: '2rem'}}>
+              <div style={{padding: '1rem'}}>
                 <Button
                     onClick={async () => {
                         if (
@@ -189,13 +188,13 @@ export default observer(() => {
               </div>
             </div>
 
-            <div className="attestation-input">
+            <div className="attestation-form">
               <div className="icon">
-                  <h2>member2 review</h2>
+                  <h2>member 2 review</h2>
                   {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
               </div>
-              <p>The member I interacted with in this deal was friendly, communicative, and respectful.</p>
-              <div style={{display: 'flex', flexDirection:'column-reverse'}}>
+              <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
+              <div className='sentiments'>
                 {sentiments.map((sentiment) => (
                     <div>
                       <input 
@@ -210,7 +209,7 @@ export default observer(() => {
                 ))}
               </div>
               <p>I would</p>
-              <div style={{paddingLeft: '3rem'}}>
+              <div style={{paddingLeft: '2rem'}}>
                 <input
                   type='radio' 
                   id='gladly' 
@@ -218,7 +217,7 @@ export default observer(() => {
                   value='gladly'
                   onChange={(e) => setDealAgain(1)}
                 />
-                <label htmlFor='gladly'></label>GLADLY<br/>
+                <label htmlFor='gladly'>GLADLY</label><br/>
                 <input
                   type='radio' 
                   id='never' 
@@ -226,11 +225,11 @@ export default observer(() => {
                   value='never'
                   onChange={(e) => setDealAgain(0)}
                 />
-                <label htmlFor='gladly'></label>NEVER<br/>
+                <label htmlFor='gladly'>NEVER</label>
               </div>
-              <p style={{paddingLeft: '7rem'}}>deal with this member again</p>
+              <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
               
-              <div style={{display: 'flex', justifyContent: 'center', paddingTop: '2rem'}}>
+              <div style={{padding: '1rem'}}>
                 <Button
                     onClick={async () => {
                         if (
