@@ -43,15 +43,6 @@ export default observer(({ setShowNewListing }: Props) => {
   const [pScore2, setPScore2] = React.useState('')
   const [pScore3, setPScore3] = React.useState('')
   const [pScore4, setPScore4] = React.useState('x')
-  // const [posterId, setPosterId] = React.useState('')
-
-  const fieldType = (i: number) => {
-    if (i < user.sumFieldCount) {
-        return 'sum'
-    } else if (i % 2 === user.sumFieldCount % 2) {
-        return 'replace'
-    } else return 'timestamp'
-  }
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -60,11 +51,10 @@ export default observer(({ setShowNewListing }: Props) => {
   return (
     <div 
       className='dark-bg'
-      // onClick={() => setshowNewListing(false)}
+      // onClick={() => setShowNewListing(false)}
       >
       <div className='centered'>
         <div className='modal'>
-          {/* <form > */}
             <div className='form-content'>
               <div>
                 <p style={{fontWeight: '600'}}>listing type:</p>
@@ -144,7 +134,6 @@ export default observer(({ setShowNewListing }: Props) => {
 
                 <div className='form-container'>
                   <div style={{display: 'flex'}}>
-                    {/* <div className='form-flex'> */}
                         {Array(
                             user.userState.sync.settings.sumFieldCount
                         )
@@ -249,8 +238,8 @@ export default observer(({ setShowNewListing }: Props) => {
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
                           const posterId = user.epochKey(reqInfo.nonce)
-                          console.log(posterId)
                           app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                          setShowNewListing(false)
                       }}
                     />
                   ) : (
@@ -258,11 +247,10 @@ export default observer(({ setShowNewListing }: Props) => {
                   )}
                 </div>
               </div>
-            </div>
+            </div>  
 
-            
-          {/* </form> */}
           <button className='close-btn' onClick={() => setShowNewListing(false)}>X</button>
+        
         </div>
       </div>
     </div>

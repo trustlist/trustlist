@@ -102,57 +102,56 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
               </div>
 
               <div className='offer-buttons'>
-                  <div>
-                    <div style={{display: 'flex'}}>
-                        <select
-                            value={reqInfo.nonce ?? 0}
-                            onChange={(event) => {
-                                setReqInfo((v) => ({
-                                    ...v,
-                                    nonce: Number(event.target.value),
-                                }))
-                            }}
-                        >
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <p style={{ fontSize: '12px' }}>
-                            submit offer with epoch key:
-                        </p>
-                    </div>
-                        <p
-                            style={{
-                                maxWidth: '180px',
-                                wordBreak: 'break-all',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {user.epochKey(reqInfo.nonce ?? 0)}
-                        </p>
-                  </div>
-
-                <Button
-                  onClick={async () => {
-                    const proof = await user.proveData(
-                        proveData
-                    )
-                    setRepProof(proof)
+                <div style={{display: 'flex'}}>
+                  <select
+                      value={reqInfo.nonce ?? 0}
+                      onChange={(event) => {
+                          setReqInfo((v) => ({
+                              ...v,
+                              nonce: Number(event.target.value),
+                          }))
+                      }}
+                  >
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                    <p style={{ fontSize: '12px' }}>
+                        submit offer with epoch key:
+                    </p>
+                </div>
+                <p
+                  style={{
+                      maxWidth: '180px',
+                      wordBreak: 'break-all',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                   }}
                 >
-                  prove trust scores
-                </Button>
-                {repProof.proof.length ? (
-                  <>
-                    {repProof.valid ? '✅' : '❌'}
-                  </>
-                ) : null}
-                {/* {repProof.valid ? ( */}
+                  {user.epochKey(reqInfo.nonce ?? 0)}
+                </p>
+                <div style={{display: 'flex'}}>
+                  {repProof.proof.length ? (
+                    <div className='proof'>
+                      {repProof.valid ? '✅' : '❌'}
+                    </div>
+                  ) : null}            
+                  <Button
+                    onClick={async () => {
+                      const proof = await user.proveData(
+                          proveData
+                      )
+                      setRepProof(proof)
+                    }}
+                  >
+                    prove trust scores
+                  </Button>
+                </div>
+                {repProof.valid ? (
                   <input 
-                    style={{marginTop: '1rem'}}
+                    style={{marginTop: '0.5rem'}}
                     type='submit'
-                    value='submit offer'
+                    value='SUBMIT OFFER'
                     onClick={() => {
                       const epoch = user.userState?.sync.calcCurrentEpoch()
                       const responderId = user.epochKey(reqInfo.nonce ?? 0)
@@ -160,9 +159,9 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
                     }}
                   />
-                {/* ) : ( */}
-                    {/* <button style={{marginTop: '1rem'}} className='blocked'>submit offer</button> */}
-                {/* )} */}
+                ) : (
+                  <button style={{marginTop: '0.5rem'}} className='blocked'>SUBMIT OFFER</button>
+                )}
               </div>
 
             </div>       

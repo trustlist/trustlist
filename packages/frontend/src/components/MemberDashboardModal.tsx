@@ -190,7 +190,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                       </h5>
                       {showDetail && <DetailModal listing={detailData} key={offer.listingId} setShowDetail={setShowDetail} />}
                       </>
-                    )) : <h5>- no listings in this epoch</h5>}
+                    )) : <h5>- no offers in this epoch</h5>}
                 </div>
               </div>             
             </div>
