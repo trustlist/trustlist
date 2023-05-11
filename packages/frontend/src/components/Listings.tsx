@@ -1,12 +1,11 @@
 import React from 'react'
-import { Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import DetailModal from './DetailModal';
+import Tooltip from './Tooltip';
 import './listings.css'
 
 import Trustlist from '../contexts/Trustlist';
 import User from '../contexts/User';
-import Tooltip from './Tooltip';
 
 type Props = {
   section: string;
@@ -77,20 +76,20 @@ export default observer(({ section, category }: Props) => {
                   <div>
                     <div className='listing-title'>{listing.title}</div>
                         <div>${listing.amount}</div>
-                        <div style={{marginRight: '200px'}}>{listing.description}</div>
+                        <div className='listing-description'>{listing.description}</div>
                         <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
                       <div className='score-item'>
                         <Tooltip 
-                          text='some text here'
+                          text="LP score: reflects the poster's ability/willingness to follow through on their listings and complete deals. "
                           content={Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
                         />
                       </div>
                       <div className='score-item'>
                         <Tooltip 
-                          text='different text here'
+                          text="CB score: reflects the member's commitment to community building by submitting timely reviews of their completed deals."
                           content={Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}
                         />    
                       </div>
@@ -98,13 +97,13 @@ export default observer(({ section, category }: Props) => {
                     <div className='score-container'>
                       <div className='score-item'>
                         <Tooltip
-                          text='other text'
+                          text="TD score: reflects the community's overall satisfaction in dealing with this member, as a percentage of how many members would choose to interact with them again."
                           content={Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}
                         />  
                       </div>
                       <div className='score-item'>
                         <Tooltip
-                          text='differenter text'
+                          text="Good Vibes score: reflects the communitiy's sentiments about this member's attitude and demeanor."
                           content={Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}
                         />
                       </div>
