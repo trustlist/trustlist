@@ -127,7 +127,10 @@ export default observer(() => {
             <div className="attestation-form">
               <div className="icon">
                   <h2>member 1 review</h2>
-                  {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
+                  <Tooltip 
+                    text="Your review of your experience with this member will become part of their trustlist reputation. Neither member will receive reputational data for this deal unless both parties sumbit their review before the epoch expires." 
+                    content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                  />
               </div>
               <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
               <div className='sentiments'>
@@ -191,7 +194,10 @@ export default observer(() => {
             <div className="attestation-form">
               <div className="icon">
                   <h2>member 2 review</h2>
-                  {/* <Tooltip text="Create an attestation by rating your experience dealing with this member." /> */}
+                  <Tooltip 
+                    text="Your review of your experience with this member will become part of their trustlist reputation. Neither member will receive reputational data for this deal unless both parties sumbit their review before the epoch expires." 
+                    content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                  />
               </div>
               <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
               <div className='sentiments'>
