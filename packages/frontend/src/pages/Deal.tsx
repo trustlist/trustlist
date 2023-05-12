@@ -38,7 +38,6 @@ export default observer(() => {
 
   const deal = app.listingsById.get(id)
   const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
-  console.log(memberKeys)
 
   if (!user.userState) {
     return <div className="container">Loading...</div>

@@ -17,6 +17,7 @@ type Props = {
     amount: string;
     amountType: string;
     description: string;
+    posterId: string;
     pScore1: string;
     pScore2: string;
     pScore3: string;
@@ -42,7 +43,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
   const [showMakeOffer, setShowMakeOffer] = React.useState<boolean>(false)
-  const [dealIsActive, setDealIsActive] = React.useState<boolean>(false)
+  // const [dealIsActive, setDealIsActive] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -51,6 +52,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
     loadData()
   }, [])
   const offers = app.offersByListingId.get(listing._id)
+  const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
 
   return (
     <div className='dark-bg'>
@@ -125,6 +127,15 @@ export default observer(({ listing, setShowDetail }: Props) => {
             </div>
 
             <div className='offers-container'>
+              {listing.dealOpened ? 
+                <>
+                <div style={{display: 'flex'}}>
+                <div style={{textDecoration: 'line-through'}}>pending offers</div>
+                <div style={{color: 'blue'}}>deal accepted</div>
+                </div>
+                </>
+              :
+              <>
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
                   {offers ? 
@@ -135,28 +146,26 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       <div className='offer-score'>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)}</div>
                       <div className='offer-score'>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)}</div>
                       <div className='offer-score'>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)}</div> 
-                      <Link to={`deal/${listing._id}`}>
-                        <button 
-                          className='accept' 
-                          onClick={() => {
-                            app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
-                            setDealIsActive(true)
-                          }}
-                        >
-                          accept deal
-                        </button>
-                      </Link>
-                      {dealIsActive ? 
-                        <>
-                          <hr/>
-                          <div style={{color: 'red'}}>your deal is now active!</div>
-                          <div>use your dashboard to submit your attestation before the end of this epoch</div>
-                          {/* <button className='close-btn' onClick={() => setDealMessageIsOpen(false)}>X</button> */}
-                        </> : null}
-
+                      {memberKeys.includes(listing.posterId) ? (
+                        <Link to={`deal/${listing._id}`}>
+                          <button 
+                            className='accept' 
+                            onClick={() => {
+                              app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
+                              // setDealIsActive(true)
+                            }}
+                          >
+                            accept deal
+                          </button>
+                        </Link>
+                      ) : (
+                        <button className='accept'>accept deal</button>
+                      )}
+                      <hr/>
                     </div>
                   )) : 'no offers yet' }
               </div>
+              </> }
             </div>
             
             <button className='close-btn' onClick={() => setShowDetail(false)}>X</button>
