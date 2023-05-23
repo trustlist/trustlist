@@ -42,7 +42,7 @@ const timeString = hours.toString().padStart(2, '0') + ':' +
   return (
     <>
       <div className="header">
-          <div className='app-title'><Link to='/'>trustlist</Link></div>
+          <div className='app-title'><Link to='/'>SOOZ list</Link></div>
           {/* alternate title:
           <div className='app-title'><Link to='/'>zk<span style={{fontSize: '1.5rem', fontWeight: '200'}}>lassified</span></Link></div> */}
 

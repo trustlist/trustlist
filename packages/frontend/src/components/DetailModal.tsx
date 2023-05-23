@@ -141,11 +141,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
                   {offers ? 
                     offers.map((offer: Offer) => (
                     <div key={offer._id} className='offer'>
-                      <div>${offer.offerAmount}  --  member's scores: </div>
-                      <div className='offer-score'>{Math.floor((Number(offer.rScore1) % 128) / (Number(offer.rScore1) >> 23) * 100)}</div>
-                      <div className='offer-score'>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)}</div>
-                      <div className='offer-score'>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)}</div>
-                      <div className='offer-score'>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)}</div> 
+                      <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{Math.floor((Number(offer.rScore1) % 128) / (Number(offer.rScore1) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)} </div> 
                       {memberKeys.includes(listing.posterId) ? (
                         <Link to={`deal/${listing._id}`}>
                           <button 

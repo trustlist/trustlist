@@ -54,7 +54,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
             <div className='offer-content'>
               <div className='offer-container'>
                     <div className=''>
-                        <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600'}}>amount: $</label>
+                        <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600', paddingLeft: '1.2rem'}}>amount: $</label>
                         <input 
                           type='text' 
                           id='offerAmount' 
@@ -72,10 +72,10 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                           return (
                               <div key={i}>
                                   {/* <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label> */}
-                                  {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score</label> : null}
-                                  {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score</label> : null}
-                                  {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score</label> : null}
-                                  {i === 3 ? <label htmlFor={`score${i +1}`}>reveal GV score</label> : null}
+                                  {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score: </label> : null}
+                                  {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score: </label> : null}
+                                  {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score: </label> : null}
+                                  {i === 3 ? <label htmlFor={`score${i +1}`}>reveal GV score: </label> : null}
                                   <input
                                       // style={{width: '6rem'}}
                                       className='offer-input'
