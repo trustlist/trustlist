@@ -64,21 +64,21 @@ const timeString = hours.toString().padStart(2, '0') + ':' +
             <div className='action-item'>
                 {user.hasSignedUp ? (
                     <>
-                      <button onClick={()=> setShowMemberDash(true)}>my TL</button>
+                      <button onClick={()=> setShowMemberDash(true)}><span style={{fontSize: '0.6rem'}}>👤</span> my TL</button>
                       {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>}
                     </>
                 ) : (
-                      <button style={{cursor: 'not-allowed'}}>my TL</button>
+                      <button style={{cursor: 'not-allowed'}}><span style={{fontSize: '0.6rem'}}>👤</span> my TL</button>
                 )} 
             </div>
             <div className='action-item'>
                 {user.hasSignedUp ? (
                   <>
-                    <button onClick={()=> setShowNewListing(true)}>list 🖌️</button>
+                    <button onClick={()=> setShowNewListing(true)}>list <span style={{fontSize: '0.6rem'}}>🖌️</span></button>
                     {showNewListing && <NewListingModal setShowNewListing={setShowNewListing}/>}
                   </>
                 ) : (
-                  <button style={{cursor: 'not-allowed'}}>list 🖌️</button>
+                  <button style={{cursor: 'not-allowed'}}>list <span style={{fontSize: '0.6rem'}}>🖌️</span></button>
                 )}
             </div>
           </div>

@@ -8,7 +8,7 @@ import Trustlist from '../contexts/Trustlist';
 export default observer(() => {
   const app = React.useContext(Trustlist)
   const [selectedSection, setSelectedSection] = React.useState('for sale')
-  const [selectedCategory, setSelectedCategory] = React.useState('')
+  const [selectedCategory, setSelectedCategory] = React.useState('bikes')
   
   return (
     <div className='content'>

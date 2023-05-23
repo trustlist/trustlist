@@ -9,6 +9,7 @@
   background-color: rgb(235, 232, 232);
   border-radius: 0.5rem;
   margin-bottom: 0.8rem;
+  cursor: pointer;
 }
 
 .listing-expired {
@@ -30,6 +31,7 @@
 .listing-description {
   font-size: 0.7rem;
   height: 1.7rem;
+  padding-right: 1.5rem;
   overflow: hidden;
 }
 

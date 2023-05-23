@@ -12,7 +12,6 @@ class Trustlist {
   sections: string[] = []
   categoriesBySection = new Map()
   listingsById = new Map()
-  // listingsBySectionAndCategory = new Map()
   forSaleByCategory = new Map()
   jobsByCategory = new Map()
   servicesByCategory = new Map()
@@ -21,7 +20,6 @@ class Trustlist {
   memberActiveDeals = []
   memberActiveListings = []
   memberActiveOffers = []
-  // activityByMemberId = new Map()
 
   constructor() {
     makeAutoObservable(this)
@@ -37,7 +35,6 @@ class Trustlist {
   }
 
   async createNewListing(epoch: any, section: string, category: string, title: string, amount: string, amountType: string, description: string, posterId: string, pScore1: string, pScore2: string, pScore3: string, pScore4: string) {
-    // console.log(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
     const data = await fetch(`${SERVER}/api/addListing`, {
       method: 'POST',
       headers: {
@@ -113,7 +110,6 @@ class Trustlist {
   }
 
   async loadSelectedCategory(section: string, category: string) {
-    console.log('hit app fx')
     const listings = await fetch(`${SERVER}/api/loadListings`, {
       method: 'POST',
       headers: {
@@ -129,9 +125,7 @@ class Trustlist {
   }
 
   async ingestListings(_listings: string, section: string, category: string) {
-    // console.log(_listings, section, category)
     const listings = [_listings].flat()
-    // this.listingsBySectionAndCategory.set(`${section}${category}`, listings)
     if (section === 'for sale') {
       this.forSaleByCategory.set(category, listings)
     } else if (section === 'housing') {

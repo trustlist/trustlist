@@ -158,9 +158,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                             accept deal
                           </button>
                         </Link>
-                      ) : (
-                        <button className='accept'>accept deal</button>
-                      )}
+                      ) : null}
                       <hr/>
                     </div>
                   )) : 'no offers yet' }

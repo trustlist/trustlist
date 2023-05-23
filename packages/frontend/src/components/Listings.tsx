@@ -77,7 +77,7 @@ export default observer(({ section, category }: Props) => {
                     <div className='listing-title'>{listing.title}</div>
                         <div>${listing.amount}</div>
                         <div className='listing-description'>{listing.description}</div>
-                        <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
+                        <div style={{fontSize: '0.4rem'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
