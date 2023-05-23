@@ -1,6 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
+import Tooltip from './Tooltip'
 import Button from '../components/Button'
 import DetailModal from './DetailModal'
 import './memberDashboardModal.css'
@@ -77,21 +78,53 @@ export default observer(({ setShowMemberDash }: Props) => {
                       <div key={i}>
                         {i < 3 ? (
                           <>
-                            <div>Score {i + 1}</div>
                             <div className="score-detail">
-                              <div>{(data || 0).toString()}</div>
-                              <div>{expected}/{received}</div>
-                              <div>{Math.floor(received / expected * 100)}%</div>
+                              {/* <div>{(data || 0).toString()}</div> */}
+                              {i === 0 ? 
+                              <div style={{display: 'flex'}}> 
+                                <Tooltip 
+                                text='Legitimate Poster score: expresses my reputation for posting legitimate listings that result in completed deals .' 
+                                content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                                />
+                                <div style={{paddingLeft: '0.3rem'}}>LP score:</div>
+                              </div> : null}
+                              {i === 1 ? 
+                              <div style={{display: 'flex'}}> 
+                                <Tooltip 
+                                text='Community Builder score: reflects my record of completing attestations for the deals I have been involved in.' 
+                                content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                                />
+                                <div style={{paddingLeft: '0.3rem'}}>CB score:</div>
+                              </div> : null}
+                              {i === 2 ? 
+                              <div style={{display: 'flex'}}> 
+                                <Tooltip 
+                                text='Trusted DealMaker: indicates the percentage of members I have made deals with who would be happy to deal with me again' 
+                                content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                                />
+                                <div style={{paddingLeft: '0.3rem'}}>TD score:</div>
+                              </div> : null}
+                              {/* {i === 1 ? <div>CB score:</div> : null}
+                              {i === 2 ? <div>TD score:</div> : null} */}
+                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{Math.floor(received / expected * 100)}%</div>
                             </div>
                           </>
                         ) : null }
                         {i === 3 ? (
                           <>
-                            <div>Score {i + 1}</div>
                             <div className="score-detail">
-                              <div>{(data || 0).toString()}</div>
-                              <div>{expected}/{received}</div>
-                              <div>{Math.floor(((received / expected) / 5) * 100)}%</div>
+                              <div style={{display: 'flex'}}> 
+                                <Tooltip 
+                                text='Good Vibes score : indicates the percentage of all possible points given to me by other members for being friendly, communicative, and respectful.'  
+                                content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
+                                />
+                                <div style={{paddingLeft: '0.3rem'}}>GV score:</div>
+                              </div>
+                              {/* <div>GV score:</div> */}
+                              {/* <div>{(data || 0).toString()}</div> */}
+                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{Math.floor(((received / expected) / 5) * 100)}%</div>
                             </div>
                           </>
                         ) : null }
@@ -108,7 +141,7 @@ export default observer(({ setShowMemberDash }: Props) => {
 
                 <div>
                   <div>
-                    <h3>my provable trust scores:</h3>
+                    <h3 style={{marginTop: '2.8rem'}}>my provable trust scores:</h3>
                   </div>
                   {user.provableData.map((data, i) => {
                     const expected = data ? Number(data >> BigInt(23)) : 0
@@ -117,21 +150,23 @@ export default observer(({ setShowMemberDash }: Props) => {
                       <div key={i}>
                         {i < 3 ? (
                           <>
-                            <div>Score {i + 1}</div>
                             <div className="score-detail">
-                              <div>{(data || 0).toString()}</div>
-                              <div>{expected}/{received}</div>
-                              <div>{Math.floor(received / expected * 100)}%</div>
+                              {/* <div>{(data || 0).toString()}</div> */}
+                              {i === 0 ? <div>LP score:</div> : null}
+                              {i === 1 ? <div>CB score:</div> : null}
+                              {i === 2 ? <div>TD score:</div> : null}
+                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{Math.floor(received / expected * 100)}%</div>
                             </div>
                           </>
                         ) : null }
                         {i === 3 ? (
                           <>
-                            <div>Score {i + 1}</div>
                             <div className="score-detail">
-                              <div>{(data || 0).toString()}</div>
-                              <div>{expected}/{received}</div>
-                              <div>{Math.floor(((received / expected) / 5) * 100)}%</div>
+                              {/* <div>{(data || 0).toString()}</div> */}
+                              <div>GV score:</div>
+                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{Math.floor(((received / expected) / 5) * 100)}%</div>
                             </div>
                           </>
                         ) : null }

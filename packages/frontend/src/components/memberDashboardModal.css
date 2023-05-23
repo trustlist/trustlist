@@ -3,6 +3,7 @@ h3 {
   font-size: 2rem;
   font-weight: 600;
   margin-top: 1rem;
+  text-align: center;
 }
 
 h4 {
@@ -58,20 +59,24 @@ h5:hover {
 }
 
 .score-detail {
-  color: rgb(41, 40, 40);
+  color: blue;
   font-size: 1rem;
-  font-weight: 600;
   display: flex;
   flex-direction:row;
   justify-content: space-between;
   align-items: center; 
-  padding: 0 1rem 0 2rem;
+  padding: 0.5rem 1rem 0 1rem;
+}
+
+.stat {
+  font-weight: 600;
+  color: black;
 }
 
 .transition {
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
 }
 
 .line {
