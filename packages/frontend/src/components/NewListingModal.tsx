@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import Button from './Button'
-import Tooltip from './Tooltip'
 import './newListingModal.css'
 
 import Trustlist from '../contexts/Trustlist'
@@ -141,7 +140,11 @@ export default observer(({ setShowNewListing }: Props) => {
                             .map((_, i) => {
                                 return (
                                     <div key={i}>
-                                        <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label>
+                                        {/* <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label> */}
+                                        {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score</label> : null}
+                                        {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score</label> : null}
+                                        {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score</label> : null}
+                                        {i === 3 ? <label htmlFor={`score${i +1}`}>reveal GV score</label> : null}
                                         <input
                                             style={{width: '6rem'}}
                                             type='text'

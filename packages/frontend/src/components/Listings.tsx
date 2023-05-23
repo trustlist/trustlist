@@ -117,7 +117,7 @@ export default observer(({ section, category }: Props) => {
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
-                        <div>reserve amount: ${listing.amount}</div>
+                        <div>${listing.amount}</div>
                         <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
                         <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
