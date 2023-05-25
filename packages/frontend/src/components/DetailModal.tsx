@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
@@ -23,6 +23,7 @@ type Props = {
     pScore3: string;
     pScore4: string;
     offerAmount: string;
+    responderId: string;
     dealOpened: boolean;
     dealClosed: boolean;
   };
@@ -42,8 +43,8 @@ type Offer = {
 export default observer(({ listing, setShowDetail }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
+  const navigate = useNavigate()
   const [showMakeOffer, setShowMakeOffer] = React.useState<boolean>(false)
-  // const [dealIsActive, setDealIsActive] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -62,15 +63,32 @@ export default observer(({ listing, setShowDetail }: Props) => {
             
             <div className='action-bar'>
               <div className='action-item'>
+                {/* uncomment this to prevent user from making an offer on their own post */}
                 {/* {user.hasSignedUp && !memberKeys.includes(listing.posterId) ? ( */}
-                {user.hasSignedUp ? (
+                {user.hasSignedUp && !listing.dealOpened ? (
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
                       {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
                   </>
                 ) : (
-                  <button style={{cursor: 'not-allowed'}}>make an offer</button>
+                  <Tooltip
+                    text='offer not allowed'
+                    content={<button style={{cursor: 'not-allowed'}}>make an offer</button>}
+                  /> 
+                  // <button style={{cursor: 'not-allowed'}}>make an offer</button>
                 )}
+                {/* {memberKeys.includes(listing.posterId) ?
+                  <Tooltip
+                    text='op not allowed'
+                    content={<button style={{cursor: 'not-allowed'}}>make an offer</button>}
+                  /> 
+                : null} */}
+                {/* {memberKeys.includes(listing.posterId) ?
+                  <Tooltip
+                    text='deal initiated; no more offers'
+                    content={<button style={{cursor: 'not-allowed'}}>make an offer</button>}
+                  /> 
+                : null} */}
               </div>
               <div className='action-item'>
                 <div>⭐️</div>
@@ -128,14 +146,31 @@ export default observer(({ listing, setShowDetail }: Props) => {
             </div>
 
             <div className='offers-container'>
-              {/* {listing.dealOpened ? 
+              {listing.dealOpened ? 
                 <>
                 <div style={{display: 'flex'}}>
-                <div style={{textDecoration: 'line-through'}}>pending offers</div>
-                <div style={{color: 'blue'}}>deal accepted</div>
+                  <div style={{textDecoration: 'line-through'}}>pending offers</div>
+                  <div style={{color: 'blue', paddingLeft: '1rem'}}>offer accepted</div>
+                </div>
+                  <div className='offer-scroll'>
+                  {offers ? 
+                    offers.map((offer: Offer) => (
+                    <div key={offer._id} className='offer'>
+                      <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{Math.floor((Number(offer.rScore1) % 128) / (Number(offer.rScore1) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)} </div> 
+                      {listing.responderId === offer.responderId ?
+                        <button className='offer-accepted'>accepted</button>
+                      : null }
+                      <hr/>
+                    </div>
+                  )) : 'no offers yet' }
+              
                 </div>
                 </>
-              : */}
+              :
               <>
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
@@ -148,24 +183,22 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)} </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)} </div> 
                       {memberKeys.includes(listing.posterId) ? (
-                        <Link to={`deal/${listing._id}`}>
-                          <button 
-                            className='accept' 
-                            onClick={() => {
-                              app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
-                              // setDealIsActive(true)
-                            }}
-                          >
-                            accept deal
-                          </button>
-                        </Link>
+                        <button 
+                          className='accept' 
+                          onClick={async () => {
+                            await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
+                            navigate(`deal/${listing._id}`)
+                          }}
+                        >
+                          accept deal
+                        </button>
                       ) : null}
                       <hr/>
                     </div>
                   )) : 'no offers yet' }
               </div>
               </> 
-              {/* } */}
+              }
             </div>
             
             <button className='close-btn' onClick={() => setShowDetail(false)}>X</button>

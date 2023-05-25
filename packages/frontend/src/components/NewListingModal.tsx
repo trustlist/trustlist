@@ -1,5 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
+// import { useNavigate } from 'react-router-dom'
 import Button from './Button'
 import './newListingModal.css'
 
@@ -23,6 +24,7 @@ type ProofInfo = {
 export default observer(({ setShowNewListing }: Props) => {
   const app = React.useContext(Trustlist)
   const user = React.useContext(User)
+  // const navigate = useNavigate()
   const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
   const [proveData, setProveData] = React.useState<{
     [key: number]: number | string
@@ -224,9 +226,8 @@ export default observer(({ setShowNewListing }: Props) => {
                   </Button>
                   
                   {repProof.valid ? (
-                    <input 
-                      type='submit'
-                      value='POST'
+                    <Button
+                      style={{backgroundColor: 'blue', color: 'white', marginLeft: '0.5rem'}}
                       onClick={async () => {                       
                           if (
                             user.userState &&
@@ -241,10 +242,12 @@ export default observer(({ setShowNewListing }: Props) => {
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
                           const posterId = user.epochKey(reqInfo.nonce)
-                          app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                          await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
                           setShowNewListing(false)
                       }}
-                    />
+                    >
+                      POST
+                    </Button>
                   ) : (
                      <button className='blocked'>POST</button>
                   )}
