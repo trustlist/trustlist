@@ -116,7 +116,7 @@ export default observer(() => {
                     type='checkbox'
                     id='complete2'
                     name='complete2'
-                    onClick={(e) => e.preventDefault()}
+                    // onClick={(e) => e.preventDefault()}
                   />
                 )}
                 <label htmlFor='complete2'>mark deal as complete</label>
@@ -188,6 +188,7 @@ export default observer(() => {
                             {[1]:'00000001', [2]:index2, [3]:index3},
                             memberKeys.indexOf(deal.posterId) ?? 0
                         )
+                        navigate(`/`)
                       }}
                     >
                       Submit

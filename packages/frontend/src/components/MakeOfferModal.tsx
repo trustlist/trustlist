@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import Button from '../components/Button'
-import Tooltip from '../components/Tooltip'
 import './makeOfferModal.css'
 
 import Trustlist from '../contexts/Trustlist'

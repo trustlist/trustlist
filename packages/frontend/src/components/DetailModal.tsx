@@ -62,6 +62,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
             
             <div className='action-bar'>
               <div className='action-item'>
+                {/* {user.hasSignedUp && !memberKeys.includes(listing.posterId) ? ( */}
                 {user.hasSignedUp ? (
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
@@ -127,14 +128,14 @@ export default observer(({ listing, setShowDetail }: Props) => {
             </div>
 
             <div className='offers-container'>
-              {listing.dealOpened ? 
+              {/* {listing.dealOpened ? 
                 <>
                 <div style={{display: 'flex'}}>
                 <div style={{textDecoration: 'line-through'}}>pending offers</div>
                 <div style={{color: 'blue'}}>deal accepted</div>
                 </div>
                 </>
-              :
+              : */}
               <>
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
@@ -163,7 +164,8 @@ export default observer(({ listing, setShowDetail }: Props) => {
                     </div>
                   )) : 'no offers yet' }
               </div>
-              </> }
+              </> 
+              {/* } */}
             </div>
             
             <button className='close-btn' onClick={() => setShowDetail(false)}>X</button>
