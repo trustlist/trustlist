@@ -55,6 +55,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
   const offers = app.offersByListingId.get(listing._id)
   const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
 
+  function calcScore(data:string) {
+    return Math.floor((Number(data) % 128) / (Number(data) >> 23) * 100)
+  }
+
   return (
     <div className='dark-bg'>
       <div className='centered'>
@@ -75,7 +79,6 @@ export default observer(({ listing, setShowDetail }: Props) => {
                     text='offer not allowed'
                     content={<button style={{cursor: 'not-allowed'}}>make an offer</button>}
                   /> 
-                  // <button style={{cursor: 'not-allowed'}}>make an offer</button>
                 )}
                 {/* {memberKeys.includes(listing.posterId) ?
                   <Tooltip
@@ -116,31 +119,31 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className='trust-container'>
                 <div className='trust-item'>
                   <Tooltip 
-                    text='Legitimate Poster score: this member has completed a transaction for 60% of the listings they have posted.' 
+                    text={`Legitimate Poster score: this member has completed a transaction for ${calcScore(listing.pScore1)}% of the listings they have posted.`}
                     content=' LP score : '
                   />
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)} %</div>
+                  <div style={{fontWeight: '600'}}>{calcScore(listing.pScore1)} %</div>
                 </div>
                 <div className='trust-item'>
                   <Tooltip 
-                    text='Community Builder score: this member has submitted attestations for 100% of the transactions they have been involved in' 
+                    text={`Community Builder score: this member has submitted attestations for ${calcScore(listing.pScore2)}% of the transactions they have been involved in`}
                     content=' CB score : '
                   />
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)} %</div>
+                  <div style={{fontWeight: '600'}}>{calcScore(listing.pScore2)} %</div>
                 </div>
                 <div className='trust-item'>
                   <Tooltip 
-                    text='Trusted DealMaker: 100% of members who have transacted with this member would be happy to deal with them again' 
+                    text={`Trusted DealMaker: ${calcScore(listing.pScore3)}% of members who have transacted with this member would be happy to deal with them again`} 
                     content=' TD score : '
                   />
-                  <div style={{fontWeight: '600'}}>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)} %</div>
+                  <div style={{fontWeight: '600'}}>{calcScore(listing.pScore3)} %</div>
                 </div>
                 <div className='trust-item'>
                   <Tooltip 
-                    text='Good Vibes score : others who have interacted with his member have given them 80% of all possible points for being friendly, communicative, and respectful' 
+                    text={`Good Vibes score : others who have interacted with his member have given them ${calcScore(listing.pScore4) / 5}% of all possible points for being friendly, communicative, and respectful`} 
                     content=' GV score : '
                   />
-                  <div style={{fontWeight: '600'}}>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)} %</div>
+                  <div style={{fontWeight: '600'}}>{calcScore(listing.pScore4) / 5} %</div>
                 </div>
               </div>  
             </div>
@@ -157,10 +160,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
                     offers.map((offer: Offer) => (
                     <div key={offer._id} className='offer'>
                       <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{Math.floor((Number(offer.rScore1) % 128) / (Number(offer.rScore1) >> 23) * 100)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{Math.floor((Number(offer.rScore2) % 128) / (Number(offer.rScore2) >> 23) * 100)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{Math.floor((Number(offer.rScore3) % 128) / (Number(offer.rScore3) >> 23) * 100)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{Math.floor(((Number(offer.rScore4) % 128) / (Number(offer.rScore4) >> 23)) / 5 * 100)} </div> 
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{calcScore(listing.pScore1)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{calcScore(listing.pScore2)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{calcScore(listing.pScore1)} </div>
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{calcScore(listing.pScore1) / 5} </div> 
                       {listing.responderId === offer.responderId ?
                         <button className='offer-accepted'>accepted</button>
                       : null }
