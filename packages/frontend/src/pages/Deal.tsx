@@ -50,7 +50,8 @@ export default observer(() => {
       {deal ? 
         <>
           <div style={{textAlign: 'center'}}>
-            <h3>{deal.title} | ${deal.offerAmount}</h3>
+            <h3>{deal.title}</h3>
+            <h3>${deal.offerAmount}</h3>
             <div className='deal-info'>
               <div>
                 <div>member 1: {deal.posterId.slice(0,6)}...</div>

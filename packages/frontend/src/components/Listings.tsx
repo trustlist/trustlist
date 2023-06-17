@@ -78,9 +78,13 @@ export default observer(({ section, category }: Props) => {
                   <div>
                     <div className='score-container'>
                       <div className='score-item'>
-                        <Tooltip 
+                        {/* <Tooltip 
                           text="LP score: reflects the poster's ability/willingness to follow through on their listings and complete deals. "
                           content={app.calcScore(listing.pScore1)}
+                        /> */}
+                        <Tooltip
+                          text="the member has chosen not to reveal this score"
+                          content={<img src={require('../../public/not_visible.svg')} alt="eye with slash"/>}
                         />
                       </div>
                       <div className='score-item'>
@@ -124,7 +128,7 @@ export default observer(({ section, category }: Props) => {
                     </div>
                     <div className='score-container'>
                       <div className='score-item'>{app.calcScore(listing.pScore3)}</div>
-                      <div className='score-item'>{app.calcScore(listing.pScore4) / 5}</div>
+                      <div className='score-item'>{app.calcScore(listing.pScore4)}</div>
                     </div>
                   </div>
                 </div>

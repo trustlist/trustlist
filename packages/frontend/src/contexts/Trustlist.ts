@@ -167,6 +167,10 @@ class Trustlist {
   }
 
   calcScore(data:string) {
+    if (Number(data) >> 23 === 0) {
+      return '...'
+      // return '🔷'
+    }
     return Math.floor((Number(data) % 128) / (Number(data) >> 23) * 100)
   }
 

@@ -126,10 +126,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 </div>
                 <div className='trust-item'>
                   <Tooltip 
-                    text={`Good Vibes score : others who have interacted with his member have given them ${app.calcScore(listing.pScore4) / 5}% of all possible points for being friendly, communicative, and respectful`} 
+                    text={`Good Vibes score : others who have interacted with his member have given them ${app.calcScore(listing.pScore4)}% of all possible points for being friendly, communicative, and respectful`} 
                     content=' GV score : '
                   />
-                  <div style={{fontWeight: '600'}}>{app.calcScore(listing.pScore4) / 5} %</div>
+                  <div style={{fontWeight: '600'}}>{app.calcScore(listing.pScore4)} %</div>
                 </div>
               </div>  
             </div>
@@ -149,7 +149,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{app.calcScore(listing.pScore1)} </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{app.calcScore(listing.pScore2)} </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{app.calcScore(listing.pScore1)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{app.calcScore(listing.pScore1) / 5} </div> 
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{app.calcScore(listing.pScore1)} </div> 
                       {listing.responderId === offer.responderId ?
                         <button className='offer-accepted'>accepted</button>
                       : null }
@@ -170,7 +170,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{app.calcScore(offer.rScore1)} </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{app.calcScore(offer.rScore2)} </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{app.calcScore(offer.rScore3)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{app.calcScore(offer.rScore4) / 5} </div> 
+                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{app.calcScore(offer.rScore4)} </div> 
                       {memberKeys.includes(listing.posterId) ? (
                         <button 
                           className='accept' 
