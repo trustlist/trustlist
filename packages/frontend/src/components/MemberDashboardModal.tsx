@@ -180,37 +180,37 @@ export default observer(({ setShowMemberDash }: Props) => {
                   {deals && deals.length > 0 ? 
                     deals.map((deal: CurrentListing) => (
                       <Link to={`deal/${deal._id}`}>
-                        <h5 key={deal._id} onClick={() => setShowMemberDash(false)}>
+                        <li key={deal._id} onClick={() => setShowMemberDash(false)}>
                           {deal.dealClosed ? <span>CLOSED  - </span> : <span>OPEN  - </span>}
                           {deal.section} - {deal.category} - {deal.title} / ${deal.offerAmount}
-                        </h5>
+                        </li>
                       </Link>
-                    )) : <h5>- no open deals in this epoch</h5> }         
+                    )) : <h5>no open deals in this epoch</h5> }         
                 </div> 
                 <h4>my open listings</h4>
                 <div className='scroll-container'>
                   {listings && listings.length > 0 ? 
                     listings.map((listing: CurrentListing) => (
                       <>
-                      <h5 
+                      <li
                         key={listing._id}
                         onClick={() => {
                           setDetailData(listing)
                           setShowDetail(true)
                         }}
                       >
-                        {listing.section} - {listing.category} - {listing.title} / ${listing.amount}
-                      </h5>
+                        {listing.title} / ${listing.amount}
+                      </li>
                       {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
                       </>
-                    )) : <h5>- no listings in this epoch</h5> }
+                    )) : <h5>no listings in this epoch</h5> }
                 </div>
                 <h4>my pending offers</h4>
                 <div className='scroll-container'>
                   {offers && offers.length > 0 ? 
                     offers.map((offer: CurrentOffer) => (
                       <>
-                      <h5 
+                      <li 
                         key={offer._id}
                         onClick={async () => {
                           await app.loadDealById(offer.listingId)
@@ -219,10 +219,10 @@ export default observer(({ setShowMemberDash }: Props) => {
                         }}
                       >
                         {offer.listingTitle} / ${offer.offerAmount}
-                      </h5>
+                      </li>
                       {showDetail && <DetailModal listing={detailData} key={offer.listingId} setShowDetail={setShowDetail} />}
                       </>
-                    )) : <h5>- no offers in this epoch</h5>}
+                    )) : <h5>no offers in this epoch</h5>}
                 </div>
               </div>             
             </div>

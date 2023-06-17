@@ -166,6 +166,10 @@ class Trustlist {
     const data = await fetch(`${SERVER}/api/removeListing/${id}`).then((r) => r.json())
   }
 
+  calcScore(data:string) {
+    return Math.floor((Number(data) % 128) / (Number(data) >> 23) * 100)
+  }
+
 }
 
 export default createContext(new Trustlist())

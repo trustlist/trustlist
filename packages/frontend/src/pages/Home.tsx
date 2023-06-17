@@ -42,7 +42,6 @@ export default observer(() => {
               key={category}
               onClick={async () => {
                 setSelectedCategory(category)
-                console.log('RR', selectedCategory)
                 await app.loadSelectedCategory(selectedSection, selectedCategory)
               }}
             >

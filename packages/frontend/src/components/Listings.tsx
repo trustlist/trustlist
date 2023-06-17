@@ -24,9 +24,6 @@ type Listing = {
   pScore2: string;
   pScore3: string;
   pScore4: string;
-  offerAmount: string;
-  dealOpened: boolean;
-  dealClosed: boolean;
 }
 
 export default observer(({ section, category }: Props) => {
@@ -35,7 +32,6 @@ export default observer(({ section, category }: Props) => {
   const user = React.useContext(User)
   const [showDetail, setShowDetail] = React.useState<boolean>(false)
   const [detailData, setDetailData] = React.useState<any>()
-  console.log(section, category)
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -84,13 +80,13 @@ export default observer(({ section, category }: Props) => {
                       <div className='score-item'>
                         <Tooltip 
                           text="LP score: reflects the poster's ability/willingness to follow through on their listings and complete deals. "
-                          content={Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}
+                          content={app.calcScore(listing.pScore1)}
                         />
                       </div>
                       <div className='score-item'>
                         <Tooltip 
                           text="CB score: reflects the member's commitment to community building by submitting timely reviews of their completed deals."
-                          content={Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}
+                          content={app.calcScore(listing.pScore2)}
                         />    
                       </div>
                     </div>
@@ -98,13 +94,13 @@ export default observer(({ section, category }: Props) => {
                       <div className='score-item'>
                         <Tooltip
                           text="TD score: reflects the community's overall satisfaction in dealing with this member, as a percentage of how many members would choose to interact with them again."
-                          content={Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}
+                          content={app.calcScore(listing.pScore3)}
                         />  
                       </div>
                       <div className='score-item'>
                         <Tooltip
                           text="Good Vibes score: reflects the communitiy's sentiments about this member's attitude and demeanor."
-                          content={Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}
+                          content={app.calcScore(listing.pScore4)}
                         />
                       </div>
                     </div>
@@ -123,12 +119,12 @@ export default observer(({ section, category }: Props) => {
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore1) % 128) / (Number(listing.pScore1) >> 23) * 100)}</div>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore2) % 128) / (Number(listing.pScore2) >> 23) * 100)}</div>
+                      <div className='score-item'>{app.calcScore(listing.pScore1)}</div>
+                      <div className='score-item'>{app.calcScore(listing.pScore2)}</div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{Math.floor((Number(listing.pScore3) % 128) / (Number(listing.pScore3) >> 23) * 100)}</div>
-                      <div className='score-item'>{Math.floor(((Number(listing.pScore4) % 128) / (Number(listing.pScore4) >> 23)) / 5 * 100)}</div>
+                      <div className='score-item'>{app.calcScore(listing.pScore3)}</div>
+                      <div className='score-item'>{app.calcScore(listing.pScore4) / 5}</div>
                     </div>
                   </div>
                 </div>

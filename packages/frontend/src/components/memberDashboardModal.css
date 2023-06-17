@@ -21,7 +21,16 @@ h5 {
   cursor: pointer;
 }
 
-h5:hover {
+li {
+  color: rgb(41, 40, 40);
+  font-size: 0.8rem;
+  font-weight: 200;
+  margin: 0.4rem;
+  cursor: pointer;
+}
+
+li:hover {
+  cursor: pointer;
   text-decoration: underline;
   color: blue;
 }
