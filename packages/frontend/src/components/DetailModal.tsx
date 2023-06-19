@@ -143,7 +143,8 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 </div>
                   <div className='offer-scroll'>
                   {offers ? 
-                    offers.map((offer: Offer) => (
+                    offers.map((offer: Offer) => {
+                    
                     <div key={offer._id} className='offer'>
                       <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
                       <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{app.calcScore(listing.pScore1, false)} </div>
@@ -155,7 +156,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       : null }
                       <hr/>
                     </div>
-                  )) : 'no offers yet' }
+                  }) : 'no offers yet' }
               
                 </div>
                 </>
@@ -164,27 +165,61 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div style={{color: 'blue'}}>pending offers</div>
               <div className='offer-scroll'>
                   {offers ? 
-                    offers.map((offer: Offer) => (
-                    <div key={offer._id} className='offer'>
-                      <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>LP: </span>{app.calcScore(offer.rScore1, false)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>CB: </span>{app.calcScore(offer.rScore2, false)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>TD: </span>{app.calcScore(offer.rScore3, false)} </div>
-                      <div className='offer-score'><span style={{fontWeight: '300'}}>GV: </span>{app.calcScore(offer.rScore4, true)} </div> 
-                      {memberKeys.includes(listing.posterId) ? (
-                        <button 
-                          className='accept' 
-                          onClick={async () => {
-                            await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
-                            navigate(`deal/${listing._id}`)
-                          }}
-                        >
-                          accept deal
-                        </button>
-                      ) : null}
-                      <hr/>
-                    </div>
-                  )) : 'no offers yet' }
+                    offers.map((offer: Offer) => {
+                      const offerS1 = app.calcScore(offer.rScore1, false)
+                      const offerS2 = app.calcScore(offer.rScore2, false)
+                      const offerS3 = app.calcScore(offer.rScore3, false)
+                      const offerS4 = app.calcScore(offer.rScore4, true)
+                      return (
+                        <div key={offer._id} className='offer'>
+                          <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
+                          <div className='offer-score'>
+                            <span style={{fontWeight: '300'}}>LP: </span>
+                            {offerS1 === 'X' ?
+                              <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                              :
+                              offerS1 === 0 ? '...' : offerS1
+                            }
+                          </div>
+                          <div className='offer-score'>
+                            <span style={{fontWeight: '300'}}>CB: </span>
+                            {offerS2 === 'X' ?
+                              <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                              :
+                              offerS2 === 0 ? '...' : offerS2
+                            }
+                          </div>
+                          <div className='offer-score'>
+                            <span style={{fontWeight: '300'}}>TD: </span>
+                            {offerS3 === 'X' ?
+                              <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                              :
+                              offerS3 === 0 ? '...' : offerS3
+                            }
+                          </div>
+                          <div className='offer-score'>
+                            <span style={{fontWeight: '300'}}>GV: </span>
+                            {offerS4 === 'X' ?
+                              <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                              :
+                              offerS4 === 0 ? '...' : offerS4
+                            }
+                          </div>
+                          {memberKeys.includes(listing.posterId) ? (
+                            <button 
+                              className='accept' 
+                              onClick={async () => {
+                                await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
+                                navigate(`deal/${listing._id}`)
+                              }}
+                            >
+                              accept deal
+                            </button>
+                          ) : null}
+                          <hr/>
+                        </div>
+                      )
+                  }) : 'no offers yet' }
               </div>
               </> 
               }
