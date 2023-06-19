@@ -1,6 +1,5 @@
-import React from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-// import { useNavigate } from 'react-router-dom'
 import Button from './Button'
 import './newListingModal.css'
 
@@ -22,28 +21,28 @@ type ProofInfo = {
 }
 
 export default observer(({ setShowNewListing }: Props) => {
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
-  // const navigate = useNavigate()
-  const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
-  const [proveData, setProveData] = React.useState<{
+  const app = useContext(Trustlist)
+  const user = useContext(User)
+  const [reqInfo, setReqInfo] = useState<ReqInfo>({ nonce: 0 })
+  const [proveData, setProveData] = useState<{
     [key: number]: number | string
   }>({})
-  const [repProof, setRepProof] = React.useState<ProofInfo>({
+  const [repProof, setRepProof] = useState<ProofInfo>({
       publicSignals: [],
       proof: [],
       valid: false,
   })
-  const [section, setSection] = React.useState('for sale')
-  const [category, setCategory] = React.useState('')
-  const [title, setTitle] = React.useState('')
-  const [amount, setAmount] = React.useState('')
-  const [amountType, setAmountType] = React.useState('one time')
-  const [description, setDescription] = React.useState('')
-  const [pScore1, setPScore1] = React.useState('')
-  const [pScore2, setPScore2] = React.useState('')
-  const [pScore3, setPScore3] = React.useState('')
-  const [pScore4, setPScore4] = React.useState('x')
+  const [section, setSection] = useState('for sale')
+  const [category, setCategory] = useState('')
+  const [title, setTitle] = useState('')
+  const [amount, setAmount] = useState('')
+  const [amountType, setAmountType] = useState('one time')
+  const [description, setDescription] = useState('')
+  const [pScore1, setPScore1] = useState('')
+  const [pScore2, setPScore2] = useState('')
+  const [pScore3, setPScore3] = useState('')
+  const [pScore4, setPScore4] = useState('')
+  const scoreNames = ['LP', 'CB', 'TD', 'GV']
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -134,15 +133,177 @@ export default observer(({ setShowNewListing }: Props) => {
                 </div>
 
                 <div className='form-container'>
-                  <div style={{display: 'flex'}}>
-                        {Array(
+                  <div style={{display: 'flex', justifyContent: 'space-around'}}>
+
+                  {Array(
+                    user.userState.sync.settings.sumFieldCount
+                  )
+                    .fill(0)
+                    .map((_, i) => {
+                        const score = user.provableData[i]
+                        return (
+                            <div key={i} className=''>
+                              <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score))}%</div>
+                              <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                                <div>
+                                  <div
+                                    style={{cursor: 'pointer'}}
+                                    onClick={()=> {
+                                      if (i === 0) {
+                                        setPScore1(String(score))
+                                      } else if (i === 1) {
+                                        setPScore2(String(score))
+                                      } else if (i === 2) {
+                                        setPScore3(String(score))
+                                      } else {
+                                        setPScore4(String(score))
+                                      }
+                                      console.log(String(score))
+                                      setProveData(() => ({
+                                        ...proveData,
+                                        [0]: Number(score),
+                                      }))
+                                      console.log(Number(score))
+                                    }}
+                                  >
+                                    <img src={require('../../public/starshine.svg')} alt="radio waves"/>
+                                  </div>
+                                  <div>reveal</div>
+                                </div>
+                                <div>
+                                  <div
+                                    style={{cursor: 'pointer'}}
+                                    onClick={()=> {
+                                      if (i === 0) {
+                                        setPScore1('X')
+                                      } else if (i === 1) {
+                                        setPScore2('X')
+                                      } else if (i === 2) {
+                                        setPScore3('X')
+                                      } else {
+                                        setPScore4('X')
+                                      }
+                                    }}
+                                  >
+                                    <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                                  </div>
+                                  <div>hide</div>
+                                </div>
+                              </div>
+                            </div>
+                        )
+                      })
+                    }
+                      {/* <div className=''>
+                        <div className=''>LP Score: {app.calcScore(String(user.data[1]))}%</div>
+                        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore2(String(user.data[1]))
+                                console.log(String(user.data[1]))
+                                setProveData(() => ({
+                                  ...proveData,
+                                  [1]: Number(user.data[1]),
+                                }))
+                                console.log(Number(user.data[1]))
+                              }}
+                            >
+                              ❎
+                            </div>
+                            <div>reveal</div>
+                          </div>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore2('X')
+                              }}
+                            >
+                              🚫
+                            </div>
+                            <div>hide</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className=''>
+                        <div className=''>LP Score: {app.calcScore(String(user.data[2]))}%</div>
+                        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore3(String(user.data[2]))
+                                console.log(String(user.data[2]))
+                                setProveData(() => ({
+                                  ...proveData,
+                                  [2]: Number(user.data[2]),
+                                }))
+                                console.log(Number(user.data[2]))
+                              }}
+                            >
+                              ❎
+                            </div>
+                            <div>reveal</div>
+                          </div>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore3('X')
+                              }}
+                            >
+                              🚫
+                            </div>
+                            <div>hide</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className=''>
+                        <div className=''>LP Score: {app.calcScore(String(user.data[3]))}%</div>
+                        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore4(String(user.data[3]))
+                                console.log(String(user.data[3]))
+                                setProveData(() => ({
+                                  ...proveData,
+                                  [3]: Number(user.data[3]),
+                                }))
+                                console.log(Number(user.data[3]))
+                              }}
+                            >
+                              ❎
+                            </div>
+                            <div>reveal</div>
+                          </div>
+                          <div>
+                            <div
+                              style={{cursor: 'pointer'}}
+                              onClick={()=> {
+                                setPScore4('X')
+                              }}
+                            >
+                              🚫
+                            </div>
+                            <div>hide</div>
+                          </div>
+                        </div>
+                      </div> */}
+
+                    
+                        {/* {Array(
                             user.userState.sync.settings.sumFieldCount
                         )
                             .fill(0)
                             .map((_, i) => {
                                 return (
                                     <div key={i}>
-                                        {/* <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label> */}
                                         {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score</label> : null}
                                         {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score</label> : null}
                                         {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score</label> : null}
@@ -172,7 +333,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                         />
                                     </div>
                                 )
-                            })}                   
+                            })}                    */}
                   </div>
                   <div>
                     <div style={{display: 'flex', paddingTop: '1rem'}}>

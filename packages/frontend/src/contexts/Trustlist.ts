@@ -167,13 +167,14 @@ class Trustlist {
   }
 
   calcScore(data:string) {
+    if (data === 'X')
+      return '🚫'
     if (Number(data) >> 23 === 0) {
       return '...'
       // return '🔷'
     }
     return Math.floor((Number(data) % 128) / (Number(data) >> 23) * 100)
   }
-
 }
 
 export default createContext(new Trustlist())

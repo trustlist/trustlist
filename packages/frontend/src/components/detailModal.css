@@ -12,6 +12,7 @@
 .action-item {
   /* align-content: center; */
   font-size: 0.8rem;
+  /* cursor: not-allowed; */
 }
 
 .detail-container {

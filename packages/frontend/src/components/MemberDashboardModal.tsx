@@ -15,21 +15,14 @@ type Props = {
 
 type CurrentListing = {
   _id: string;
-  // epoch: number | undefined;
   section: string;
   category: string;
   title: string;
   amount: string;
   offerAmount: string,
-  // amountType: string;
-  // description: string;
-  // pScore1: string;
-  // pScore2: string;
-  // pScore3: string;
-  // pScore4: string;
-  // offerAmount: string;
   dealOpened: boolean;
-  dealClosed: boolean;
+  posterDealClosed: boolean;
+  responderDealClosed: boolean;
 }
 
 type CurrentOffer = {
@@ -54,7 +47,7 @@ export default observer(({ setShowMemberDash }: Props) => {
   }, [])
   const deals = app.memberActiveDeals
   const listings = app.memberActiveListings
-  const offers = app. memberActiveOffers
+  const offers = app.memberActiveOffers
 
   return (
     <div 
@@ -191,41 +184,42 @@ export default observer(({ setShowMemberDash }: Props) => {
               </div>
 
               <div className='activity-container'>
-                <h4>deals awaiting my review</h4>
+                <h4>my deals</h4>
                 <div className='scroll-container'>
                   {deals && deals.length > 0 ? 
                     deals.map((deal: CurrentListing) => (
                       <Link to={`deal/${deal._id}`}>
                         <li key={deal._id} onClick={() => setShowMemberDash(false)}>
-                          {deal.dealClosed ? <span>CLOSED  - </span> : <span>OPEN  - </span>}
-                          {deal.section} - {deal.category} - {deal.title} / ${deal.offerAmount}
+                          {deal.posterDealClosed && deal.responderDealClosed ? <span style={{color: 'red'}}>CLOSED  - </span> : <span style={{color: 'green'}}>OPEN  - </span>}
+                          {deal.title} / ${deal.offerAmount}
                         </li>
                       </Link>
                     )) : <h5>no open deals in this epoch</h5> }         
                 </div> 
-                <h4>my open listings</h4>
+                <h4>my listings</h4>
                 <div className='scroll-container'>
                   {listings && listings.length > 0 ? 
                     listings.map((listing: CurrentListing) => (
                       <>
-                      <li
-                        key={listing._id}
-                        onClick={() => {
-                          setDetailData(listing)
-                          setShowDetail(true)
-                        }}
-                      >
-                        {listing.title} / ${listing.amount}
-                      </li>
-                      {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
+                        <li
+                          key={listing._id}
+                          onClick={() => {
+                            setDetailData(listing)
+                            setShowDetail(true)
+                          }}
+                        >
+                          {listing.title} / ${listing.amount}
+                        </li>
+                        {showDetail && <DetailModal listing={detailData} key={listing._id} setShowDetail={setShowDetail} />}
                       </>
                     )) : <h5>no listings in this epoch</h5> }
                 </div>
-                <h4>my pending offers</h4>
+                <h4>my offers</h4>
                 <div className='scroll-container'>
                   {offers && offers.length > 0 ? 
                     offers.map((offer: CurrentOffer) => (
                       <>
+                      {}
                       <li 
                         key={offer._id}
                         onClick={async () => {
