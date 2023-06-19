@@ -121,7 +121,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                               {expected === 0 ? 
                                 <div className='stat'>0%</div>
                               :
-                              <div className="stat">{Math.floor(((received / expected) / 5) * 100)}%</div>
+                              <div className="stat">{Math.floor((received / expected * 100) / 5)}%</div>
                               }
                             </div>
                           </>

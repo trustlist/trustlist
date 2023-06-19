@@ -57,10 +57,10 @@ export default observer(({ section, category }: Props) => {
       {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
-          const score1 = app.calcScore(listing.pScore1)
-          const score2 = app.calcScore(listing.pScore2)
-          const score3 = app.calcScore(listing.pScore3)
-          const score4 = app.calcScore(listing.pScore4)
+          const score1 = app.calcScore(listing.pScore1, false)
+          const score2 = app.calcScore(listing.pScore2, false)
+          const score3 = app.calcScore(listing.pScore3, false)
+          const score4 = app.calcScore(listing.pScore4, true)
           return (
           <>
             {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
