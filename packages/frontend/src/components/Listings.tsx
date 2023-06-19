@@ -55,8 +55,13 @@ export default observer(({ section, category }: Props) => {
   return (
     <div className='listings'>
       {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
-      {listings ? 
-        listings.slice().reverse().map((listing: Listing) => (
+      {listings ?
+        listings.slice().reverse().map((listing: Listing) => {
+          const score1 = app.calcScore(listing.pScore1)
+          const score2 = app.calcScore(listing.pScore2)
+          const score3 = app.calcScore(listing.pScore3)
+          const score4 = app.calcScore(listing.pScore4)
+          return (
           <>
             {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
               <>
@@ -80,17 +85,23 @@ export default observer(({ section, category }: Props) => {
                       <div className='score-item'>
                         <Tooltip 
                           text="LP score: reflects the poster's ability/willingness to follow through on their listings and complete deals. "
-                          content={app.calcScore(listing.pScore1)}
+                          content=
+                          {score1 === 'X' ?
+                            <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                            :
+                            score1 === 0 ? '...' : score1
+                          }
                         />
-                        {/* <Tooltip
-                          text="the member has chosen not to reveal this score"
-                          content={<img src={require('../../public/not_visible.svg')} alt="eye with slash"/>}
-                        /> */}
                       </div>
                       <div className='score-item'>
                         <Tooltip 
                           text="CB score: reflects the member's commitment to community building by submitting timely reviews of their completed deals."
-                          content={app.calcScore(listing.pScore2)}
+                          content=
+                          {score2 === 'X' ?
+                            <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                            :
+                            score2 === 0 ? '...' : score2
+                          }
                         />    
                       </div>
                     </div>
@@ -98,13 +109,23 @@ export default observer(({ section, category }: Props) => {
                       <div className='score-item'>
                         <Tooltip
                           text="TD score: reflects the community's overall satisfaction in dealing with this member, as a percentage of how many members would choose to interact with them again."
-                          content={app.calcScore(listing.pScore3)}
+                          content=
+                          {score3 === 'X' ?
+                            <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                            :
+                            score3 === 0 ? '...' : score3
+                          }
                         />  
                       </div>
                       <div className='score-item'>
                         <Tooltip
                           text="Good Vibes score: reflects the communitiy's sentiments about this member's attitude and demeanor."
-                          content={app.calcScore(listing.pScore4)}
+                          content=
+                          {score4 === 'X' ?
+                            <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                            :
+                            score4 === 0 ? '...' : score4
+                          }
                         />
                       </div>
                     </div>
@@ -123,19 +144,43 @@ export default observer(({ section, category }: Props) => {
                   </div>
                   <div>
                     <div className='score-container'>
-                      <div className='score-item'>{app.calcScore(listing.pScore1)}</div>
-                      <div className='score-item'>{app.calcScore(listing.pScore2)}</div>
+                      <div className='score-item'>
+                        {score1 === 'X' ?
+                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                          :
+                          score1 === 0 ? '...' : score1
+                        }
+                      </div>
+                      <div className='score-item'>
+                        {score2 === 'X' ?
+                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                          :
+                          score2 === 0 ? '...' : score2
+                        }
+                      </div>
                     </div>
                     <div className='score-container'>
-                      <div className='score-item'>{app.calcScore(listing.pScore3)}</div>
-                      <div className='score-item'>{app.calcScore(listing.pScore4)}</div>
+                    <div className='score-item'>
+                        {score3 === 'X' ?
+                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                          :
+                          score3 === 0 ? '...' : score3
+                        }
+                      </div>
+                      <div className='score-item'>
+                        {score4 === 'X' ?
+                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                          :
+                          score4 === 0 ? '...' : score4
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
               </> }
           </>
-
-        )) : null}
+          )
+        }) : null}
     </div>
   )
 })
