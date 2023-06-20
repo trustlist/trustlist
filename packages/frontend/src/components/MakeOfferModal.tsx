@@ -81,7 +81,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                               {/* <div style={{display: 'flex', justifyContent: 'space-around'}}> */}
                                 {/* <div> */}
                                   <div
-                                    style={{cursor: 'pointer'}}
+                                    className='choose reveal'
                                     onClick={()=> {
                                       if (i === 0) {
                                         setRScore1(String(score))
@@ -100,13 +100,12 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                       console.log(Number(score))
                                     }}
                                   >
-                                    <img src={require('../../public/starshine.svg')} alt="radio waves"/>
+                                    <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
                                   </div>
-                                  <div>reveal</div>
                                 {/* </div> */}
                                 {/* <div> */}
                                   <div
-                                    style={{cursor: 'pointer'}}
+                                    className='choose hide'
                                     onClick={()=> {
                                       if (i === 0) {
                                         setRScore1('X')
@@ -119,9 +118,8 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                       }
                                     }}
                                   >
-                                    <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                                    <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
                                   </div>
-                                  <div>hide</div>
                                 {/* </div> */}
                               {/* </div> */}
                             </div>
@@ -187,16 +185,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                         submit offer with epoch key:
                     </p>
                 </div>
-                <p
-                  style={{
-                      maxWidth: '180px',
-                      wordBreak: 'break-all',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                  }}
-                >
-                  {user.epochKey(reqInfo.nonce ?? 0)}
-                </p>
+                <p className='epoch-key'>{user.epochKey(reqInfo.nonce ?? 0)}</p>
                 <div style={{display: 'flex'}}>
                   {repProof.proof.length ? (
                     <div className='proof'>

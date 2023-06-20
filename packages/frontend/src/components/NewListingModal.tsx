@@ -144,14 +144,15 @@ export default observer(({ setShowNewListing }: Props) => {
                         return (
                             <div key={i} className=''>
                               { i === 3 ?
-                                <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score), true)}%</div>
+                                <div style={{fontWeight: '600'}}>{scoreNames[i]} Score: {app.calcScore(String(score), true)}%</div>
                               :
-                                <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
+                                <div style={{fontWeight: '600'}}>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
                               }
                               <div style={{display: 'flex', justifyContent: 'space-around'}}>
                                 <div>
                                   <div
-                                    style={{cursor: 'pointer'}}
+                                    className='choose reveal'
+                                    // style={{cursor: 'pointer'}}
                                     onClick={()=> {
                                       if (i === 0) {
                                         setPScore1(String(score))
@@ -170,13 +171,14 @@ export default observer(({ setShowNewListing }: Props) => {
                                       console.log(Number(score))
                                     }}
                                   >
-                                    <img src={require('../../public/starshine.svg')} alt="radio waves"/>
+                                    <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
                                   </div>
-                                  <div>reveal</div>
+                                  {/* <div style={{fontSize: '0.7rem'}}>reveal</div> */}
                                 </div>
                                 <div>
                                   <div
-                                    style={{cursor: 'pointer'}}
+                                    className='choose hide'
+                                    // style={{cursor: 'pointer'}}
                                     onClick={()=> {
                                       if (i === 0) {
                                         setPScore1('X')
@@ -189,9 +191,9 @@ export default observer(({ setShowNewListing }: Props) => {
                                       }
                                     }}
                                   >
-                                    <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                                    <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
                                   </div>
-                                  <div>hide</div>
+                                  {/* <div style={{fontSize: '0.7rem'}}>hide</div> */}
                                 </div>
                               </div>
                             </div>
@@ -340,7 +342,7 @@ export default observer(({ setShowNewListing }: Props) => {
                             })}                    */}
                   </div>
                   <div>
-                    <div style={{display: 'flex', paddingTop: '1rem'}}>
+                    <div style={{display: 'flex', padding: '1rem 0 0 0.5rem'}}>
                         <select
                             value={reqInfo.nonce ?? 0}
                             onChange={(event) => {
@@ -358,17 +360,9 @@ export default observer(({ setShowNewListing }: Props) => {
                             Create listing with epoch key:
                         </p>
                     </div>
-                        <p
-                            style={{
-                                fontSize: '14px',
-                                maxWidth: '650px',
-                                wordBreak: 'break-all',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {user.epochKey(reqInfo.nonce ?? 0)}
-                        </p>
+                    <p className='epoch-key'style={{maxWidth: '650px'}}>
+                        {user.epochKey(reqInfo.nonce ?? 0)}
+                    </p>
                   </div>
                 </div>
 
