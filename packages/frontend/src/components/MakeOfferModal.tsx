@@ -40,6 +40,8 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
   const [rScore2, setRScore2] = React.useState('')
   const [rScore3, setRScore3] = React.useState('')
   const [rScore4, setRScore4] = React.useState('')
+  const scoreNames = ['LP', 'CB', 'TD', 'GV']
+
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -64,19 +66,77 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                     </div>
 
                     {Array(
+                    user.userState.sync.settings.sumFieldCount
+                    )
+                      .fill(0)
+                      .map((_, i) => {
+                        const score = user.provableData[i]
+                        return (
+                            <div key={i} className=''style={{display: 'flex', justifyContent: 'space-around'}}>
+                              <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
+                              {/* <div style={{display: 'flex', justifyContent: 'space-around'}}> */}
+                                {/* <div> */}
+                                  <div
+                                    style={{cursor: 'pointer'}}
+                                    onClick={()=> {
+                                      if (i === 0) {
+                                        setRScore1(String(score))
+                                      } else if (i === 1) {
+                                        setRScore2(String(score))
+                                      } else if (i === 2) {
+                                        setRScore3(String(score))
+                                      } else {
+                                        setRScore4(String(score))
+                                      }
+                                      console.log(String(score))
+                                      setProveData(() => ({
+                                        ...proveData,
+                                        [0]: Number(score),
+                                      }))
+                                      console.log(Number(score))
+                                    }}
+                                  >
+                                    <img src={require('../../public/starshine.svg')} alt="radio waves"/>
+                                  </div>
+                                  <div>reveal</div>
+                                {/* </div> */}
+                                {/* <div> */}
+                                  <div
+                                    style={{cursor: 'pointer'}}
+                                    onClick={()=> {
+                                      if (i === 0) {
+                                        setRScore1('X')
+                                      } else if (i === 1) {
+                                        setRScore2('X')
+                                      } else if (i === 2) {
+                                        setRScore3('X')
+                                      } else {
+                                        setRScore4('X')
+                                      }
+                                    }}
+                                  >
+                                    <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                                  </div>
+                                  <div>hide</div>
+                                {/* </div> */}
+                              {/* </div> */}
+                            </div>
+                        )
+                      })
+                    }
+
+                    {/* {Array(
                       user.userState.sync.settings.sumFieldCount
                     )
                       .fill(0)
                       .map((_, i) => {
                           return (
                               <div key={i}>
-                                  {/* <label htmlFor={`score${i +1}`}>reveal Score {i + 1}</label> */}
                                   {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score: </label> : null}
                                   {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score: </label> : null}
                                   {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score: </label> : null}
                                   {i === 3 ? <label htmlFor={`score${i +1}`}>reveal GV score: </label> : null}
                                   <input
-                                      // style={{width: '6rem'}}
                                       className='offer-input'
                                       type='text'
                                       id={`score${i + 1}`}
@@ -101,7 +161,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                   />
                               </div>
                           )
-                      })}                  
+                      })}                   */}
               </div>
 
               <div className='offer-buttons'>
