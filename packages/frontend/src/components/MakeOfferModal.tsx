@@ -65,6 +65,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                         />
                     </div>
 
+                    <div className='score-grid'>
                     {Array(
                     user.userState.sync.settings.sumFieldCount
                     )
@@ -72,14 +73,13 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       .map((_, i) => {
                         const score = user.provableData[i]
                         return (
-                            <div key={i} className=''style={{display: 'flex', justifyContent: 'space-around'}}>
+                            <div key={i} className='reveal-container'>
                               { i === 3 ?
-                                <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score), true)}%</div>
+                                <div className='score-name'>{scoreNames[i]} Score: {app.calcScore(String(score), true)}%</div>
                               :
-                                <div className=''>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
+                                <div className='score-name'>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
                               }
-                              {/* <div style={{display: 'flex', justifyContent: 'space-around'}}> */}
-                                {/* <div> */}
+                              <div className='icon-container'>
                                   <div
                                     className='choose reveal'
                                     onClick={()=> {
@@ -102,8 +102,6 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                   >
                                     <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
                                   </div>
-                                {/* </div> */}
-                                {/* <div> */}
                                   <div
                                     className='choose hide'
                                     onClick={()=> {
@@ -120,12 +118,12 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                   >
                                     <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
                                   </div>
-                                {/* </div> */}
-                              {/* </div> */}
+                              </div>
                             </div>
                         )
                       })
                     }
+                    </div>
 
                     {/* {Array(
                       user.userState.sync.settings.sumFieldCount
