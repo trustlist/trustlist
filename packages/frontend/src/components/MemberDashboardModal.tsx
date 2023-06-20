@@ -117,7 +117,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                                 <div style={{paddingLeft: '0.3rem'}}>GV score:</div>
                               </div>
                               {/* <div>{(data || 0).toString()}</div> */}
-                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{received}/{expected * 5}</div>
                               {expected === 0 ? 
                                 <div className='stat'>0%</div>
                               :
@@ -167,7 +167,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                             <div className="score-detail">
                               {/* <div>{(data || 0).toString()}</div> */}
                               <div>GV score:</div>
-                              <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{received}/{expected * 5}</div>
                               {expected === 0 ? 
                                 <div className='stat'>0%</div>
                               :
