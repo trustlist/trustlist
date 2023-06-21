@@ -45,7 +45,7 @@ export default observer(({ setShowNewListing }: Props) => {
   const scoreNames = ['LP', 'CB', 'TD', 'GV']
   const [pScores, setPScores] = useState<{
     [key: number]: number | string
-  }>({})
+  }>({0:'X', 1:'X', 2:'X', 3: 'X'})
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -227,6 +227,8 @@ export default observer(({ setShowNewListing }: Props) => {
                       )
                       setRepProof(proof)
                       console.log('data', proveData, 'scores', pScores)
+                      const scoresString = JSON.stringify(pScores)
+                      console.log(scoresString)
                     }}
                   >
                     prove trust scores
@@ -249,7 +251,9 @@ export default observer(({ setShowNewListing }: Props) => {
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
                           const posterId = user.epochKey(reqInfo.nonce)
-                          await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                          // await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
+                          const scoresString = JSON.stringify(pScores)
+                          await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, scoresString)
                           setShowNewListing(false)
                       }}
                     >

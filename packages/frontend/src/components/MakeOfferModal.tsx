@@ -160,8 +160,9 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       const epoch = user.userState?.sync.calcCurrentEpoch()
                       const responderId = user.epochKey(reqInfo.nonce ?? 0)
                       console.log(responderId)
-                      app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
-                      // app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScores)
+                      // app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
+                      const scoresString = JSON.stringify(rScores)
+                      app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, scoresString)
                     }}
                   />
                 ) : (

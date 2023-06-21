@@ -6,7 +6,6 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/loadListings', async (req, res) => {
     try {
       const { section, category } = req.body
-      console.log('hit:', section, 'no cat?', category)
       const listings = await db.findMany('Listings', {
         where: {
           section,

@@ -5,17 +5,14 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/submitOffer', async (req, res) => {
     try {
-      const { epoch, listingId, listingTitle, offerAmount, responderId, rScore1, rScore2, rScore3, rScore4 } = req.body
+      const { epoch, listingId, listingTitle, offerAmount, responderId, scoreString } = req.body
       await db.create('Offers', {
         epoch,
         listingId,
         listingTitle,
         offerAmount,
         responderId,
-        rScore1,
-        rScore2,
-        rScore3,
-        rScore4,
+        scoreString,
       })
       res.json({ message: 'success!' })
     } catch (error: any) {

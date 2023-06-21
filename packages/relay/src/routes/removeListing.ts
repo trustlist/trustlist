@@ -11,7 +11,6 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
           _id: id,
         },
       })
-      // console.log(deal)
       res.json(listing)
     } catch (error: any) {
       res.status(500).json({ error })

@@ -20,10 +20,11 @@ type Listing = {
   amount: string;
   amountType: string;
   description: string;
-  pScore1: string;
-  pScore2: string;
-  pScore3: string;
-  pScore4: string;
+  // pScore1: string;
+  // pScore2: string;
+  // pScore3: string;
+  // pScore4: string;
+  scoreString: string;
 }
 
 export default observer(({ section, category }: Props) => {
@@ -57,10 +58,13 @@ export default observer(({ section, category }: Props) => {
       {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
-          const score1 = app.calcScore(listing.pScore1, false)
-          const score2 = app.calcScore(listing.pScore2, false)
-          const score3 = app.calcScore(listing.pScore3, false)
-          const score4 = app.calcScore(listing.pScore4, true)
+          // const score1 = app.calcScore(listing.pScore1, false)
+          // const score2 = app.calcScore(listing.pScore2, false)
+          // const score3 = app.calcScore(listing.pScore3, false)
+          // const score4 = app.calcScore(listing.pScore4, true)
+          const pScores = JSON.parse(listing.scoreString)
+          console.log(pScores)
+          const scores = app.calcScores(pScores)
           return (
           <>
             {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?
@@ -86,10 +90,10 @@ export default observer(({ section, category }: Props) => {
                         <Tooltip 
                           text="LP score: reflects the poster's ability/willingness to follow through on their listings and complete deals. "
                           content=
-                          {score1 === 'X' ?
+                          {scores[0] === 9999999 ?
                             <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                             :
-                            score1 === 0 ? '...' : score1
+                            scores[0] === 0 ? '...' : scores[0]
                           }
                         />
                       </div>
@@ -97,10 +101,10 @@ export default observer(({ section, category }: Props) => {
                         <Tooltip 
                           text="CB score: reflects the member's commitment to community building by submitting timely reviews of their completed deals."
                           content=
-                          {score2 === 'X' ?
+                          {scores[1] === 9999999 ?
                             <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                             :
-                            score2 === 0 ? '...' : score2
+                            scores[1] === 0 ? '...' : scores[1]
                           }
                         />    
                       </div>
@@ -110,10 +114,10 @@ export default observer(({ section, category }: Props) => {
                         <Tooltip
                           text="TD score: reflects the community's overall satisfaction in dealing with this member, as a percentage of how many members would choose to interact with them again."
                           content=
-                          {score3 === 'X' ?
+                          {scores[2] === 9999999 ?
                             <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                             :
-                            score3 === 0 ? '...' : score3
+                            scores[2] === 0 ? '...' : scores[2]
                           }
                         />  
                       </div>
@@ -121,10 +125,10 @@ export default observer(({ section, category }: Props) => {
                         <Tooltip
                           text="Good Vibes score: reflects the communitiy's sentiments about this member's attitude and demeanor."
                           content=
-                          {score4 === 'X' ?
+                          {scores[3] === 9999999 ?
                             <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                             :
-                            score4 === 0 ? '...' : score4
+                            scores[3] === 0 ? '...' : scores[3]
                           }
                         />
                       </div>
@@ -145,34 +149,30 @@ export default observer(({ section, category }: Props) => {
                   <div>
                     <div className='score-container'>
                       <div className='score-item'>
-                        {score1 === 'X' ?
+                        {/* {score1 === 'X' ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
                           score1 === 0 ? '...' : score1
-                        }
+                        } */}
                       </div>
                       <div className='score-item'>
-                        {score2 === 'X' ?
+                        {/* {score2 === 'X' ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
                           score2 === 0 ? '...' : score2
-                        }
+                        } */}
                       </div>
                     </div>
                     <div className='score-container'>
                     <div className='score-item'>
-                        {score3 === 'X' ?
+                        {/* {score3 === 'X' ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
                           score3 === 0 ? '...' : score3
-                        }
+                        } */}
                       </div>
                       <div className='score-item'>
-                        {score4 === 'X' ?
-                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
-                          :
-                          score4 === 0 ? '...' : score4
-                        }
+                        {/* {s */}
                       </div>
                     </div>
                   </div>

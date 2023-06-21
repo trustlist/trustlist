@@ -34,7 +34,7 @@ class Trustlist {
     this.categoriesBySection.forEach((value, key) => {this.sections.push(key)})
   }
 
-  async createNewListing(epoch: any, section: string, category: string, title: string, amount: string, amountType: string, description: string, posterId: string, pScore1: string, pScore2: string, pScore3: string, pScore4: string) {
+  async createNewListing(epoch: any, section: string, category: string, title: string, amount: string, amountType: string, description: string, posterId: string, scoreString: string) {
     const data = await fetch(`${SERVER}/api/addListing`, {
       method: 'POST',
       headers: {
@@ -49,17 +49,13 @@ class Trustlist {
         amountType,
         description,
         posterId,
-        pScore1,
-        pScore2,
-        pScore3,
-        pScore4,
+        scoreString,
       })
     }).then(r => r.json())
     console.log(data.message)
   }
 
-  async submitOffer(epoch: any, listingId: string, listingTitle: string, responderId: string, offerAmount: string, rScore1: string, rScore2: string, rScore3: string, rScore4: string) {
-    console.log(epoch, listingId, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
+  async submitOffer(epoch: any, listingId: string, listingTitle: string, responderId: string, offerAmount: string, scoresString: string) {
     const data = await fetch(`${SERVER}/api/submitOffer`, {
       method: 'POST',
       headers: {
@@ -71,10 +67,7 @@ class Trustlist {
         listingTitle,
         responderId,
         offerAmount,
-        rScore1,
-        rScore2,
-        rScore3,
-        rScore4,
+        scoresString,
       })
     }).then(r => r.json())
     console.log(data.message)
@@ -177,26 +170,30 @@ class Trustlist {
     return score
   }
 
-  calcScores(data: any[]) {
-    const scores = []
-    for (const i in data) {
-      if (i === 'X') {
-        scores.push('X')
-        return
-      }
-      if (Number(i) === 0) {
+  calcScores(data: {}) {
+    const scores: Number[] = []
+    const dataValues = Object.values(data)
+    console.log('string list of scores', dataValues)
+    for (let i = 0; i < dataValues.length; i++) {
+      console.log(dataValues[i])
+      if (dataValues[i] === 'X') {
+        scores.push(9999999)
+      } else if (dataValues[i] === '0') {
         scores.push(0)
-        return
+      } else {
+        const score = Math.floor((Number(dataValues[i]) % 128) / (Number(dataValues[i]) >> 23) * 100)
+        console.log(score)
+        if (i === 3) {
+          scores.push(score / 5)
+        } else {
+          scores.push(score)
+        }
       }
-      const score = Math.floor((Number(data) % 128) / (Number(data) >> 23) * 100)
-      if (data.indexOf(i) === 3) {
-        scores.push(score / 5)
-      }
-      scores.push(score)
     }
-    console.log(scores)
+    console.log('number list of scores', scores)
     return scores
   }
+
 }
 
 export default createContext(new Trustlist())
