@@ -36,10 +36,6 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
-  const [rScore1, setRScore1] = React.useState('')
-  const [rScore2, setRScore2] = React.useState('')
-  const [rScore3, setRScore3] = React.useState('')
-  const [rScore4, setRScore4] = React.useState('')
   const scoreNames = ['LP', 'CB', 'TD', 'GV']
   const [rScores, setRScores] = React.useState<{
     [key: number]: number | string
@@ -69,7 +65,6 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                 <div className='score-grid'>
                   {scoreNames.map((name, i) => {
                     const score = String(user.provableData[i])
-                    console.log(i, score)
                     return (
                       <div key={name} className='reveal-container'>
                         { i === 3 ?
@@ -85,12 +80,10 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                                     ...rScores,
                                     [i]: score,
                                   }))
-                                  console.log('now', rScores[i])
                                   setProveData(() => ({
                                     ...proveData,
                                     [i]: score,
                                   }))
-                                  console.log('now', proveData[i])
                                 }}
                               >
                                 <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
@@ -145,7 +138,6 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                           proveData
                       )
                       setRepProof(proof)
-                      console.log('data', proveData, 'scores', rScores)
                     }}
                   >
                     prove trust scores
@@ -159,10 +151,8 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                     onClick={() => {
                       const epoch = user.userState?.sync.calcCurrentEpoch()
                       const responderId = user.epochKey(reqInfo.nonce ?? 0)
-                      console.log(responderId)
-                      // app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
-                      const scoresString = JSON.stringify(rScores)
-                      app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, scoresString)
+                      const scoreString = JSON.stringify(rScores)
+                      app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, scoreString)
                     }}
                   />
                 ) : (

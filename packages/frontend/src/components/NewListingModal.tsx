@@ -38,10 +38,6 @@ export default observer(({ setShowNewListing }: Props) => {
   const [amount, setAmount] = useState('')
   const [amountType, setAmountType] = useState('one time')
   const [description, setDescription] = useState('')
-  const [pScore1, setPScore1] = useState('')
-  const [pScore2, setPScore2] = useState('')
-  const [pScore3, setPScore3] = useState('')
-  const [pScore4, setPScore4] = useState('')
   const scoreNames = ['LP', 'CB', 'TD', 'GV']
   const [pScores, setPScores] = useState<{
     [key: number]: number | string
@@ -140,7 +136,6 @@ export default observer(({ setShowNewListing }: Props) => {
 
                   {scoreNames.map((name, i) => {
                         const score = String(user.provableData[i])
-                        console.log(i, score)
                         return (
                             <div key={i} className=''>
                               { i === 3 ?
@@ -157,12 +152,10 @@ export default observer(({ setShowNewListing }: Props) => {
                                         ...pScores,
                                         [i]: score,
                                       }))
-                                      console.log('new', pScores[i])
                                       setProveData(() => ({
                                         ...proveData,
                                         [i]: score,
                                       }))
-                                      console.log('new', proveData[i])
                                     }}
                                   >
                                     <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
@@ -226,9 +219,6 @@ export default observer(({ setShowNewListing }: Props) => {
                           proveData
                       )
                       setRepProof(proof)
-                      console.log('data', proveData, 'scores', pScores)
-                      const scoresString = JSON.stringify(pScores)
-                      console.log(scoresString)
                     }}
                   >
                     prove trust scores
@@ -251,9 +241,8 @@ export default observer(({ setShowNewListing }: Props) => {
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
                           const posterId = user.epochKey(reqInfo.nonce)
-                          // await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, pScore1, pScore2, pScore3, pScore4)
-                          const scoresString = JSON.stringify(pScores)
-                          await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, scoresString)
+                          const scoreString = JSON.stringify(pScores)
+                          await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, scoreString)
                           setShowNewListing(false)
                       }}
                     >

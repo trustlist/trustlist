@@ -20,10 +20,6 @@ type Listing = {
   amount: string;
   amountType: string;
   description: string;
-  // pScore1: string;
-  // pScore2: string;
-  // pScore3: string;
-  // pScore4: string;
   scoreString: string;
 }
 
@@ -58,10 +54,6 @@ export default observer(({ section, category }: Props) => {
       {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
-          // const score1 = app.calcScore(listing.pScore1, false)
-          // const score2 = app.calcScore(listing.pScore2, false)
-          // const score3 = app.calcScore(listing.pScore3, false)
-          // const score4 = app.calcScore(listing.pScore4, true)
           const pScores = JSON.parse(listing.scoreString)
           console.log(pScores)
           const scores = app.calcScores(pScores)
@@ -136,43 +128,58 @@ export default observer(({ section, category }: Props) => {
                   </div>
                 </div>
                 {showDetail && <DetailModal listing={detailData} key={detailData._id} setShowDetail={setShowDetail} />}
-              </> : 
+              </> 
+            : 
               <>
                 <div className='listing-expired' key={listing._id}>
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
-                        <div>${listing.amount}</div>
-                        <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
-                        <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
+                    <div>${listing.amount}</div>
+                    <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
+                    <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
+                      {/* {scores.map((score) => (
+                        <div className='score-item'>
+                          {score === 9999999 ?
+                            <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                            :
+                            score === 0 ? '...' : String(score)
+                          }
+                        </div>
+                      ))}
+                    </div> */}
                       <div className='score-item'>
-                        {/* {score1 === 'X' ?
+                        {scores[0] === 9999999 ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
-                          score1 === 0 ? '...' : score1
-                        } */}
+                          scores[0] === 0 ? '...' : String(scores[0])
+                        }
                       </div>
                       <div className='score-item'>
-                        {/* {score2 === 'X' ?
+                        {scores[1] === 9999999 ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
-                          score2 === 0 ? '...' : score2
-                        } */}
+                          scores[1] === 0 ? '...' : String(scores[1])
+                        }
                       </div>
                     </div>
                     <div className='score-container'>
                     <div className='score-item'>
-                        {/* {score3 === 'X' ?
+                        {scores[2] === 9999999 ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
                           :
-                          score3 === 0 ? '...' : score3
-                        } */}
+                          scores[2] === 0 ? '...' : String(scores[2])
+                        }
                       </div>
                       <div className='score-item'>
-                        {/* {s */}
+                        {scores[3] === 9999999 ?
+                          <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
+                          :
+                          scores[3] === 0 ? '...' : String(scores[3])
+                        }
                       </div>
                     </div>
                   </div>
