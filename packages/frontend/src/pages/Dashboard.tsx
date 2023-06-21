@@ -257,6 +257,7 @@ export default observer(() => {
                                                     ...proveData,
                                                     [i]: event.target.value,
                                                 }))
+                                                console.log(proveData)
                                             }}
                                         />
                                     </div>

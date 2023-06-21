@@ -41,12 +41,13 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
   const [rScore3, setRScore3] = React.useState('')
   const [rScore4, setRScore4] = React.useState('')
   const scoreNames = ['LP', 'CB', 'TD', 'GV']
-
+  const [rScores, setRScores] = React.useState<{
+    [key: number]: number | string
+  }>({})
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
   }
-
   return (
     <div className='dark-bg'>
       <div className='centered'>
@@ -54,114 +55,62 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
           <form>
             <div className='offer-content'>
               <div className='offer-container'>
-                    <div className=''>
-                        <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600', paddingLeft: '1.2rem'}}>amount: $</label>
-                        <input 
-                          type='text' 
-                          id='offerAmount' 
-                          name='offerAmount' 
-                          onChange={(e) => setOfferAmount(e.target.value)}
-                          className='offer-input'
-                        />
-                    </div>
+                <div className=''>
+                  <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600', paddingLeft: '1.2rem'}}>amount: $</label>
+                  <input 
+                    type='text' 
+                    id='offerAmount' 
+                    name='offerAmount' 
+                    onChange={(e) => setOfferAmount(e.target.value)}
+                    className='offer-input'
+                  />
+                </div>
 
-                    <div className='score-grid'>
-                    {Array(
-                    user.userState.sync.settings.sumFieldCount
-                    )
-                      .fill(0)
-                      .map((_, i) => {
-                        const score = user.provableData[i]
-                        return (
-                            <div key={i} className='reveal-container'>
-                              { i === 3 ?
-                                <div className='score-name'>{scoreNames[i]} Score: {app.calcScore(String(score), true)}%</div>
+                <div className='score-grid'>
+                  {scoreNames.map((name, i) => {
+                    const score = String(user.provableData[i])
+                    console.log(i, score)
+                    return (
+                      <div key={name} className='reveal-container'>
+                        { i === 3 ?
+                                <div className='score-name'>{name} Score: {app.calcScore(score, true)}%</div>
                               :
-                                <div className='score-name'>{scoreNames[i]} Score: {app.calcScore(String(score), false)}%</div>
+                                <div className='score-name'>{name} Score: {app.calcScore(score, false)}%</div>
                               }
-                              <div className='icon-container'>
-                                  <div
-                                    className='choose reveal'
-                                    onClick={()=> {
-                                      if (i === 0) {
-                                        setRScore1(String(score))
-                                      } else if (i === 1) {
-                                        setRScore2(String(score))
-                                      } else if (i === 2) {
-                                        setRScore3(String(score))
-                                      } else {
-                                        setRScore4(String(score))
-                                      }
-                                      console.log(String(score))
-                                      setProveData(() => ({
-                                        ...proveData,
-                                        [0]: Number(score),
-                                      }))
-                                      console.log(Number(score))
-                                    }}
-                                  >
-                                    <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
-                                  </div>
-                                  <div
-                                    className='choose hide'
-                                    onClick={()=> {
-                                      if (i === 0) {
-                                        setRScore1('X')
-                                      } else if (i === 1) {
-                                        setRScore2('X')
-                                      } else if (i === 2) {
-                                        setRScore3('X')
-                                      } else {
-                                        setRScore4('X')
-                                      }
-                                    }}
-                                  >
-                                    <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
-                                  </div>
+                        <div className='icon-container'>
+                              <div
+                                className='choose reveal'
+                                onClick={()=> {
+                                  setRScores(() => ({
+                                    ...rScores,
+                                    [i]: score,
+                                  }))
+                                  console.log('now', rScores[i])
+                                  setProveData(() => ({
+                                    ...proveData,
+                                    [i]: score,
+                                  }))
+                                  console.log('now', proveData[i])
+                                }}
+                              >
+                                <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
                               </div>
-                            </div>
-                        )
-                      })
-                    }
-                    </div>
-
-                    {/* {Array(
-                      user.userState.sync.settings.sumFieldCount
+                              <div
+                                className='choose hide'
+                                onClick={()=> {
+                                  setRScores(() => ({
+                                    ...rScores,
+                                    [i]: 'X',
+                                  }))
+                                }}
+                              >
+                                <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
+                              </div>
+                          </div> 
+                      </div>
                     )
-                      .fill(0)
-                      .map((_, i) => {
-                          return (
-                              <div key={i}>
-                                  {i === 0 ? <label htmlFor={`score${i +1}`}>reveal LP score: </label> : null}
-                                  {i === 1 ? <label htmlFor={`score${i +1}`}>reveal CB score: </label> : null}
-                                  {i === 2 ? <label htmlFor={`score${i +1}`}>reveal TD score: </label> : null}
-                                  {i === 3 ? <label htmlFor={`score${i +1}`}>reveal GV score: </label> : null}
-                                  <input
-                                      className='offer-input'
-                                      type='text'
-                                      id={`score${i + 1}`}
-                                      name={`score${i + 1}`}
-                                      value={proveData[i] ?? '0'}
-                                      onChange={(event) => {
-                                          if (
-                                              !/^\d*$/.test(
-                                                  event.target.value
-                                              )
-                                          )
-                                              return
-                                          setProveData(() => ({
-                                              ...proveData,
-                                              [i]: event.target.value,
-                                          }))
-                                          if (i === 0) {setRScore1(event.target.value)}
-                                          if (i === 1) {setRScore2(event.target.value)}
-                                          if (i === 2) {setRScore3(event.target.value)}
-                                          if (i === 3) {setRScore4(event.target.value)}
-                                      }}
-                                  />
-                              </div>
-                          )
-                      })}                   */}
+                  })}
+                </div>
               </div>
 
               <div className='offer-buttons'>
@@ -196,6 +145,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                           proveData
                       )
                       setRepProof(proof)
+                      console.log('data', proveData, 'scores', rScores)
                     }}
                   >
                     prove trust scores
@@ -211,6 +161,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       const responderId = user.epochKey(reqInfo.nonce ?? 0)
                       console.log(responderId)
                       app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScore1, rScore2, rScore3, rScore4)
+                      // app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, rScores)
                     }}
                   />
                 ) : (
@@ -225,4 +176,4 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
       </div>
     </div>
   )
-  })
+})
