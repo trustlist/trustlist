@@ -135,13 +135,13 @@ export default observer(({ setShowNewListing }: Props) => {
                   <div style={{display: 'flex', justifyContent: 'space-around'}}>
 
                   {scoreNames.map((name, i) => {
-                        const score = String(user.provableData[i])
+                        const score = Number(user.provableData[i])
                         return (
                             <div key={i} className=''>
                               { i === 3 ?
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScore(score, true)}%</div>
+                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromData(score, true)}%</div>
                               :
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScore(score, false)}%</div>
+                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromData(score, false)}%</div>
                               }
                               <div style={{display: 'flex', justifyContent: 'space-around'}}>
                                 <div>

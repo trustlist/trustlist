@@ -64,13 +64,13 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
 
                 <div className='score-grid'>
                   {scoreNames.map((name, i) => {
-                    const score = String(user.provableData[i])
+                    const score = Number(user.provableData[i])
                     return (
                       <div key={name} className='reveal-container'>
                         { i === 3 ?
-                                <div className='score-name'>{name} Score: {app.calcScore(score, true)}%</div>
+                                <div className='score-name'>{name} Score: {app.calcScoreFromData(score, true)}%</div>
                               :
-                                <div className='score-name'>{name} Score: {app.calcScore(score, false)}%</div>
+                                <div className='score-name'>{name} Score: {app.calcScoreFromData(score, false)}%</div>
                               }
                         <div className='icon-container'>
                               <div
