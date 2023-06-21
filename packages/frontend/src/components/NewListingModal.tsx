@@ -139,9 +139,9 @@ export default observer(({ setShowNewListing }: Props) => {
                         return (
                             <div key={i} className=''>
                               { i === 3 ?
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromData(score, true)}%</div>
+                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score, true)}%</div>
                               :
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromData(score, false)}%</div>
+                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score, false)}%</div>
                               }
                               <div style={{display: 'flex', justifyContent: 'space-around'}}>
                                 <div>

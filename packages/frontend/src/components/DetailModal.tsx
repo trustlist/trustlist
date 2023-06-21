@@ -49,7 +49,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
   const offers = app.offersByListingId.get(listing._id)
   const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
   const pScores = JSON.parse(listing.scoreString)
-  const posterScores = app.calcScores(pScores)
+  const posterScores = app.calcScoresFromDB(pScores)
   
 return (
     <div className='dark-bg'>
@@ -157,13 +157,13 @@ return (
                 <>
                 <div style={{display: 'flex'}}>
                   <div style={{textDecoration: 'line-through'}}>pending offers</div>
-                  <div style={{color: 'blue', paddingLeft: '1rem'}}>offer accepted</div>
+                  <div style={{color: 'blue', paddingLeft: '1rem'}}>deal pending</div>
                 </div>
                 <div className='offer-scroll'>
                   {offers ? 
                     offers.map((offer: Offer) => {
                       const rScores = JSON.parse(offer.scoreString)
-                      const responderScores = app.calcScores(rScores)
+                      const responderScores = app.calcScoresFromDB(rScores)
                       return (
                         <div key={offer._id} className='offer'>
                           <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>
@@ -213,7 +213,7 @@ return (
                   {offers ? 
                     offers.map((offer: Offer) => {
                       const rScores = JSON.parse(offer.scoreString)
-                      const responderScores = app.calcScores(rScores)
+                      const responderScores = app.calcScoresFromDB(rScores)
                       return (
                         <div key={offer._id} className='offer'>
                           <div><span style={{color: 'blue'}}>${offer.offerAmount} </span>  ----    offering member's scores: </div>

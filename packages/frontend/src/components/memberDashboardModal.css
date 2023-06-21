@@ -74,7 +74,7 @@ li:hover {
   flex-direction:row;
   justify-content: space-between;
   align-items: center; 
-  padding: 0.5rem 1rem 0 1rem;
+  padding: 0.3rem 0.2rem 0 0.8rem;
 }
 
 .stat {

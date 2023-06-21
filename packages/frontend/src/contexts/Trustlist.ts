@@ -9,6 +9,8 @@ import prover from './prover'
 import poseidon from 'poseidon-lite'
 
 class Trustlist {
+  scoreNames: string[] = []
+  dashboardScoreDescriptions: string[] = []
   sections: string[] = []
   categoriesBySection = new Map()
   listingsById = new Map()
@@ -27,6 +29,8 @@ class Trustlist {
   }
 
   async load() {
+    this.scoreNames = ['LP', 'CB', 'TD', 'GV']
+    this.dashboardScoreDescriptions = ['Legitimate Poster score: expresses my reputation for posting legitimate listings that result in completed deals.', 'Community Builder score: reflects my record of completing attestations for the deals I have been involved in.', 'Trusted DealMaker: indicates the percentage of members I have interacted with who would recommend me to others.', 'Good Vibes score : indicates the percentage of all possible points given to me by other members for being friendly, communicative, and respectful.']
     this.categoriesBySection.set('for sale', ['antiques', 'appliances', 'auto parts', 'baby', 'beauty', 'bikes', 'boats', 'books', 'cars+trucks', 'clothes', 'electronics', 'farm+garden', 'furniture', 'household', 'jewelry', 'materials', 'sporting', 'tickets', 'tools', 'toys', 'trailers', 'video', 'wanted'])
     this.categoriesBySection.set('housing', ['apts/houses', 'swap', 'wanted', 'commercial', 'parking/storage', 'rooms/shared', 'sublets/temporary', 'vacation rentals'])
     this.categoriesBySection.set('jobs', ['accounting', 'admin', 'arch/eng', 'art/design', 'biotech', 'business', 'customer service', 'education', 'etc/misc', 'food/bev', 'government', 'legal', 'maufacturing', 'marketing', 'medical', 'nonprofit', 'real estate', 'retail', 'sales', 'salon/spa', 'software', 'technical', 'tv/film', 'writing/editing'])
@@ -159,7 +163,7 @@ class Trustlist {
     const data = await fetch(`${SERVER}/api/removeListing/${id}`).then((r) => r.json())
   }
 
-  calcScoreFromData(data: number, GVscore: boolean) {
+  calcScoreFromUserData(data: number, GVscore: boolean) {
     if (data === 0)
       return 0
     const score = Math.floor((data % 128) / (data >> 23) * 100)
@@ -168,7 +172,7 @@ class Trustlist {
     return score
   }
 
-  calcScores(data: {}) {
+  calcScoresFromDB(data: {}) {
     const scores: Number[] = []
     const dataValues = Object.values(data)
     console.log('string list of scores', dataValues)

@@ -56,7 +56,7 @@ export default observer(({ section, category }: Props) => {
         listings.slice().reverse().map((listing: Listing) => {
           const pScores = JSON.parse(listing.scoreString)
           console.log(pScores)
-          const scores = app.calcScores(pScores)
+          const scores = app.calcScoresFromDB(pScores)
           return (
           <>
             {listing.epoch === user.userState?.sync.calcCurrentEpoch() ?

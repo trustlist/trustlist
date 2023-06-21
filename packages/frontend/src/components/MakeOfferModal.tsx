@@ -68,9 +68,9 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                     return (
                       <div key={name} className='reveal-container'>
                         { i === 3 ?
-                                <div className='score-name'>{name} Score: {app.calcScoreFromData(score, true)}%</div>
+                                <div className='score-name'>{name} Score: {app.calcScoreFromUserData(score, true)}%</div>
                               :
-                                <div className='score-name'>{name} Score: {app.calcScoreFromData(score, false)}%</div>
+                                <div className='score-name'>{name} Score: {app.calcScoreFromUserData(score, false)}%</div>
                               }
                         <div className='icon-container'>
                               <div
