@@ -1,5 +1,6 @@
 .tooltip-outer {
     position: relative;
+    cursor: pointer;
 }
 
 .tooltip-popup {

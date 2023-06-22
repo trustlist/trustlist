@@ -10,6 +10,7 @@ import poseidon from 'poseidon-lite'
 
 class Trustlist {
   scoreNames: string[] = []
+  listingScoreDescriptions: string[] = []
   dashboardScoreDescriptions: string[] = []
   sections: string[] = []
   categoriesBySection = new Map()
@@ -31,6 +32,7 @@ class Trustlist {
   async load() {
     this.scoreNames = ['LP', 'CB', 'TD', 'GV']
     this.dashboardScoreDescriptions = ['Legitimate Poster score: expresses my reputation for posting legitimate listings that result in completed deals.', 'Community Builder score: reflects my record of completing attestations for the deals I have been involved in.', 'Trusted DealMaker: indicates the percentage of members I have interacted with who would recommend me to others.', 'Good Vibes score : indicates the percentage of all possible points given to me by other members for being friendly, communicative, and respectful.']
+    this.listingScoreDescriptions = [`Legitimate Poster score: this member has completed a transaction for this percentage of the listings they have posted.`, `Community Builder score: this member has submitted attestations for this percentage of the transactions they have been involved in`, `Trusted DealMaker: Percentage of members who have transacted with this member would be happy to deal with them again`, `Good Vibes score : others who have interacted with his member have given them this percentage of all possible points for being friendly, communicative, and respectful`]
     this.categoriesBySection.set('for sale', ['antiques', 'appliances', 'auto parts', 'baby', 'beauty', 'bikes', 'boats', 'books', 'cars+trucks', 'clothes', 'electronics', 'farm+garden', 'furniture', 'household', 'jewelry', 'materials', 'sporting', 'tickets', 'tools', 'toys', 'trailers', 'video', 'wanted'])
     this.categoriesBySection.set('housing', ['apts/houses', 'swap', 'wanted', 'commercial', 'parking/storage', 'rooms/shared', 'sublets/temporary', 'vacation rentals'])
     this.categoriesBySection.set('jobs', ['accounting', 'admin', 'arch/eng', 'art/design', 'biotech', 'business', 'customer service', 'education', 'etc/misc', 'food/bev', 'government', 'legal', 'maufacturing', 'marketing', 'medical', 'nonprofit', 'real estate', 'retail', 'sales', 'salon/spa', 'software', 'technical', 'tv/film', 'writing/editing'])

@@ -31,16 +31,20 @@
   /* padding-top: 2rem; */
 }
 
+.detail-tooltip {
+  padding: 0.5rem 0.2rem 0 0;
+}
+
 .trust-item {
   display: flex;
   justify-content: space-between;
-  background-color: rgb(244, 241, 241);
+  background-color: rgb(233, 231, 231);
   border-radius: 0.3rem;
-  border: 1px solid rgb(218, 217, 217);
-  width: 150px;
+  border: 1px solid rgb(191, 190, 190);
+  width: 120px;
   text-align: center;
-  margin: 0.4rem 0;
-  padding: 0.2rem 0.8rem;
+  margin: 0.2rem 0;
+  padding: 0.3rem 0.8rem;
 }
 
 .offers-container {
