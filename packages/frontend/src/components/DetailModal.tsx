@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
@@ -36,12 +36,12 @@ type Offer = {
 }
 
 export default observer(({ listing, setShowDetail }: Props) => {
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
+  const app = useContext(Trustlist)
+  const user = useContext(User)
   const navigate = useNavigate()
-  const [showMakeOffer, setShowMakeOffer] = React.useState<boolean>(false)
+  const [showMakeOffer, setShowMakeOffer] = useState<boolean>(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadData = async () => {
       await app.loadOffers(listing._id)
     }
@@ -60,19 +60,18 @@ export default observer(({ listing, setShowDetail }: Props) => {
             
             <div className='action-bar'>
               <div className='action-item'>
-                {/* prevent user from making an offer on their own post */}
-                {/* {user.hasSignedUp && !memberKeys.includes(listing.posterId) ? ( */}
-                {user.hasSignedUp && !listing.dealOpened ? (
+                {user.hasSignedUp && !listing.dealOpened 
+                // prevent user from making an offer on their own post
+                // && !memberKeys.includes(listing.posterId) 
+                ? 
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
-                      {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
+                    {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
                   </>
-                ) : (
-                  <Tooltip
-                    text='offer not allowed'
-                    content={<button style={{cursor: 'not-allowed'}}>make an offer</button>}
-                  /> 
-                )}
+                : null }
+                {listing.epoch != user.userState?.sync.calcCurrentEpoch() ?
+                  <button style={{color: 'red', borderColor: 'red'}}>EXPIRED</button>
+                : null}
               </div>
               <div className='action-item'>
                 <div>⭐️</div>
