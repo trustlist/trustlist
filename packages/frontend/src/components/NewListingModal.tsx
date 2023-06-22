@@ -38,7 +38,6 @@ export default observer(({ setShowNewListing }: Props) => {
   const [amount, setAmount] = useState('')
   const [amountType, setAmountType] = useState('one time')
   const [description, setDescription] = useState('')
-  const scoreNames = ['LP', 'CB', 'TD', 'GV']
   const [pScores, setPScores] = useState<{
     [key: number]: number | string
   }>({0:'X', 1:'X', 2:'X', 3: 'X'})
@@ -131,10 +130,10 @@ export default observer(({ setShowNewListing }: Props) => {
                   </div>  
                 </div>
 
-                <div className='form-container'>
+                <div className='form-container' style={{paddingBottom: '0.3rem'}}>
                   <div style={{display: 'flex', justifyContent: 'space-around'}}>
 
-                  {scoreNames.map((name, i) => {
+                  {app.scoreNames.map((name, i) => {
                         const score = Number(user.provableData[i])
                         return (
                             <div key={i} className=''>

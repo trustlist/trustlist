@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import DetailModal from './DetailModal';
 import Tooltip from './Tooltip';
@@ -21,16 +21,19 @@ type Listing = {
   amountType: string;
   description: string;
   scoreString: string;
+  dealOpened: boolean;
+  posterDealClosed: boolean;
+  responderDealClosed: boolean;
 }
 
 export default observer(({ section, category }: Props) => {
   
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
-  const [showDetail, setShowDetail] = React.useState<boolean>(false)
-  const [detailData, setDetailData] = React.useState<any>()
+  const app = useContext(Trustlist)
+  const user = useContext(User)
+  const [showDetail, setShowDetail] = useState<boolean>(false)
+  const [detailData, setDetailData] = useState<any>()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadData = async () => {
       await app.loadSelectedCategory(section, category)
     }
@@ -47,7 +50,6 @@ export default observer(({ section, category }: Props) => {
   } else {
     listings = app.servicesByCategory.get(category)
   }
-  console.log(listings)
 
   return (
     <div className='listings'>
@@ -55,7 +57,6 @@ export default observer(({ section, category }: Props) => {
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
           const pScores = JSON.parse(listing.scoreString)
-          console.log(pScores)
           const scores = app.calcScoresFromDB(pScores)
           return (
           <>
@@ -72,9 +73,23 @@ export default observer(({ section, category }: Props) => {
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
-                        <div>${listing.amount}</div>
-                        <div className='listing-description'>{listing.description}</div>
-                        <div style={{fontSize: '0.4rem'}} onClick={() => app.removeListing(listing._id)}>delete</div>
+                    {listing.posterDealClosed && listing.responderDealClosed ?
+                      <div style={{display: 'flex'}}>
+                        <div style={{textDecoration: 'line-through'}}>${listing.amount}</div>
+                        <div className='complete'>deal completed</div>
+                      </div>  
+                    : null }
+                    {listing.dealOpened && !listing.posterDealClosed?
+                      <div style={{display: 'flex'}}>
+                        <div style={{textDecoration: 'line-through'}}>${listing.amount}</div>
+                        <div className='accepted'>offer accepted</div>
+                      </div>
+                    : null }
+                    {!listing.dealOpened ?  
+                      <div>${listing.amount}</div>
+                    : null }
+                    <div className='listing-description'>{listing.description}</div>
+                    <div style={{fontSize: '0.4rem'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>
                   <div>
                     <div className='score-container'>
@@ -135,7 +150,21 @@ export default observer(({ section, category }: Props) => {
                   <div className='thumbnail'>TL</div>
                   <div>
                     <div className='listing-title'>{listing.title}</div>
-                    <div>${listing.amount}</div>
+                    {listing.posterDealClosed && listing.responderDealClosed ?
+                      <div style={{display: 'flex'}}>
+                        <div style={{textDecoration: 'line-through'}}>${listing.amount}</div>
+                        <div className='complete'>deal completed</div>
+                      </div>  
+                    : null }
+                    {listing.dealOpened && !listing.posterDealClosed?
+                      <div style={{display: 'flex'}}>
+                        <div style={{textDecoration: 'line-through'}}>${listing.amount}</div>
+                        <div className='accepted'>offer accepted</div>
+                      </div>
+                    : null }
+                    {!listing.dealOpened ?  
+                      <div>${listing.amount}</div>
+                    : null }
                     <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
                     <div style={{fontSize: '0.4rem', cursor: 'pointer'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                   </div>

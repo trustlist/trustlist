@@ -36,7 +36,6 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
       valid: false,
   })
   const [offerAmount, setOfferAmount] = React.useState('')
-  const scoreNames = ['LP', 'CB', 'TD', 'GV']
   const [rScores, setRScores] = React.useState<{
     [key: number]: number | string
   }>({})
@@ -52,7 +51,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
             <div className='offer-content'>
               <div className='offer-container'>
                 <div className=''>
-                  <label htmlFor='offerAmount' style={{fontSize: '1rem', fontWeight: '600', paddingLeft: '1.2rem'}}>amount: $</label>
+                  <label htmlFor='offerAmount' style={{fontSize: '1.2rem', fontWeight: '600', paddingLeft: '3rem'}}>amount: $</label>
                   <input 
                     type='text' 
                     id='offerAmount' 
@@ -63,7 +62,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                 </div>
 
                 <div className='score-grid'>
-                  {scoreNames.map((name, i) => {
+                  {app.scoreNames.map((name, i) => {
                     const score = Number(user.provableData[i])
                     return (
                       <div key={name} className='reveal-container'>

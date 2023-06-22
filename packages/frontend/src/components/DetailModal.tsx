@@ -22,7 +22,7 @@ type Props = {
     offerAmount: string;
     responderId: string;
     dealOpened: boolean;
-    dealClosed: boolean;
+    // dealClosed: boolean;
   };
   setShowDetail: (value: boolean) => void;
 }
