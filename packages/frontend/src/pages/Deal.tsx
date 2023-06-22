@@ -71,7 +71,7 @@ export default observer(() => {
                           throw new Error('Needs transition')
                       }
                       await user.requestReputation(
-                        {[0]:'00000001', [1]:'10000000'},
+                        {[0]:1, [1]:1 << 23},
                         reqInfo.nonce ?? 0
                       )
                       app.dealClose(deal._id, 'poster')
@@ -105,7 +105,7 @@ export default observer(() => {
                           throw new Error('Needs transition')
                       }
                       await user.requestReputation(
-                        {[1]:'10000000'},
+                        {[1]:1 << 23},
                         reqInfo.nonce ?? 0
                       )
                       app.dealClose(deal._id, 'responder')
@@ -183,10 +183,10 @@ export default observer(() => {
                         ) {
                             throw new Error('Needs transition')
                         }
-                        const index2 = 10000000 + dealAgain
-                        const index3 = 10000000 + sentiment
+                        const index2 = 1 << 23 + dealAgain
+                        const index3 = 1 << 23 + sentiment
                         await user.requestReputation(
-                            {[1]:'00000001', [2]:index2, [3]:index3},
+                            {[1]:1, [2]:index2, [3]:index3},
                             memberKeys.indexOf(deal.posterId) ?? 0
                         )
                         navigate(`/`)
@@ -256,10 +256,10 @@ export default observer(() => {
                           ) {
                               throw new Error('Needs transition')
                           }
-                          const index2 = 10000000 + dealAgain
-                          const index3 = 10000000 + sentiment
+                          const index2 = 1 << 23 + dealAgain
+                          const index3 = 1 << 23 + sentiment
                           await user.requestReputation(
-                              {[1]:'00000001', [2]:index2, [3]:index3},
+                              {[1]:1, [2]:index2, [3]:index3},
                               memberKeys.indexOf(deal.responderId) ?? 0
                           )
                           navigate(`/`)

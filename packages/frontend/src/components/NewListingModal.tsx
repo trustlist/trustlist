@@ -235,7 +235,7 @@ export default observer(({ setShowNewListing }: Props) => {
                               throw new Error('Needs transition')
                           }
                           await user.requestReputation(
-                            {[0]:'10000000'},
+                            {[0]: 1 << 23},
                             reqInfo.nonce ?? 0
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
