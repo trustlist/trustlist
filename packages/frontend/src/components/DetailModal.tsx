@@ -22,7 +22,8 @@ type Props = {
     offerAmount: string;
     responderId: string;
     dealOpened: boolean;
-    // dealClosed: boolean;
+    posterDealClosed: boolean;
+    responderDealClosed: boolean;
   };
   setShowDetail: (value: boolean) => void;
 }
@@ -157,7 +158,13 @@ return (
                 <>
                 <div style={{display: 'flex'}}>
                   <div style={{textDecoration: 'line-through'}}>pending offers</div>
-                  <div style={{color: 'blue', paddingLeft: '1rem'}}>deal pending</div>
+                  {listing.posterDealClosed && listing.responderDealClosed ?
+                    <div style={{display: 'flex'}}>
+                      <div style={{color: 'red', paddingLeft: '1rem'}}>deal completed</div>
+                    </div>
+                  :
+                    <div style={{color: 'green', paddingLeft: '1rem'}}>deal pending</div>
+                  }
                 </div>
                 <div className='offer-scroll'>
                   {offers ? 
