@@ -70,9 +70,12 @@ export default observer(() => {
                       ) {
                           throw new Error('Needs transition')
                       }
+                      // need to wait until other member has also checked
+                      // +1 to opposite member's expected CB score
                       await user.requestReputation(
-                        {[0]:1, [1]:1 << 23},
-                        reqInfo.nonce ?? 0
+                        {[1]:1 << 23},
+                        memberKeys.indexOf(deal.posterId) ?? 0,
+                        deal.responderId
                       )
                       app.dealClose(deal._id, 'poster')
                     }}
@@ -104,9 +107,13 @@ export default observer(() => {
                       ) {
                           throw new Error('Needs transition')
                       }
+                      // need to wait until other member has also checked
+                      // +1 to opposite member's completed LP score
+                      // +1 to opposite member's expected CB score
                       await user.requestReputation(
-                        {[1]:1 << 23},
-                        reqInfo.nonce ?? 0
+                        {[0]:1, [1]:1 << 23},
+                        memberKeys.indexOf(deal.responderId) ?? 0,
+                        deal.posterId
                       )
                       app.dealClose(deal._id, 'responder')
                     }}
@@ -185,9 +192,18 @@ export default observer(() => {
                         }
                         const index2 = 1 << 23 + dealAgain
                         const index3 = 1 << 23 + sentiment
+                        // +1 to current member's completed CB score
                         await user.requestReputation(
-                            {[1]:1, [2]:index2, [3]:index3},
-                            memberKeys.indexOf(deal.posterId) ?? 0
+                            {[1]:1},
+                            memberKeys.indexOf(deal.posterId) ?? 0,
+                            ''
+                        )
+                        // +1 to opposite member's expected and +1 || 0 to completed TD score
+                        // +1 to opposite member's expected and +0-5 to completed GV score
+                        await user.requestReputation(
+                            {[2]:index2, [3]:index3},
+                            memberKeys.indexOf(deal.posterId) ?? 0,
+                            deal.responderId
                         )
                         navigate(`/`)
                       }}
@@ -258,9 +274,18 @@ export default observer(() => {
                           }
                           const index2 = 1 << 23 + dealAgain
                           const index3 = 1 << 23 + sentiment
+                          // +1 to current member's completed CB score
                           await user.requestReputation(
-                              {[1]:1, [2]:index2, [3]:index3},
-                              memberKeys.indexOf(deal.responderId) ?? 0
+                              {[1]:1},
+                              memberKeys.indexOf(deal.responderId) ?? 0,
+                              ''
+                          )
+                          // +1 to opposite member's expected and +1 || 0 to completed TD score
+                          // +1 to opposite member's expected and +0-5 to completed GV score
+                          await user.requestReputation(
+                              {[2]:index2, [3]:index3},
+                              memberKeys.indexOf(deal.responderId) ?? 0,
+                              deal.posterId
                           )
                           navigate(`/`)
                       }}

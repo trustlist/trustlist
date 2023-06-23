@@ -208,7 +208,8 @@ export default observer(() => {
                                 }
                                 await userContext.requestReputation(
                                     reqData,
-                                    reqInfo.nonce ?? 0
+                                    reqInfo.nonce ?? 0,
+                                    ''
                                 )
                                 setReqData({})
                             }}

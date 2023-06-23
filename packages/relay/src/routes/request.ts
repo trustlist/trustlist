@@ -10,7 +10,7 @@ import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/UnirepApp.sol/
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     app.post('/api/request', async (req, res) => {
         try {
-            const { reqData, publicSignals, proof } = req.body
+            const { reqData, publicSignals, proof, receiverEpochKey } = req.body
 
             const epochKeyProof = new EpochKeyProof(
                 publicSignals,
@@ -22,6 +22,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
                 res.status(400).json({ error: 'Invalid proof' })
                 return
             }
+            const epochKey = receiverEpochKey === '' ? epochKeyProof.epochKey : receiverEpochKey
             const epoch = await synchronizer.loadCurrentEpoch()
             const appContract = new ethers.Contract(APP_ADDRESS, UNIREP_APP.abi)
 
@@ -30,13 +31,13 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
             if (keys.length === 1) {
                 calldata = appContract.interface.encodeFunctionData(
                     'submitAttestation',
-                    [epochKeyProof.epochKey, epoch, keys[0], reqData[keys[0]]]
+                    [epochKey, epoch, keys[0], reqData[keys[0]]]
                 )
             } else if (keys.length > 1) {
                 calldata = appContract.interface.encodeFunctionData(
                     'submitManyAttestations',
                     [
-                        epochKeyProof.epochKey,
+                        epochKey,
                         epoch,
                         keys,
                         keys.map((k) => reqData[k]),

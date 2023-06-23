@@ -92,7 +92,8 @@ class User {
 
     async requestReputation(
         reqData: { [key: number]: string | number },
-        epkNonce: number
+        epkNonce: number, 
+        receiverEpochKey: string,
     ) {
         if (!this.userState) throw new Error('user state not initialized')
 
@@ -125,6 +126,7 @@ class User {
                     reqData,
                     publicSignals: epochKeyProof.publicSignals,
                     proof: epochKeyProof.proof,
+                    receiverEpochKey,
                 })
             ),
         }).then((r) => r.json())

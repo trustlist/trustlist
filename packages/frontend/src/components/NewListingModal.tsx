@@ -234,9 +234,11 @@ export default observer(({ setShowNewListing }: Props) => {
                           ) {
                               throw new Error('Needs transition')
                           }
+                          // +1 to current member's expected LP score
                           await user.requestReputation(
                             {[0]: 1 << 23},
-                            reqInfo.nonce ?? 0
+                            reqInfo.nonce ?? 0,
+                            '',
                           )
                           const epoch = user.userState?.sync.calcCurrentEpoch()
                           const posterId = user.epochKey(reqInfo.nonce)
