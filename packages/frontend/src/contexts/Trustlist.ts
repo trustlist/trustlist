@@ -170,7 +170,7 @@ class Trustlist {
       return 0
     const score = Math.floor((data % 128) / (data >> 23) * 100)
     if (GVscore)
-      return score / 5
+      return Math.floor(score / 5)
     return score
   }
 
@@ -188,7 +188,7 @@ class Trustlist {
         const score = Math.floor((Number(dataValues[i]) % 128) / (Number(dataValues[i]) >> 23) * 100)
         console.log(score)
         if (i === 3) {
-          scores.push(score / 5)
+          scores.push(Math.floor(score / 5))
         } else {
           scores.push(score)
         }

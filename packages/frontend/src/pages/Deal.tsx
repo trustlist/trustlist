@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import Button from '../components/Button'
@@ -16,22 +16,24 @@ export default observer(() => {
 
   const { id }: any = useParams()
   const navigate = useNavigate()
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
+  const app = useContext(Trustlist)
+  const user = useContext(User)
 
-  const [dealComplete, setdealComplete] = React.useState(false)
-  const [sentiment, setSentiment] = React.useState(3)
-  const [dealAgain, setDealAgain] = React.useState(1)
-  const [reqData1, setReqData1] = React.useState<{
+  const [posterDealComplete, setposterDealComplete] = useState(false)
+  const [responderDealComplete, setresponderDealComplete] = useState(false)
+  const [posterSubmitted, setPosterSubmitted] = useState(false)
+  const [responderSubmitted, setResponderSubmitted] = useState(false)
+  const [sentiment, setSentiment] = useState(3)
+  const [dealAgain, setDealAgain] = useState(1)
+  const [reqDataPoster, setReqDataPoster] = useState<{
     [key: number]: number | string
   }>({})
-  const [reqData2, setReqData2] = React.useState<{
+  const [reqDataRepsponder, setReqDataResponder] = useState<{
     [key: number]: number | string
   }>({})
-  const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
   const sentiments = ['hard no', 'not really', 'whatever idc', 'mostly', 'yeah def']
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadData = async () => {
       await app.loadDealById(id)
     }
@@ -47,87 +49,81 @@ export default observer(() => {
 
   return (
     <div className='deal-content'>
+      {deal && (deal.epoch !== user.userState?.sync.calcCurrentEpoch()) ?
+        <div>🚫 this deal has expired</div>
+      : null}
+      {/* {deal && posterSubmitted && responderSubmitted ?
+        <div style={{color: 'red'}}>this deal has been completed and attested to</div>
+      : null} */}
       {deal ? 
         <>
           <div style={{textAlign: 'center'}}>
             <h3>{deal.title}</h3>
             <h3>${deal.offerAmount}</h3>
             <div className='deal-info'>
-              <div>
-                <div>member 1: {deal.posterId.slice(0,6)}...</div>
-                {memberKeys.includes(deal.posterId) ? (
-                  <input 
-                    type='checkbox'
-                    id='complete1'
-                    name='complete1'
-                    className='checked'
+              <div>  
+                <div>poster id: {deal.posterId.slice(0,6)}...</div>
+                {deal.posterDealClosed ?
+                  <div className='checked'>✅</div>
+                :
+                  <div 
+                    className='unchecked'
                     onClick={async () => {
-                      // won't need transition, but will error if deal's epoch has expired
-                      if (
-                        user.userState &&
-                        user.userState.sync.calcCurrentEpoch() !==
-                          (await user.userState.latestTransitionedEpoch())
-                      ) {
-                          throw new Error('Needs transition')
+                      if (memberKeys.includes(deal.posterId)) {
+                        app.dealClose(deal._id, 'poster')
+                        if (deal.responderDealClosed) {
+                          // +1 to responder's expected CB score
+                          await user.requestReputation(
+                            {[1]:1 << 23},
+                            memberKeys.indexOf(deal.posterId) ?? 0,
+                            deal.responderId
+                          )
+                          // +1 to poster's completed LP score
+                          // +1 to poster's expected CB score
+                          await user.requestReputation(
+                            {[0]:1, [1]:1 << 23},
+                            memberKeys.indexOf(deal.posterId) ?? 0,
+                            ''
+                          )
+                        }
                       }
-                      // need to wait until other member has also checked
-                      // +1 to opposite member's expected CB score
-                      await user.requestReputation(
-                        {[1]:1 << 23},
-                        memberKeys.indexOf(deal.posterId) ?? 0,
-                        deal.responderId
-                      )
-                      app.dealClose(deal._id, 'poster')
-                    }}
-                  />
-                ) : (
-                  <input 
-                    type='checkbox'
-                    id='complete1'
-                    name='complete1'
-                    style={{cursor: 'not-allowed'}}
-                    onClick={(e) => e.preventDefault()}
-                  />
-                )}
-                <label htmlFor='complete1'>mark deal as complete</label>
+                    }}   
+                  >
+                    ?
+                  </div>
+                }
               </div>
-              <div>
-                <div>member 2: {deal.responderId.slice(0,6)}...</div>
-                {memberKeys.includes(deal.responderId) ? (
-                  <input
-                    type='checkbox'
-                    id='complete2'
-                    name='complete2'
-                    className='checked'
+              <div>  
+                <div>responder id: {deal.responderId.slice(0,6)}...</div>
+                {deal.responderDealClosed ?
+                  <div className='checked'>✅</div>
+                :
+                  <div 
+                    className='unchecked'
                     onClick={async () => {
-                      if (
-                        user.userState &&
-                        user.userState.sync.calcCurrentEpoch() !==
-                          (await user.userState.latestTransitionedEpoch())
-                      ) {
-                          throw new Error('Needs transition')
+                      if (memberKeys.includes(deal.responderId)) {
+                        app.dealClose(deal._id, 'responder')
+                        if (deal.posterDealClosed) {
+                          // +1 to responder's expected CB score
+                          await user.requestReputation(
+                            {[1]:1 << 23},
+                            memberKeys.indexOf(deal.responderId) ?? 0,
+                            ''
+                          )
+                          // +1 to poster's completed LP score
+                          // +1 to poster's expected CB score
+                          await user.requestReputation(
+                            {[0]:1, [1]:1 << 23},
+                            memberKeys.indexOf(deal.posterId) ?? 0,
+                            deal.posterId
+                          )
+                        }
                       }
-                      // need to wait until other member has also checked
-                      // +1 to opposite member's completed LP score
-                      // +1 to opposite member's expected CB score
-                      await user.requestReputation(
-                        {[0]:1, [1]:1 << 23},
-                        memberKeys.indexOf(deal.responderId) ?? 0,
-                        deal.posterId
-                      )
-                      app.dealClose(deal._id, 'responder')
-                    }}
-                  />
-                ) : (
-                  <input 
-                    style={{cursor: 'not-allowed'}}
-                    type='checkbox'
-                    id='complete2'
-                    name='complete2'
-                    // onClick={(e) => e.preventDefault()}
-                  />
-                )}
-                <label htmlFor='complete2'>mark deal as complete</label>
+                    }}   
+                  >
+                    ?
+                  </div>
+                }
               </div>
             </div>
           </div>

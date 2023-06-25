@@ -14,6 +14,21 @@ input.checked {
   justify-content: space-between;
 }
 
+.checked {
+  border-radius: 0.5rem;
+  border: 0.2rem solid green;
+  padding: 0.5rem;
+  font-size: 2rem;
+}
+
+.unchecked {
+  border-radius: 0.5rem;
+  border: 0.2rem solid red;
+  padding: 1rem;
+  font-size: 2rem;
+  color: rgb(212, 210, 210);
+}
+
 .attestation-container {
   display: flex;
   justify-content: space-between;
