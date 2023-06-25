@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
+import ReviewForm from '../components/ReviewForm';
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip';
 import './deal.css'
@@ -130,7 +131,9 @@ export default observer(() => {
       
           {deal.posterDealClosed && deal.responderDealClosed ? (
             <div className='attestation-container'>
-              <div className="attestation-form">
+              <ReviewForm member='poster' memberKeys={memberKeys} id={deal.posterId}/>
+              <ReviewForm member='responder' memberKeys={memberKeys} id={deal.responderId}/>
+              {/* <div className="attestation-form">
                 <div className="icon">
                     <h2>member 1 review</h2>
                     <Tooltip 
@@ -177,7 +180,6 @@ export default observer(() => {
                 <div style={{padding: '1rem'}}>
                   {memberKeys.includes(deal.posterId) ? (
                     <Button
-                      // style={{backgroundColor: 'blue', color: 'white'}}
                       onClick={async () => {
                         if (
                             user.userState &&
@@ -188,14 +190,11 @@ export default observer(() => {
                         }
                         const index2 = 1 << 23 + dealAgain
                         const index3 = 1 << 23 + sentiment
-                        // +1 to current member's completed CB score
                         await user.requestReputation(
                             {[1]:1},
                             memberKeys.indexOf(deal.posterId) ?? 0,
                             ''
                         )
-                        // +1 to opposite member's expected and +1 || 0 to completed TD score
-                        // +1 to opposite member's expected and +0-5 to completed GV score
                         await user.requestReputation(
                             {[2]:index2, [3]:index3},
                             memberKeys.indexOf(deal.posterId) ?? 0,
@@ -259,7 +258,6 @@ export default observer(() => {
                 <div style={{padding: '1rem'}}>
                   {memberKeys.includes(deal.responderId) ? (
                     <Button
-                      // style={{backgroundColor: 'blue', color: 'white'}}
                       onClick={async () => {
                           if (
                               user.userState &&
@@ -270,14 +268,11 @@ export default observer(() => {
                           }
                           const index2 = 1 << 23 + dealAgain
                           const index3 = 1 << 23 + sentiment
-                          // +1 to current member's completed CB score
                           await user.requestReputation(
                               {[1]:1},
                               memberKeys.indexOf(deal.responderId) ?? 0,
                               ''
                           )
-                          // +1 to opposite member's expected and +1 || 0 to completed TD score
-                          // +1 to opposite member's expected and +0-5 to completed GV score
                           await user.requestReputation(
                               {[2]:index2, [3]:index3},
                               memberKeys.indexOf(deal.responderId) ?? 0,
@@ -291,7 +286,7 @@ export default observer(() => {
                   ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
                   }
                 </div>
-              </div>
+              </div> */}
             </div>
           ) : (
             <div style={{color: 'black', textAlign: 'center', paddingTop: '4rem'}}>
