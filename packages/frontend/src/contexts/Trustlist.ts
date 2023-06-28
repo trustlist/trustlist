@@ -165,36 +165,26 @@ class Trustlist {
     const data = await fetch(`${SERVER}/api/removeListing/${id}`).then((r) => r.json())
   }
 
-  calcScoreFromUserData(data: number, GVscore: boolean) {
+  calcScoreFromUserData(data: number) {
     if (data === 0)
       return 0
     const score = Math.floor((data % 128) / (data >> 23) * 100)
-    if (GVscore)
-      return Math.floor(score / 5)
     return score
   }
 
   calcScoresFromDB(data: {}) {
     const scores: Number[] = []
     const dataValues = Object.values(data)
-    console.log('string list of scores', dataValues)
     for (let i = 0; i < dataValues.length; i++) {
-      console.log(dataValues[i])
       if (dataValues[i] === 'X') {
         scores.push(9999999)
-      } else if (dataValues[i] === '0') {
+      } else if (dataValues[i] === 0) {
         scores.push(0)
       } else {
-        const score = Math.floor((Number(dataValues[i]) % 128) / (Number(dataValues[i]) >> 23) * 100)
-        console.log(score)
-        if (i === 3) {
-          scores.push(Math.floor(score / 5))
-        } else {
-          scores.push(score)
-        }
+        const score = Math.floor((Number(dataValues[i]) % 23) / (Number(dataValues[i]) >> 96) * 100)
+        scores.push(score)
       }
     }
-    console.log('number list of scores', scores)
     return scores
   }
 

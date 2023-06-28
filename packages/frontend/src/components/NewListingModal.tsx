@@ -137,11 +137,7 @@ export default observer(({ setShowNewListing }: Props) => {
                         const score = Number(user.provableData[i])
                         return (
                             <div key={i} className=''>
-                              { i === 3 ?
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score, true)}%</div>
-                              :
-                                <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score, false)}%</div>
-                              }
+                              <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score)}%</div>
                               <div style={{display: 'flex', justifyContent: 'space-around'}}>
                                 <div>
                                   <div

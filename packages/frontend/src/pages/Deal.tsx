@@ -63,7 +63,28 @@ export default observer(() => {
               <div>  
                 <div>poster id: {deal.posterId.slice(0,6)}...</div>
                 {deal.posterDealClosed ?
-                  <div className='checked'>✅</div>
+                  <div className='checked'
+                  // onClick={async () => {
+                  //   if (memberKeys.includes(deal.posterId)) {
+                  //     app.dealClose(deal._id, 'poster')
+                  //     if (deal.responderDealClosed) {
+                  //       // +1 to responder's expected CB score
+                  //       await user.requestReputation(
+                  //         {[1]:1 << 23},
+                  //         memberKeys.indexOf(deal.posterId) ?? 0,
+                  //         deal.responderId
+                  //       )
+                  //       // +1 to poster's completed LP score
+                  //       // +1 to poster's expected CB score
+                  //       await user.requestReputation(
+                  //         {[0]:1, [1]:1 << 23},
+                  //         memberKeys.indexOf(deal.posterId) ?? 0,
+                  //         ''
+                  //       )
+                  //     }
+                  //   }
+                  // }}
+                  >✅</div>
                 :
                   <div 
                     className='unchecked'
@@ -129,8 +150,22 @@ export default observer(() => {
       
           {deal.posterDealClosed && deal.responderDealClosed ? (
             <div className='attestation-container'>
-              <ReviewForm member='poster' memberKeys={memberKeys} id={deal.posterId}/>
-              <ReviewForm member='responder' memberKeys={memberKeys} id={deal.responderId}/>
+              <ReviewForm 
+                member='poster' 
+                memberKeys={memberKeys} 
+                currentMemberId={deal.posterId} 
+                oppositeMemberId={deal.responderId}
+                posterAttested={deal.posterAttested}
+                responderAttested={deal.responderAttested}
+              />
+              <ReviewForm 
+                member='responder' 
+                memberKeys={memberKeys} 
+                currentMemberId={deal.reesponderId} 
+                oppositeMemberId={deal.posterId}
+                posterAttested={deal.posterAttested}
+                responderAttested={deal.responderAttested}
+              />
             </div>
           ) : (
             <div style={{color: 'black', textAlign: 'center', paddingTop: '4rem'}}>

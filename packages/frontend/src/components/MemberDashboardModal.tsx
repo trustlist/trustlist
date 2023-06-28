@@ -77,18 +77,11 @@ export default observer(({ setShowMemberDash }: Props) => {
                             />
                             <div style={{paddingLeft: '0.3rem'}}>{app.scoreNames[i]} score:</div>
                           </div>
-                          {i === 3 ?
-                            <div className="stat">{received}/{expected * 5}</div>
-                          :
-                            <div className="stat">{received}/{expected}</div>
-                          }  
+                          <div className="stat">{received}/{expected}</div>
                           {expected === 0 ? 
                             <div className='stat'>0%</div>
                           :
-                            i === 3 ?
-                              <div className="stat">{Math.floor((received / expected * 100) / 5)}%</div>
-                            :
-                              <div className="stat">{Math.floor(received / expected * 100)}%</div>
+                            <div className="stat">{Math.floor(received / expected * 100)}%</div>
                           }
                         </div>
                       </div>
@@ -118,20 +111,13 @@ export default observer(({ setShowMemberDash }: Props) => {
                             content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
                             />
                             <div style={{paddingLeft: '0.3rem'}}>{app.scoreNames[i]} score:</div>
-                          </div>  
-                          {i === 3 ?
-                            <div className="stat">{received}/{expected * 5}</div>
+                          </div>
+                          <div className="stat">{received}/{expected}</div>
+                          {expected === 0 ? 
+                            <div className='stat'>0%</div>
                           :
-                            <div className="stat">{received}/{expected}</div>
+                              <div className="stat">{Math.floor(received / expected * 100)}%</div>
                           }
-                            {expected === 0 ? 
-                              <div className='stat'>0%</div>
-                            :
-                              i === 3 ?
-                                <div className="stat">{Math.floor((received / expected * 100) / 5)}%</div>
-                              :
-                                <div className="stat">{Math.floor(received / expected * 100)}%</div>
-                            }
                         </div>
                       </div>
                     )

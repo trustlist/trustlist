@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { observer } from 'mobx-react-lite'
 import Button from './Button';
@@ -10,10 +10,20 @@ import User from '../contexts/User';
 type Props = {
   member: string;
   memberKeys: string[];
-  id: string;
+  currentMemberId: string;
+  oppositeMemberId: string;
+  posterAttested: boolean;
+  responderAttested: boolean;
 }
 
-export default observer(({ member, memberKeys, id  }: Props) => {
+export default observer(({ 
+  member, 
+  memberKeys, 
+  currentMemberId, 
+  oppositeMemberId,
+  posterAttested,
+  responderAttested
+}: Props) => {
   
   const app = useContext(Trustlist)
   const user = useContext(User)
@@ -68,7 +78,7 @@ export default observer(({ member, memberKeys, id  }: Props) => {
                 <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
                 
                 <div style={{padding: '1rem'}}>
-                  {memberKeys.includes(id) ? (
+                  {memberKeys.includes(currentMemberId) ? (
                     <Button
                       // style={{backgroundColor: 'blue', color: 'white'}}
                       onClick={async () => {
@@ -79,27 +89,28 @@ export default observer(({ member, memberKeys, id  }: Props) => {
                         ) {
                             throw new Error('Needs transition')
                         }
-                        const index2 = 1 << 23 + dealAgain
-                        const index3 = 1 << 23 + sentiment
+                        const index2 = (1 << 23) + dealAgain
+                        const index3 = (5 << 23) + sentiment
                         // +1 to current member's completed CB score
                         await user.requestReputation(
                             {[1]:1},
-                            memberKeys.indexOf(id) ?? 0,
+                            memberKeys.indexOf(currentMemberId) ?? 0,
                             ''
                         )
                         // +1 to opposite member's expected and +1 || 0 to completed TD score
-                        // +1 to opposite member's expected and +0-5 to completed GV score
+                        // +5 to opposite member's expected and +0-5 to completed GV score
                         await user.requestReputation(
                             {[2]:index2, [3]:index3},
-                            memberKeys.indexOf(id) ?? 0,
-                            id
+                            memberKeys.indexOf(currentMemberId) ?? 0,
+                            oppositeMemberId
                         )
                         navigate(`/`)
                       }}
                     >
                       Submit
                     </Button>
-                  ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
+                  ) : null
+                  // ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
                   }
                   
                 </div>
