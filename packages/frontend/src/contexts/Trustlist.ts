@@ -108,6 +108,20 @@ class Trustlist {
     console.log(data.message)
   }
 
+  async submitReview(id: string, member: string) {
+    const data = await fetch(`${SERVER}/api/submitReview`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        id,
+        member,
+      })
+    }).then(r => r.json())
+    console.log(data.message)
+  }
+
   async loadSelectedCategory(section: string, category: string) {
     const listings = await fetch(`${SERVER}/api/loadListings`, {
       method: 'POST',

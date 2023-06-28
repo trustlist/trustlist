@@ -20,18 +20,6 @@ export default observer(() => {
   const app = useContext(Trustlist)
   const user = useContext(User)
 
-  const [posterDealComplete, setposterDealComplete] = useState(false)
-  const [responderDealComplete, setresponderDealComplete] = useState(false)
-  const [posterSubmitted, setPosterSubmitted] = useState(false)
-  const [responderSubmitted, setResponderSubmitted] = useState(false)
-  const [reqDataPoster, setReqDataPoster] = useState<{
-    [key: number]: number | string
-  }>({})
-  const [reqDataRepsponder, setReqDataResponder] = useState<{
-    [key: number]: number | string
-  }>({})
-  const sentiments = ['hard no', 'not really', 'whatever idc', 'mostly', 'yeah def']
-
   useEffect(() => {
     const loadData = async () => {
       await app.loadDealById(id)
@@ -64,33 +52,33 @@ export default observer(() => {
                 <div>poster id: {deal.posterId.slice(0,6)}...</div>
                 {deal.posterDealClosed ?
                   <div className='checked'
-                  // onClick={async () => {
-                  //   if (memberKeys.includes(deal.posterId)) {
-                  //     app.dealClose(deal._id, 'poster')
-                  //     if (deal.responderDealClosed) {
-                  //       // +1 to responder's expected CB score
-                  //       await user.requestReputation(
-                  //         {[1]:1 << 23},
-                  //         memberKeys.indexOf(deal.posterId) ?? 0,
-                  //         deal.responderId
-                  //       )
-                  //       // +1 to poster's completed LP score
-                  //       // +1 to poster's expected CB score
-                  //       await user.requestReputation(
-                  //         {[0]:1, [1]:1 << 23},
-                  //         memberKeys.indexOf(deal.posterId) ?? 0,
-                  //         ''
-                  //       )
-                  //     }
-                  //   }
-                  // }}
+                  onClick={async () => {
+                    if (memberKeys.includes(deal.posterId)) {
+                      await app.dealClose(deal._id, 'poster')
+                      if (deal.responderDealClosed) {
+                        // +1 to responder's expected CB score
+                        await user.requestReputation(
+                          {[1]:1 << 23},
+                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          deal.responderId
+                        )
+                        // +1 to poster's completed LP score
+                        // +1 to poster's expected CB score
+                        await user.requestReputation(
+                          {[0]:1, [1]:1 << 23},
+                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          ''
+                        )
+                      }
+                    }
+                  }}
                   >✅</div>
                 :
                   <div 
                     className='unchecked'
                     onClick={async () => {
                       if (memberKeys.includes(deal.posterId)) {
-                        app.dealClose(deal._id, 'poster')
+                        await app.dealClose(deal._id, 'poster')
                         if (deal.responderDealClosed) {
                           // +1 to responder's expected CB score
                           await user.requestReputation(
@@ -122,7 +110,7 @@ export default observer(() => {
                     className='unchecked'
                     onClick={async () => {
                       if (memberKeys.includes(deal.responderId)) {
-                        app.dealClose(deal._id, 'responder')
+                        await app.dealClose(deal._id, 'responder')
                         if (deal.posterDealClosed) {
                           // +1 to responder's expected CB score
                           await user.requestReputation(
@@ -151,20 +139,22 @@ export default observer(() => {
           {deal.posterDealClosed && deal.responderDealClosed ? (
             <div className='attestation-container'>
               <ReviewForm 
+                dealId={deal._id}
                 member='poster' 
                 memberKeys={memberKeys} 
                 currentMemberId={deal.posterId} 
                 oppositeMemberId={deal.responderId}
-                posterAttested={deal.posterAttested}
-                responderAttested={deal.responderAttested}
+                currentMemberReviewSubmitted={deal.posterAttested}
+                oppositeMemberReviewSubmitted={deal.responderAttested}
               />
               <ReviewForm 
+                dealId={deal._id}
                 member='responder' 
                 memberKeys={memberKeys} 
                 currentMemberId={deal.reesponderId} 
                 oppositeMemberId={deal.posterId}
-                posterAttested={deal.posterAttested}
-                responderAttested={deal.responderAttested}
+                currentMemberReviewSubmitted={deal.responderAttested}
+                oppositeMemberReviewSubmitted={deal.posterAttested}
               />
             </div>
           ) : (
