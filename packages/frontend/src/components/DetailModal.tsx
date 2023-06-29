@@ -97,7 +97,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 <div>{listing.description}</div>
               </div>
               <div className='trust-container'>
-                {app.listingScoreDescriptions.map((desc, i) => (
+                {app.scoreDescriptions.map((desc, i) => (
                   <div style={{display: 'flex'}}>
                     <div className='detail-tooltip'>
                       <Tooltip 

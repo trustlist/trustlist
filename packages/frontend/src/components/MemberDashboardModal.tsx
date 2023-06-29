@@ -64,7 +64,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                   <div>
                     <h3>my latest trust scores:</h3>
                   </div>
-                  {app.dashboardScoreDescriptions.map((desc, i) => {
+                  {app.scoreDescriptions.map((desc, i) => {
                     const expected = user.data[i] ? Number(user.data[i] >> BigInt(23)) : 0
                     const received = user.data[i] ? Number(user.data[i] % BigInt(128)) : 0 
                     return (
@@ -99,7 +99,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                   <div>
                     <h3 style={{marginTop: '2rem'}}>my provable trust scores:</h3>
                   </div>
-                  {app.dashboardScoreDescriptions.map((desc, i) => {
+                  {app.scoreDescriptions.map((desc, i) => {
                     const expected = user.provableData[i] ? Number(user.provableData[i] >> BigInt(23)) : 0
                     const received = user.provableData[i] ? Number(user.provableData[i] % BigInt(128)) : 0 
                     return (

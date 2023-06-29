@@ -100,7 +100,7 @@ export default observer(({ section, category }: Props) => {
                   {scores.map((score, i) => (
                     <div className='score-item'>
                       <Tooltip 
-                        text={app.dashboardScoreDescriptions[i]}
+                        text={app.scoreDescriptions[i]}
                         content=
                         {score === 9999999 ?
                           <img src={require('../../public/not_visible.svg')} alt="eye with slash"/>
