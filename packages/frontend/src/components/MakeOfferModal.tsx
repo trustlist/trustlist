@@ -1,5 +1,7 @@
-import React from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import ScoreReveal from './ScoreReveal'
+import ScoreHide from './ScoreHide'
 import Button from '../components/Button'
 import './makeOfferModal.css'
 
@@ -23,26 +25,30 @@ type ProofInfo = {
 }
 
 export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) => {
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
-
-  const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
-  const [proveData, setProveData] = React.useState<{
+  const app = useContext(Trustlist)
+  const user = useContext(User)
+  
+  const [offerAmount, setOfferAmount] = useState('')
+  const [rScores, setRScores] = useState<{
     [key: number]: number | string
   }>({})
-  const [repProof, setRepProof] = React.useState<ProofInfo>({
+  const [hidden, setHidden] = useState<{
+    [key: number]: boolean
+  }>({0:true, 1:true, 2:true, 3:true})
+  const [proveData, setProveData] = useState<{
+    [key: number]: number | string
+  }>({})
+  const [reqInfo, setReqInfo] = useState<ReqInfo>({ nonce: 0 })
+  const [repProof, setRepProof] = useState<ProofInfo>({
       publicSignals: [],
       proof: [],
       valid: false,
   })
-  const [offerAmount, setOfferAmount] = React.useState('')
-  const [rScores, setRScores] = React.useState<{
-    [key: number]: number | string
-  }>({})
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
   }
+
   return (
     <div className='dark-bg'>
       <div className='centered'>
@@ -68,33 +74,39 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       <div key={name} className='reveal-container'>
                         <div className='score-name'>{name} Score: {app.calcScoreFromUserData(score)}%</div>
                         <div className='icon-container'>
-                              <div
-                                className='choose reveal'
-                                onClick={()=> {
-                                  setRScores(() => ({
-                                    ...rScores,
-                                    [i]: score,
-                                  }))
-                                  setProveData(() => ({
-                                    ...proveData,
-                                    [i]: score,
-                                  }))
-                                }}
-                              >
-                                <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
-                              </div>
-                              <div
-                                className='choose hide'
-                                onClick={()=> {
-                                  setRScores(() => ({
-                                    ...rScores,
-                                    [i]: 'X',
-                                  }))
-                                }}
-                              >
-                                <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
-                              </div>
-                          </div> 
+                          <div
+                            onClick={()=> {
+                              setHidden(() => ({
+                                ...hidden,
+                                [i]: false
+                              }))
+                              setRScores(() => ({
+                                ...rScores,
+                                [i]: score,
+                              }))
+                              setProveData(() => ({
+                                ...proveData,
+                                [i]: score,
+                              }))
+                            }}
+                          >
+                            <ScoreReveal hidden={hidden[i]} />
+                          </div>
+                          <div
+                            onClick={()=> {
+                              setHidden(() => ({
+                                ...hidden,
+                                [i]: true
+                              }))
+                              setRScores(() => ({
+                                ...rScores,
+                                [i]: 'X',
+                              }))
+                            }}
+                          >
+                            <ScoreHide hidden={hidden[i]} />
+                          </div>
+                        </div> 
                       </div>
                     )
                   })}

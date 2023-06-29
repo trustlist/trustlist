@@ -25,15 +25,7 @@ type ProofInfo = {
 export default observer(({ setShowNewListing }: Props) => {
   const app = useContext(Trustlist)
   const user = useContext(User)
-  const [reqInfo, setReqInfo] = useState<ReqInfo>({ nonce: 0 })
-  const [proveData, setProveData] = useState<{
-    [key: number]: number | string
-  }>({})
-  const [repProof, setRepProof] = useState<ProofInfo>({
-      publicSignals: [],
-      proof: [],
-      valid: false,
-  })
+
   const [section, setSection] = useState('for sale')
   const [category, setCategory] = useState('')
   const [title, setTitle] = useState('')
@@ -46,6 +38,15 @@ export default observer(({ setShowNewListing }: Props) => {
   const [hidden, setHidden] = useState<{
     [key: number]: boolean
   }>({0:true, 1:true, 2:true, 3:true})
+  const [proveData, setProveData] = useState<{
+    [key: number]: number | string
+  }>({})
+  const [reqInfo, setReqInfo] = useState<ReqInfo>({ nonce: 0 })
+  const [repProof, setRepProof] = useState<ProofInfo>({
+      publicSignals: [],
+      proof: [],
+      valid: false,
+  })
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
