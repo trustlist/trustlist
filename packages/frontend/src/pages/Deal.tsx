@@ -37,104 +37,106 @@ export default observer(() => {
   return (
     <div className='deal-content'>
       {deal && (deal.epoch !== user.userState?.sync.calcCurrentEpoch()) ?
-        <div>🚫 this deal has expired</div>
+        <div style={{textAlign: 'center'}}>🚫 this deal has expired</div>
       : null}
       {/* {deal && posterSubmitted && responderSubmitted ?
         <div style={{color: 'red'}}>this deal has been completed and attested to</div>
       : null} */}
       {deal ? 
         <>
-          <div style={{textAlign: 'center'}}>
-            <h3>{deal.title}</h3>
-            <h3>${deal.offerAmount}</h3>
-            <div className='deal-info'>
-              <div>  
-                <div>poster id: {deal.posterId.slice(0,6)}...</div>
-                {deal.posterDealClosed ?
-                  <div className='checked'
-                  // onClick={async () => {
-                  //   if (memberKeys.includes(deal.posterId)) {
-                  //     await app.dealClose(deal._id, 'poster')
-                  //     if (deal.responderDealClosed) {
-                  //       // +1 to responder's expected CB score
-                  //       await user.requestReputation(
-                  //         {[1]:1 << 23},
-                  //         memberKeys.indexOf(deal.posterId) ?? 0,
-                  //         deal.responderId
-                  //       )
-                  //       // +1 to poster's completed LP score
-                  //       // +1 to poster's expected CB score
-                  //       await user.requestReputation(
-                  //         {[0]:1, [1]:1 << 23},
-                  //         memberKeys.indexOf(deal.posterId) ?? 0,
-                  //         ''
-                  //       )
-                  //     }
-                  //   }
-                  // }}
-                  >✅</div>
-                :
-                  <div 
-                    className='unchecked'
-                    onClick={async () => {
-                      if (memberKeys.includes(deal.posterId)) {
-                        await app.dealClose(deal._id, 'poster')
-                        if (deal.responderDealClosed) {
-                          // +1 to responder's expected CB score
-                          await user.requestReputation(
-                            {[1]:1 << 23},
-                            memberKeys.indexOf(deal.posterId) ?? 0,
-                            deal.responderId
-                          )
-                          // +1 to poster's completed LP score
-                          // +1 to poster's expected CB score
-                          await user.requestReputation(
-                            {[0]:1, [1]:1 << 23},
-                            memberKeys.indexOf(deal.posterId) ?? 0,
-                            ''
-                          )
-                        }
-                        window.location.reload()
+          <div className='deal-info'>
+            <div className='member-info'>  
+              <div>poster id: {deal.posterId.slice(0,6)}...</div>
+              {deal.posterDealClosed ?
+                <div className='checked'
+                // onClick={async () => {
+                //   if (memberKeys.includes(deal.posterId)) {
+                //     await app.dealClose(deal._id, 'poster')
+                //     if (deal.responderDealClosed) {
+                //       // +1 to responder's expected CB score
+                //       await user.requestReputation(
+                //         {[1]:1 << 23},
+                //         memberKeys.indexOf(deal.posterId) ?? 0,
+                //         deal.responderId
+                //       )
+                //       // +1 to poster's completed LP score
+                //       // +1 to poster's expected CB score
+                //       await user.requestReputation(
+                //         {[0]:1, [1]:1 << 23},
+                //         memberKeys.indexOf(deal.posterId) ?? 0,
+                //         ''
+                //       )
+                //     }
+                //   }
+                // }}
+                >✅</div>
+              :
+                <div 
+                  className='unchecked'
+                  onClick={async () => {
+                    if (memberKeys.includes(deal.posterId)) {
+                      await app.dealClose(deal._id, 'poster')
+                      if (deal.responderDealClosed) {
+                        // +1 to responder's expected CB score
+                        await user.requestReputation(
+                          {[1]:1 << 23},
+                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          deal.responderId
+                        )
+                        // +1 to poster's completed LP score
+                        // +1 to poster's expected CB score
+                        await user.requestReputation(
+                          {[0]:1, [1]:1 << 23},
+                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          ''
+                        )
                       }
-                    }}   
-                  >
-                    ?
-                  </div>
-                }
-              </div>
-              <div>  
-                <div>responder id: {deal.responderId.slice(0,6)}...</div>
-                {deal.responderDealClosed ?
-                  <div className='checked'>✅</div>
-                :
-                  <div 
-                    className='unchecked'
-                    onClick={async () => {
-                      if (memberKeys.includes(deal.responderId)) {
-                        await app.dealClose(deal._id, 'responder')
-                        if (deal.posterDealClosed) {
-                          // +1 to responder's expected CB score
-                          await user.requestReputation(
-                            {[1]:1 << 23},
-                            memberKeys.indexOf(deal.responderId) ?? 0,
-                            ''
-                          )
-                          // +1 to poster's completed LP score
-                          // +1 to poster's expected CB score
-                          await user.requestReputation(
-                            {[0]:1, [1]:1 << 23},
-                            memberKeys.indexOf(deal.posterId) ?? 0,
-                            deal.posterId
-                          )
-                        }
-                        window.location.reload()
+                      window.location.reload()
+                    }
+                  }}   
+                >
+                  ?
+                </div>
+              }
+            </div>
+
+            <div>
+              <h3>{deal.title}</h3>
+              <h3>${deal.offerAmount}</h3>
+            </div>
+
+            <div className='member-info'>  
+              <div>responder id: {deal.responderId.slice(0,6)}...</div>
+              {deal.responderDealClosed ?
+                <div className='checked'>✅</div>
+              :
+                <div 
+                  className='unchecked'
+                  onClick={async () => {
+                    if (memberKeys.includes(deal.responderId)) {
+                      await app.dealClose(deal._id, 'responder')
+                      if (deal.posterDealClosed) {
+                        // +1 to responder's expected CB score
+                        await user.requestReputation(
+                          {[1]:1 << 23},
+                          memberKeys.indexOf(deal.responderId) ?? 0,
+                          ''
+                        )
+                        // +1 to poster's completed LP score
+                        // +1 to poster's expected CB score
+                        await user.requestReputation(
+                          {[0]:1, [1]:1 << 23},
+                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          deal.posterId
+                        )
                       }
-                    }}   
-                  >
-                    ?
-                  </div>
-                }
-              </div>
+                      window.location.reload()
+                    }
+                  }}   
+                >
+                  ?
+                </div>
+              }
             </div>
           </div>
       
@@ -147,7 +149,8 @@ export default observer(() => {
                 memberKeys={memberKeys} 
                 currentMemberId={deal.posterId} 
                 oppositeMemberId={deal.responderId}
-                reviewSubmitted={deal.posterAttested}
+                currentMemberReview={deal.posterReview}
+                oppositeMemberReview={deal.responderReview}
               />
               <ReviewForm 
                 key={deal.responderId}
@@ -156,7 +159,8 @@ export default observer(() => {
                 memberKeys={memberKeys} 
                 currentMemberId={deal.responderId} 
                 oppositeMemberId={deal.posterId}
-                reviewSubmitted={deal.responderAttested}
+                currentMemberReview={deal.responderReview}
+                oppositeMemberReview={deal.posterReview}
               />
             </div>
           ) : (

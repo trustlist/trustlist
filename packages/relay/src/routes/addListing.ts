@@ -21,8 +21,8 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
         dealOpened: false,
         posterDealClosed: false,
         responderDealClosed: false,
-        posterAttested: false,
-        responderAttested: false,
+        posterReview: '',
+        responderReview: '',
       })
       res.json({ message: 'success!' })
     } catch (error: any) {

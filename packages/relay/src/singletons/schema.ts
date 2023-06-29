@@ -38,8 +38,8 @@ const _schema = [
             ['dealOpened', 'Bool'],
             ['posterDealClosed', 'Bool'],
             ['responderDealClosed', 'Bool'],
-            ['posterAttested', 'Bool'],
-            ['responderAttested', 'Bool'],
+            ['posterReview', 'String'],
+            ['responderReview', 'String'],
         ],
     },
     {

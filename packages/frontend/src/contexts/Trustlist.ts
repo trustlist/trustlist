@@ -108,7 +108,7 @@ class Trustlist {
     console.log(data.message)
   }
 
-  async submitReview(id: string, member: string) {
+  async submitReview(id: string, member: string, review: string) {
     const data = await fetch(`${SERVER}/api/submitReview`, {
       method: 'POST',
       headers: {
@@ -117,6 +117,7 @@ class Trustlist {
       body: JSON.stringify({
         id,
         member,
+        review,
       })
     }).then(r => r.json())
     console.log(data.message)

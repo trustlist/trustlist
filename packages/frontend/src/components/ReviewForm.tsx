@@ -6,6 +6,7 @@ import Tooltip from './Tooltip';
 
 import Trustlist from '../contexts/Trustlist';
 import User from '../contexts/User';
+import { joinSignature } from 'ethers/lib/utils';
 
 type Props = {
   dealId: string;
@@ -13,7 +14,8 @@ type Props = {
   memberKeys: string[];
   currentMemberId: string;
   oppositeMemberId: string;
-  reviewSubmitted: boolean;
+  currentMemberReview: string;
+  oppositeMemberReview: string;
 }
 
 export default observer(({ 
@@ -22,7 +24,8 @@ export default observer(({
   memberKeys, 
   currentMemberId, 
   oppositeMemberId,
-  reviewSubmitted,
+  currentMemberReview,
+  oppositeMemberReview,
 }: Props) => {
   
   const app = useContext(Trustlist)
@@ -41,7 +44,7 @@ export default observer(({
             content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
           />
       </div>
-      {reviewSubmitted ?
+      {currentMemberReview ?
         <div style={{fontSize: '0.8rem'}}>✅ submission complete</div>
       :
         <div style={{fontSize: '0.8rem'}}>❗️awaiting submission</div>
@@ -84,27 +87,36 @@ export default observer(({
       <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
       
       <div style={{padding: '1rem'}}>
-        {memberKeys.includes(currentMemberId) && !reviewSubmitted ? (
+        {memberKeys.includes(currentMemberId) && !currentMemberReview ? (
           <Button
             // style={{backgroundColor: 'blue', color: 'white'}}
             onClick={async () => {
-              const index2 = (1 << 23) + dealAgain
-              const index3 = (5 << 23) + sentiment
               // +1 to current member's completed CB score
               await user.requestReputation(
-                  {[1]:1},
-                  memberKeys.indexOf(currentMemberId) ?? 0,
-                  ''
+                {[1]:1},
+                memberKeys.indexOf(currentMemberId) ?? 0,
+                ''
               )
               // +1 to opposite member's expected and +1 || 0 to completed TD score
-              // +5 to opposite member's expected and +0-5 to completed GV score
-              await user.requestReputation(
-                  {[2]:index2, [3]:index3},
+              // +5 to opposite member's expected and +0-5 to completed GV score 
+              const TDscore = (1 << 23) + dealAgain
+              const GVscore = (5 << 23) + sentiment
+              if (oppositeMemberReview) {  
+                await user.requestReputation(
+                  {[2]:TDscore, [3]:GVscore},
                   memberKeys.indexOf(currentMemberId) ?? 0,
                   oppositeMemberId
-              )
-              await app.submitReview(dealId, member)
-              navigate(`/`)
+                )
+                await user.requestReputation(
+                  JSON.parse(oppositeMemberReview),
+                  memberKeys.indexOf(currentMemberId) ?? 0,
+                  ''
+                )
+              }
+              const review = JSON.stringify({[2]:TDscore, [3]:GVscore})
+              await app.submitReview(dealId, member, review)
+              window.location.reload()
+              // navigate(`/`)
             }}
           >
             Submit

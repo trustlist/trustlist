@@ -5,14 +5,14 @@ import { Synchronizer } from '@unirep/core'
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
   app.post('/api/SubmitReview', async (req, res) => {
     try {
-      const { id, member} = req.body
+      const { id, member, review } = req.body
       if (member === 'poster') {
         await db.update('Listings', {
           where: {
             _id: id,
           },
           update: {
-            posterAttested: true,
+            posterReview: review,
           },
         }) 
       } else {
@@ -21,7 +21,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
             _id: id,
           },
           update: {
-            responderAttested: true,
+            responderReview: review,
           },
         }) 
       }   
