@@ -95,7 +95,6 @@ export default observer(({ section, category }: Props) => {
                   :
                   <div style={{marginRight: '200px', color: 'black'}}>EXPIRED</div>
                   }        
-                  <div style={{fontSize: '0.4rem'}} onClick={() => app.removeListing(listing._id)}>delete</div>
                 </div>
                 <div className='score-container'>
                   {scores.map((score, i) => (

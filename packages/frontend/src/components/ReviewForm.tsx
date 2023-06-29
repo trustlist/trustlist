@@ -6,7 +6,6 @@ import Tooltip from './Tooltip';
 
 import Trustlist from '../contexts/Trustlist';
 import User from '../contexts/User';
-import { joinSignature } from 'ethers/lib/utils';
 
 type Props = {
   dealId: string;

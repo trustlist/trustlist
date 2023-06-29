@@ -176,10 +176,6 @@ class Trustlist {
     this.memberActiveOffers = offers
   }
 
-  async removeListing(id: string) {
-    const data = await fetch(`${SERVER}/api/removeListing/${id}`).then((r) => r.json())
-  }
-
   calcScoreFromUserData(data: number) {
     if (data === 0)
       return 0
