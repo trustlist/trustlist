@@ -37,11 +37,11 @@
   cursor: pointer;
 }
 
-.reveal:hover {
+.reveal {
   background-color: rgb(163, 241, 157);
 }
 
-.hide:hover {
+.hide {
   background-color: rgb(246, 152, 152);
 }
 

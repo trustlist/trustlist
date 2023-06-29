@@ -1,5 +1,7 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import ScoreReveal from './ScoreReveal'
+import ScoreHide from './ScoreHide'
 import Button from './Button'
 import './newListingModal.css'
 
@@ -41,6 +43,9 @@ export default observer(({ setShowNewListing }: Props) => {
   const [pScores, setPScores] = useState<{
     [key: number]: number | string
   }>({0:'X', 1:'X', 2:'X', 3: 'X'})
+  const [hidden, setHidden] = useState<{
+    [key: number]: boolean
+  }>({0:true, 1:true, 2:true, 3:true})
 
   if (!user.userState) {
     return <div className="container">Loading...</div>
@@ -134,43 +139,47 @@ export default observer(({ setShowNewListing }: Props) => {
                   <div style={{display: 'flex', justifyContent: 'space-around'}}>
 
                   {app.scoreNames.map((name, i) => {
-                        const score = Number(user.provableData[i])
-                        return (
-                            <div key={i} className=''>
-                              <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score)}%</div>
-                              <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                                <div>
-                                  <div
-                                    className='choose reveal'
-                                    onClick={()=> {
-                                      setPScores(() => ({
-                                        ...pScores,
-                                        [i]: score,
-                                      }))
-                                      setProveData(() => ({
-                                        ...proveData,
-                                        [i]: score,
-                                      }))
-                                    }}
-                                  >
-                                    <img src={require('../../public/eye_open.svg')} alt="eye open"/>
-                                  </div>
-                                </div>
-                                <div>
-                                  <div
-                                    className='choose hide'
-                                    onClick={()=> {
-                                      setPScores(() => ({
-                                        ...pScores,
-                                        [i]: 'X',
-                                      }))
-                                    }}
-                                  >
-                                    <img src={require('../../public/eye_closed.svg')} alt="eye with slash"/>
-                                  </div>
-                                </div>
-                              </div>
+                    const score = Number(user.provableData[i])
+                    return (
+                        <div key={i} className=''>
+                          <div style={{fontWeight: '600'}}>{name} Score: {app.calcScoreFromUserData(score)}%</div>                             
+                          <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                            <div
+                              onClick={()=> {
+                                setHidden(() => ({
+                                  ...hidden,
+                                  [i]: false
+                                }))
+                                setPScores(() => ({
+                                  ...pScores,
+                                  [i]: score,
+                                }))
+                                setProveData(() => ({
+                                  ...proveData,
+                                  [i]: score,
+                                }))
+                              }}
+                            >
+                              <ScoreReveal hidden={hidden[i]} />
                             </div>
+                          
+                            <div
+                              onClick={()=> {
+                                setHidden(() => ({
+                                  ...hidden,
+                                  [i]: true
+                                }))
+                                setPScores(() => ({
+                                  ...pScores,
+                                  [i]: 'X',
+                                }))
+                              }}
+                            >
+                              <ScoreHide hidden={hidden[i]} />
+                            </div>
+                            
+                          </div>
+                        </div>
                         )
                       })
                     }

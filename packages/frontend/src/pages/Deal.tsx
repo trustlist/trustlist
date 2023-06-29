@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useContext, useEffect } from 'react'
+import { useParams, useNavigate } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import ReviewForm from '../components/ReviewForm';
 import Button from '../components/Button'
@@ -39,9 +39,6 @@ export default observer(() => {
       {deal && (deal.epoch !== user.userState?.sync.calcCurrentEpoch()) ?
         <div style={{textAlign: 'center'}}>🚫 this deal has expired</div>
       : null}
-      {/* {deal && posterSubmitted && responderSubmitted ?
-        <div style={{color: 'red'}}>this deal has been completed and attested to</div>
-      : null} */}
       {deal ? 
         <>
           <div className='deal-info'>
@@ -49,26 +46,6 @@ export default observer(() => {
               <div>poster id: {deal.posterId.slice(0,6)}...</div>
               {deal.posterDealClosed ?
                 <div className='checked'
-                // onClick={async () => {
-                //   if (memberKeys.includes(deal.posterId)) {
-                //     await app.dealClose(deal._id, 'poster')
-                //     if (deal.responderDealClosed) {
-                //       // +1 to responder's expected CB score
-                //       await user.requestReputation(
-                //         {[1]:1 << 23},
-                //         memberKeys.indexOf(deal.posterId) ?? 0,
-                //         deal.responderId
-                //       )
-                //       // +1 to poster's completed LP score
-                //       // +1 to poster's expected CB score
-                //       await user.requestReputation(
-                //         {[0]:1, [1]:1 << 23},
-                //         memberKeys.indexOf(deal.posterId) ?? 0,
-                //         ''
-                //       )
-                //     }
-                //   }
-                // }}
                 >✅</div>
               :
                 <div 
