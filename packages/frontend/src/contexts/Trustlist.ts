@@ -195,7 +195,7 @@ class Trustlist {
       } else if (dataValues[i] === 0) {
         scores.push(0)
       } else {
-        const score = Math.floor((Number(dataValues[i]) % 23) / (Number(dataValues[i]) >> 96) * 100)
+        const score = Math.floor((Number(dataValues[i]) % 128) / (Number(dataValues[i]) >> 23) * 100)
         scores.push(score)
       }
     }

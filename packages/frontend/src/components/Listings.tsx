@@ -58,9 +58,7 @@ export default observer(({ section, category }: Props) => {
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
           const posterScores = JSON.parse(listing.scoreString)
-          console.log(posterScores)
           const scores = app.calcScoresFromDB(posterScores)
-          console.log(scores)
           {listing.epoch != user.userState?.sync.calcCurrentEpoch() ?
             listingClass = 'listing-expired'
           : null }

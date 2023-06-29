@@ -13,8 +13,7 @@ type Props = {
   memberKeys: string[];
   currentMemberId: string;
   oppositeMemberId: string;
-  currentMemberReviewSubmitted: boolean;
-  oppositeMemberReviewSubmitted: boolean;
+  reviewSubmitted: boolean;
 }
 
 export default observer(({ 
@@ -23,8 +22,7 @@ export default observer(({
   memberKeys, 
   currentMemberId, 
   oppositeMemberId,
-  currentMemberReviewSubmitted,
-  oppositeMemberReviewSubmitted,
+  reviewSubmitted,
 }: Props) => {
   
   const app = useContext(Trustlist)
@@ -43,7 +41,7 @@ export default observer(({
             content={<img src={require('../../public/info_icon.svg')} alt="info icon"/>}
           />
       </div>
-      {currentMemberReviewSubmitted ?
+      {reviewSubmitted ?
         <div style={{fontSize: '0.8rem'}}>✅ submission complete</div>
       :
         <div style={{fontSize: '0.8rem'}}>❗️awaiting submission</div>
@@ -86,7 +84,7 @@ export default observer(({
       <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
       
       <div style={{padding: '1rem'}}>
-        {memberKeys.includes(currentMemberId) && !currentMemberReviewSubmitted ? (
+        {memberKeys.includes(currentMemberId) && !reviewSubmitted ? (
           <Button
             // style={{backgroundColor: 'blue', color: 'white'}}
             onClick={async () => {

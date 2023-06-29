@@ -153,7 +153,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                       }))
                                     }}
                                   >
-                                    <img src={require('../../public/eye_open.svg')} alt="radio waves"/>
+                                    <img src={require('../../public/eye_open.svg')} alt="eye open"/>
                                   </div>
                                 </div>
                                 <div>
@@ -241,6 +241,7 @@ export default observer(({ setShowNewListing }: Props) => {
                           const scoreString = JSON.stringify(pScores)
                           await app.createNewListing(epoch, section, category, title, amount, amountType, description, posterId, scoreString)
                           setShowNewListing(false)
+                          window.location.reload()
                       }}
                     >
                       POST

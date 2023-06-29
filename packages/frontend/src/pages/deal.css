@@ -27,6 +27,7 @@ input.checked {
   padding: 1rem;
   font-size: 2rem;
   color: rgb(212, 210, 210);
+  cursor: pointer;
 }
 
 .attestation-container {

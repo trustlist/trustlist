@@ -52,26 +52,26 @@ export default observer(() => {
                 <div>poster id: {deal.posterId.slice(0,6)}...</div>
                 {deal.posterDealClosed ?
                   <div className='checked'
-                  onClick={async () => {
-                    if (memberKeys.includes(deal.posterId)) {
-                      await app.dealClose(deal._id, 'poster')
-                      if (deal.responderDealClosed) {
-                        // +1 to responder's expected CB score
-                        await user.requestReputation(
-                          {[1]:1 << 23},
-                          memberKeys.indexOf(deal.posterId) ?? 0,
-                          deal.responderId
-                        )
-                        // +1 to poster's completed LP score
-                        // +1 to poster's expected CB score
-                        await user.requestReputation(
-                          {[0]:1, [1]:1 << 23},
-                          memberKeys.indexOf(deal.posterId) ?? 0,
-                          ''
-                        )
-                      }
-                    }
-                  }}
+                  // onClick={async () => {
+                  //   if (memberKeys.includes(deal.posterId)) {
+                  //     await app.dealClose(deal._id, 'poster')
+                  //     if (deal.responderDealClosed) {
+                  //       // +1 to responder's expected CB score
+                  //       await user.requestReputation(
+                  //         {[1]:1 << 23},
+                  //         memberKeys.indexOf(deal.posterId) ?? 0,
+                  //         deal.responderId
+                  //       )
+                  //       // +1 to poster's completed LP score
+                  //       // +1 to poster's expected CB score
+                  //       await user.requestReputation(
+                  //         {[0]:1, [1]:1 << 23},
+                  //         memberKeys.indexOf(deal.posterId) ?? 0,
+                  //         ''
+                  //       )
+                  //     }
+                  //   }
+                  // }}
                   >✅</div>
                 :
                   <div 
@@ -94,6 +94,7 @@ export default observer(() => {
                             ''
                           )
                         }
+                        window.location.reload()
                       }
                     }}   
                   >
@@ -126,6 +127,7 @@ export default observer(() => {
                             deal.posterId
                           )
                         }
+                        window.location.reload()
                       }
                     }}   
                   >
@@ -139,22 +141,22 @@ export default observer(() => {
           {deal.posterDealClosed && deal.responderDealClosed ? (
             <div className='attestation-container'>
               <ReviewForm 
+                key={deal.posterId}
                 dealId={deal._id}
                 member='poster' 
                 memberKeys={memberKeys} 
                 currentMemberId={deal.posterId} 
                 oppositeMemberId={deal.responderId}
-                currentMemberReviewSubmitted={deal.posterAttested}
-                oppositeMemberReviewSubmitted={deal.responderAttested}
+                reviewSubmitted={deal.posterAttested}
               />
               <ReviewForm 
+                key={deal.responderId}
                 dealId={deal._id}
                 member='responder' 
                 memberKeys={memberKeys} 
-                currentMemberId={deal.reesponderId} 
+                currentMemberId={deal.responderId} 
                 oppositeMemberId={deal.posterId}
-                currentMemberReviewSubmitted={deal.responderAttested}
-                oppositeMemberReviewSubmitted={deal.posterAttested}
+                reviewSubmitted={deal.responderAttested}
               />
             </div>
           ) : (
