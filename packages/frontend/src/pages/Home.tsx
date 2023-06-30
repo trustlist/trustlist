@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import Listings from '../components/Listings'
 import './home.css'
@@ -6,9 +6,9 @@ import './home.css'
 import Trustlist from '../contexts/Trustlist';
 
 export default observer(() => {
-  const app = React.useContext(Trustlist)
-  const [selectedSection, setSelectedSection] = React.useState('for sale')
-  const [selectedCategory, setSelectedCategory] = React.useState('bikes')
+  const app = useContext(Trustlist)
+  const [selectedSection, setSelectedSection] = useState('for sale')
+  const [selectedCategory, setSelectedCategory] = useState('')
   
   return (
     <div className='content'>
@@ -42,7 +42,6 @@ export default observer(() => {
               key={category}
               onClick={async () => {
                 setSelectedCategory(category)
-                await app.loadSelectedCategory(selectedSection, selectedCategory)
               }}
             >
               {category}

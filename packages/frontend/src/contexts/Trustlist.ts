@@ -127,7 +127,6 @@ class Trustlist {
         category,
       })
     }).then((r) => r.json())
-    console.log(listings)
     this.ingestListings(listings, section, category)
   }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext, useState, useEffect} from 'react'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
 import Tooltip from './Tooltip'
@@ -33,12 +33,12 @@ type CurrentOffer = {
 }
 
 export default observer(({ setShowMemberDash }: Props) => {
-  const app = React.useContext(Trustlist)
-  const user = React.useContext(User)
-  const [showDetail, setShowDetail] = React.useState<boolean>(false)
-  const [detailData, setDetailData] = React.useState<any>()
+  const app = useContext(Trustlist)
+  const user = useContext(User)
+  const [showDetail, setShowDetail] = useState<boolean>(false)
+  const [detailData, setDetailData] = useState<any>()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadData = async () => {
       const epochKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
       await app.loadMemberActivity(epochKeys)

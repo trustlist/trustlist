@@ -39,7 +39,7 @@ export default observer(({ section, category }: Props) => {
       await app.loadSelectedCategory(section, category)
     }
     loadData()
-  }, [])
+  }, [section, category])
 
   let listings = []
   if (section === 'for sale') {
@@ -54,7 +54,8 @@ export default observer(({ section, category }: Props) => {
 
   return (
     <div className='listings'>
-      {!listings || listings.length < 1 ? <div className='message'>no listings here yet!</div> : null}
+      {category === '' ? <div className='message'>choose a category...</div> : null}
+      {category !== '' && (!listings || listings.length < 1) ? <div className='message'>no listings here yet!</div> : null}
       {listings ?
         listings.slice().reverse().map((listing: Listing) => {
           const posterScores = JSON.parse(listing.scoreString)
@@ -98,7 +99,7 @@ export default observer(({ section, category }: Props) => {
                 </div>
                 <div className='score-container'>
                   {scores.map((score, i) => (
-                    <div className='score-item'>
+                    <div className='score-item' key={i}>
                       <Tooltip 
                         text={app.scoreDescriptions[i]}
                         content=
