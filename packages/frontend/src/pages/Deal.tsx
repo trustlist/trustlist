@@ -115,7 +115,7 @@ export default observer(() => {
                         // +1 to poster's expected CB score
                         await user.requestReputation(
                           {[0]:1, [1]:1 << 23},
-                          memberKeys.indexOf(deal.posterId) ?? 0,
+                          memberKeys.indexOf(deal.responderId) ?? 0,
                           deal.posterId
                         )
                       }
@@ -159,7 +159,7 @@ export default observer(() => {
             </div>
           ) : (
             <div style={{color: 'black', textAlign: 'center', paddingTop: '2rem'}}>
-              both members must mark deal complete to enable attestations
+              both members must mark deal complete to enable reviews
             </div>
           )}  
         </>

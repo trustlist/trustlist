@@ -31,7 +31,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
   const [offerAmount, setOfferAmount] = useState('')
   const [rScores, setRScores] = useState<{
     [key: number]: number | string
-  }>({})
+  }>({0:'X', 1:'X', 2:'X', 3: 'X'})
   const [hidden, setHidden] = useState<{
     [key: number]: boolean
   }>({0:true, 1:true, 2:true, 3:true})
