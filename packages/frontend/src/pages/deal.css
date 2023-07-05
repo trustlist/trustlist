@@ -15,23 +15,33 @@ input.checked {
 }
 
 .member-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-top: 2rem;
 }
 
 .checked {
   border-radius: 0.5rem;
   border: 0.2rem solid green;
-  padding: 0.5rem;
+  margin: 0.5rem;
   font-size: 2rem;
+  width: 3rem;
+  padding: 0.2rem 0 0.1rem;
+  text-align: center;
 }
 
 .unchecked {
   border-radius: 0.5rem;
   border: 0.2rem solid red;
-  padding: 1rem;
+  margin: 0.5rem;
   font-size: 2rem;
   color: rgb(212, 210, 210);
   cursor: pointer;
+  width: 3rem;
+  padding: 0.4rem 0 0.2rem;
+  text-align: center;
 }
 
 .attestation-container {

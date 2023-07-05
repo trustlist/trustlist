@@ -45,9 +45,12 @@ export default observer(() => {
             <div className='member-info'>  
               <div>poster id: {deal.posterId.slice(0,6)}...</div>
               {deal.posterDealClosed ?
-                <div className='checked'
-                >✅</div>
+                <>
+                  <div className='checked'>✅</div>
+                  <div>deal complete</div>
+                </>
               :
+                <>
                 <div 
                   className='unchecked'
                   onClick={async () => {
@@ -72,8 +75,13 @@ export default observer(() => {
                     }
                   }}   
                 >
-                  ?
+                  <Tooltip 
+                    text='only the posting member can check'
+                    content='☑️'
+                  />
                 </div>
+                <div>deal pending</div>
+                </>
               }
             </div>
 
@@ -85,8 +93,12 @@ export default observer(() => {
             <div className='member-info'>  
               <div>responder id: {deal.responderId.slice(0,6)}...</div>
               {deal.responderDealClosed ?
-                <div className='checked'>✅</div>
+                <>
+                  <div className='checked'>✅</div>
+                  <div>deal complete</div>
+                </>
               :
+                <>
                 <div 
                   className='unchecked'
                   onClick={async () => {
@@ -108,11 +120,16 @@ export default observer(() => {
                         )
                       }
                       window.location.reload()
-                    }
+                    } 
                   }}   
                 >
-                  ?
+                  <Tooltip 
+                    text='only the responding member can check'
+                    content='☑️'
+                  />
                 </div>
+                <div>deal pending</div>
+                </>
               }
             </div>
           </div>
@@ -141,7 +158,7 @@ export default observer(() => {
               />
             </div>
           ) : (
-            <div style={{color: 'black', textAlign: 'center', paddingTop: '4rem'}}>
+            <div style={{color: 'black', textAlign: 'center', paddingTop: '2rem'}}>
               both members must mark deal complete to enable attestations
             </div>
           )}  
