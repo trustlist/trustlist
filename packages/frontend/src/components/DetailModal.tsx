@@ -60,15 +60,22 @@ export default observer(({ listing, setShowDetail }: Props) => {
             
             <div className='action-bar'>
               <div className='action-item'>
-                {user.hasSignedUp && !listing.dealOpened && (listing.epoch === user.userState?.sync.calcCurrentEpoch())
-                // prevent user from making an offer on their own post
-                // && !memberKeys.includes(listing.posterId) 
+                {user.hasSignedUp 
+                  // prevent new offers if one has already been accepted
+                  && !listing.dealOpened 
+                  // prevent new offers if listing epoch is expired
+                  && (listing.epoch === user.userState?.sync.calcCurrentEpoch())
+                  // prevent user from making an offer on their own post
+                  && !memberKeys.includes(listing.posterId) 
                 ? 
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>
                     {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
                   </>
                 : null }
+                {memberKeys.includes(listing.posterId) ?
+                  <button style={{color: 'red', borderColor: 'red'}}>my listing</button>
+                : null}
                 {listing.epoch != user.userState?.sync.calcCurrentEpoch() ?
                   <button style={{color: 'red', borderColor: 'red'}}>EXPIRED</button>
                 : null}
