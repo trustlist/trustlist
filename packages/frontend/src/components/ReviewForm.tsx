@@ -44,86 +44,88 @@ export default observer(({
           />
       </div>
       {currentMemberReview ?
-        <div style={{fontSize: '0.8rem'}}>✅ submission complete</div>
+        <div style={{fontSize: '0.8rem'}}>✅ review submitted</div>
       :
-        <div style={{fontSize: '0.8rem'}}>❗️awaiting submission</div>
+        <>
+          <div style={{fontSize: '0.8rem'}}>❗️awaiting submission</div>
+          <hr style={{marginBottom: '1.5rem'}}/>
+          <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
+          <div className='sentiments'>
+            {sentiments.map((sentiment) => (
+                <div>
+                  <input 
+                    type='radio' 
+                    id={sentiment} 
+                    name='sentiment' 
+                    value={sentiment}
+                    onChange={(e) => setSentiment(sentiments.indexOf(e.target.value) + 1)}
+                  />
+                  <label htmlFor={sentiment}></label>{sentiment}<br/>
+                </div>
+            ))}
+          </div>
+          <p>I would</p>
+          <div style={{paddingLeft: '2rem'}}>
+            <input
+              type='radio' 
+              id='gladly' 
+              name='again' 
+              value='gladly'
+              onChange={(e) => setDealAgain(1)}
+            />
+            <label htmlFor='gladly'>GLADLY</label><br/>
+            <input
+              type='radio' 
+              id='never' 
+              name='again' 
+              value='never'
+              onChange={(e) => setDealAgain(0)}
+            />
+            <label htmlFor='gladly'>NEVER</label>
+          </div>
+          <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
+          
+          <div style={{padding: '1rem'}}>
+            {memberKeys.includes(currentMemberId) && !currentMemberReview ? (
+              <Button
+                // style={{backgroundColor: 'blue', color: 'white'}}
+                onClick={async () => {
+                  // +1 to current member's completed CB score
+                  await user.requestReputation(
+                    {[1]:1},
+                    memberKeys.indexOf(currentMemberId) ?? 0,
+                    ''
+                  )
+                  // +1 to opposite member's expected and +1 || 0 to completed TD score
+                  // +5 to opposite member's expected and +0-5 to completed GV score 
+                  const TDscore = (1 << 23) + dealAgain
+                  const GVscore = (5 << 23) + sentiment
+                  if (oppositeMemberReview) {  
+                    await user.requestReputation(
+                      {[2]:TDscore, [3]:GVscore},
+                      memberKeys.indexOf(currentMemberId) ?? 0,
+                      oppositeMemberId
+                    )
+                    await user.requestReputation(
+                      JSON.parse(oppositeMemberReview),
+                      memberKeys.indexOf(currentMemberId) ?? 0,
+                      ''
+                    )
+                  }
+                  const review = JSON.stringify({[2]:TDscore, [3]:GVscore})
+                  await app.submitReview(dealId, member, review)
+                  window.location.reload()
+                  // navigate(`/`)
+                }}
+              >
+                Submit
+              </Button>
+            ) : null
+            // ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
+            }  
+          </div>
+        </>
       }
-      <hr style={{marginBottom: '1.5rem'}}/>
-      <p>The member I interacted with in this deal was respectful, friendly, and easy to communicate with.</p>
-      <div className='sentiments'>
-        {sentiments.map((sentiment) => (
-            <div>
-              <input 
-                type='radio' 
-                id={sentiment} 
-                name='sentiment' 
-                value={sentiment}
-                onChange={(e) => setSentiment(sentiments.indexOf(e.target.value) + 1)}
-              />
-              <label htmlFor={sentiment}></label>{sentiment}<br/>
-            </div>
-        ))}
-      </div>
-      <p>I would</p>
-      <div style={{paddingLeft: '2rem'}}>
-        <input
-          type='radio' 
-          id='gladly' 
-          name='again' 
-          value='gladly'
-          onChange={(e) => setDealAgain(1)}
-        />
-        <label htmlFor='gladly'>GLADLY</label><br/>
-        <input
-          type='radio' 
-          id='never' 
-          name='again' 
-          value='never'
-          onChange={(e) => setDealAgain(0)}
-        />
-        <label htmlFor='gladly'>NEVER</label>
-      </div>
-      <p style={{paddingLeft: '5rem'}}>deal with this member again</p>
-      
-      <div style={{padding: '1rem'}}>
-        {memberKeys.includes(currentMemberId) && !currentMemberReview ? (
-          <Button
-            // style={{backgroundColor: 'blue', color: 'white'}}
-            onClick={async () => {
-              // +1 to current member's completed CB score
-              await user.requestReputation(
-                {[1]:1},
-                memberKeys.indexOf(currentMemberId) ?? 0,
-                ''
-              )
-              // +1 to opposite member's expected and +1 || 0 to completed TD score
-              // +5 to opposite member's expected and +0-5 to completed GV score 
-              const TDscore = (1 << 23) + dealAgain
-              const GVscore = (5 << 23) + sentiment
-              if (oppositeMemberReview) {  
-                await user.requestReputation(
-                  {[2]:TDscore, [3]:GVscore},
-                  memberKeys.indexOf(currentMemberId) ?? 0,
-                  oppositeMemberId
-                )
-                await user.requestReputation(
-                  JSON.parse(oppositeMemberReview),
-                  memberKeys.indexOf(currentMemberId) ?? 0,
-                  ''
-                )
-              }
-              const review = JSON.stringify({[2]:TDscore, [3]:GVscore})
-              await app.submitReview(dealId, member, review)
-              window.location.reload()
-              // navigate(`/`)
-            }}
-          >
-            Submit
-          </Button>
-        ) : null
-        // ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
-        }  
-      </div>
     </div>
   )
 })
