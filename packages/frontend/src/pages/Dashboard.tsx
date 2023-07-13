@@ -206,7 +206,7 @@ export default observer(() => {
                                 ) {
                                     throw new Error('Needs transition')
                                 }
-                                await userContext.requestReputation(
+                                await userContext.requestData(
                                     reqData,
                                     reqInfo.nonce ?? 0,
                                     ''

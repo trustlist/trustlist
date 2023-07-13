@@ -48,7 +48,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
     loadData()
   }, [])
   const offers = app.offersByListingId.get(listing._id)
-  const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
+  const memberKeys = [user.epochKey(0), user.epochKey(1)]
   const pScores = JSON.parse(listing.scoreString)
   const posterScores = app.calcScoresFromDB(pScores)
   
@@ -66,7 +66,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                   // prevent new offers if listing epoch is expired
                   && (listing.epoch === user.userState?.sync.calcCurrentEpoch())
                   // prevent user from making an offer on their own post
-                  && !memberKeys.includes(listing.posterId) 
+                  // && !memberKeys.includes(listing.posterId) 
                 ? 
                   <>
                     <button onClick={()=> setShowMakeOffer(true)}>make an offer</button>

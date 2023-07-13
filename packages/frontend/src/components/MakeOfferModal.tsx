@@ -126,7 +126,7 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                   >
                     <option value="0">0</option>
                     <option value="1">1</option>
-                    <option value="2">2</option>
+                    {/* <option value="2">2</option> */}
                   </select>
                     <p style={{ fontSize: '12px' }}>
                         submit offer with epoch key:
@@ -150,7 +150,8 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                     prove trust scores
                   </Button>
                 </div>
-                {repProof.valid ? (
+                {/* only allow offer submit after valid proof */}
+                {/* {repProof.valid ? ( */}
                   <input 
                     style={{marginTop: '0.5rem'}}
                     type='submit'
@@ -162,9 +163,9 @@ export default observer(({ listingId, listingTitle, setShowMakeOffer }: Props) =
                       app.submitOffer(epoch, listingId, listingTitle, responderId, offerAmount, scoreString)
                     }}
                   />
-                ) : (
-                  <button style={{marginTop: '0.5rem'}} className='blocked'>SUBMIT OFFER</button>
-                )}
+                {/* ) : ( */}
+                  {/* <button style={{marginTop: '0.5rem'}} className='blocked'>SUBMIT OFFER</button> */}
+                {/* )} */}
               </div>
 
             </div>       

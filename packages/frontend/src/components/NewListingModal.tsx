@@ -199,7 +199,7 @@ export default observer(({ setShowNewListing }: Props) => {
                         >
                             <option value="0">0</option>
                             <option value="1">1</option>
-                            <option value="2">2</option>
+                            {/* <option value="2">2</option> */}
                         </select>
                         <p style={{ fontSize: '12px' }}>
                             Create listing with epoch key:
@@ -229,7 +229,8 @@ export default observer(({ setShowNewListing }: Props) => {
                     prove trust scores
                   </Button>
                   
-                  {repProof.valid ? (
+                  {/* only allow post after valid proof */}
+                  {/* {repProof.valid ? ( */}
                     <Button
                       style={{backgroundColor: 'blue', color: 'white', marginLeft: '0.5rem'}}
                       onClick={async () => {                       
@@ -241,7 +242,7 @@ export default observer(({ setShowNewListing }: Props) => {
                               throw new Error('Needs transition')
                           }
                           // +1 to current member's expected LP score
-                          await user.requestReputation(
+                          await user.requestData(
                             {[0]: 1 << 23},
                             reqInfo.nonce ?? 0,
                             '',
@@ -256,9 +257,9 @@ export default observer(({ setShowNewListing }: Props) => {
                     >
                       POST
                     </Button>
-                  ) : (
-                     <button className='blocked'>POST</button>
-                  )}
+                  {/* ) : ( */}
+                     {/* <button className='blocked'>POST</button> */}
+                  {/* )} */}
                 </div>
               </div>
             </div>  

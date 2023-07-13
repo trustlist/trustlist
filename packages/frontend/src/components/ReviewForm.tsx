@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import { useNavigate } from "react-router-dom"
 import { observer } from 'mobx-react-lite'
 import Button from './Button';
 import Tooltip from './Tooltip';
@@ -29,7 +28,6 @@ export default observer(({
   
   const app = useContext(Trustlist)
   const user = useContext(User)
-  const navigate = useNavigate()
   const [sentiment, setSentiment] = useState(3)
   const [dealAgain, setDealAgain] = useState(1)
   const sentiments = ['hard no', 'not really', 'whatever idc', 'mostly', 'yeah def']
@@ -91,7 +89,7 @@ export default observer(({
                 // style={{backgroundColor: 'blue', color: 'white'}}
                 onClick={async () => {
                   // +1 to current member's completed CB score
-                  await user.requestReputation(
+                  await user.requestData(
                     {[1]:1},
                     memberKeys.indexOf(currentMemberId) ?? 0,
                     ''
@@ -101,12 +99,12 @@ export default observer(({
                   const TDscore = (1 << 23) + dealAgain
                   const GVscore = (5 << 23) + sentiment
                   if (oppositeMemberReview) {  
-                    await user.requestReputation(
+                    await user.requestData(
                       {[2]:TDscore, [3]:GVscore},
                       memberKeys.indexOf(currentMemberId) ?? 0,
                       oppositeMemberId
                     )
-                    await user.requestReputation(
+                    await user.requestData(
                       JSON.parse(oppositeMemberReview),
                       memberKeys.indexOf(currentMemberId) ?? 0,
                       ''
@@ -115,14 +113,11 @@ export default observer(({
                   const review = JSON.stringify({[2]:TDscore, [3]:GVscore})
                   await app.submitReview(dealId, member, review)
                   window.location.reload()
-                  // navigate(`/`)
                 }}
               >
                 Submit
               </Button>
-            ) : null
-            // ) : <Button style={{cursor: 'not-allowed'}}>Submit</Button>
-            }  
+            ) : null }  
           </div>
         </>
       }

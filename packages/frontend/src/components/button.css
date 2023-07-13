@@ -1,6 +1,6 @@
 .button-outer {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
     user-select: none;
 }

@@ -40,7 +40,7 @@ export default observer(({ setShowMemberDash }: Props) => {
 
   useEffect(() => {
     const loadData = async () => {
-      const epochKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
+      const epochKeys = [user.epochKey(0), user.epochKey(1)]
       await app.loadMemberActivity(epochKeys)
     }
     loadData()
