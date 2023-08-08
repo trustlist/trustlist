@@ -30,7 +30,7 @@ class User {
         }
 
         const { UNIREP_ADDRESS, APP_ADDRESS, ETH_PROVIDER_URL } = await fetch(
-          `${SERVER}/api/config`
+            `${SERVER}/api/config`
         ).then((r) => r.json())
 
         const provider = ETH_PROVIDER_URL.startsWith('http')
@@ -38,16 +38,13 @@ class User {
             : new ethers.providers.WebSocketProvider(ETH_PROVIDER_URL)
         this.provider = provider
 
-        const userState = new UserState(
-            {
-                provider,
-                prover,
-                unirepAddress: UNIREP_ADDRESS,
-                attesterId: BigInt(APP_ADDRESS),
-                _id: identity,
-            },
-            identity
-        )
+        const userState = new UserState({
+            provider,
+            prover,
+            unirepAddress: UNIREP_ADDRESS,
+            attesterId: BigInt(APP_ADDRESS),
+            id: identity,
+        })
         await userState.sync.start()
         this.userState = userState
         await userState.waitForSync()
@@ -63,6 +60,10 @@ class User {
 
     get sumFieldCount() {
         return this.userState?.sync.settings.sumFieldCount
+    }
+
+    get replNonceBits() {
+        return this.userState?.sync.settings.replNonceBits
     }
 
     epochKey(nonce: number) {
@@ -89,7 +90,9 @@ class User {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                publicSignals: signupProof.publicSignals,
+                publicSignals: signupProof.publicSignals.map((n) =>
+                    n.toString()
+                ),
                 proof: signupProof.proof,
             }),
         }).then((r) => r.json())
@@ -101,8 +104,8 @@ class User {
 
     async requestData(
         reqData: { [key: number]: string | number },
-        epkNonce: number, 
-        receiverEpochKey: string,
+        epkNonce: number,
+        receiverEpochKey: string
     ) {
         if (!this.userState) throw new Error('user state not initialized')
 
@@ -126,7 +129,9 @@ class User {
             body: JSON.stringify(
                 stringifyBigInts({
                     reqData,
-                    publicSignals: epochKeyProof.publicSignals,
+                    publicSignals: epochKeyProof.publicSignals.map((n) =>
+                        n.toString()
+                    ),
                     proof: epochKeyProof.proof,
                     receiverEpochKey,
                 })
@@ -148,7 +153,9 @@ class User {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                publicSignals: signupProof.publicSignals,
+                publicSignals: signupProof.publicSignals.map((n) =>
+                    n.toString()
+                ),
                 proof: signupProof.proof,
             }),
         }).then((r) => r.json())
