@@ -361,8 +361,8 @@ export default observer(({ setShowNewListing }: Props) => {
                                                 posterId,
                                                 scoreString
                                             )
-                                            // setShowNewListing(false)
-                                            // window.location.reload()
+                                            setShowNewListing(false)
+                                            window.location.reload()
                                         }}
                                     >
                                         POST

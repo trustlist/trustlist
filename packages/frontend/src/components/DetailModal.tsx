@@ -60,13 +60,13 @@ export default observer(({ listing, setShowDetail }: Props) => {
                         <div className="action-bar">
                             <div className="action-item">
                                 {user.hasSignedUp &&
+                                // prevent user from making an offer on their own post
+                                !memberKeys.includes(listing.posterId) &&
                                 // prevent new offers if one has already been accepted
                                 !listing.dealOpened &&
                                 // prevent new offers if listing epoch is expired
                                 listing.epoch ===
                                     user.userState?.sync.calcCurrentEpoch() ? (
-                                    // prevent user from making an offer on their own post
-                                    // && !memberKeys.includes(listing.posterId)
                                     <>
                                         <button
                                             onClick={() =>

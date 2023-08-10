@@ -116,7 +116,6 @@ export default observer(
                             {memberKeys.includes(currentMemberId) &&
                             !currentMemberReview ? (
                                 <Button
-                                    // style={{backgroundColor: 'blue', color: 'white'}}
                                     onClick={async () => {
                                         // +1 to current member's completed CB score
                                         await user.requestData(

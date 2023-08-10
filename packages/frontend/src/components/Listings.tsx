@@ -64,8 +64,8 @@ export default observer(({ section, category }: Props) => {
                       .slice()
                       .reverse()
                       .map((listing: Listing) => {
-                          // const posterScores = JSON.parse(listing.scoreString)
-                          // const scores = app.calcScoresFromDB(posterScores)
+                          const posterScores = JSON.parse(listing.scoreString)
+                          const scores = app.calcScoresFromDB(posterScores)
                           {
                               listing.epoch !=
                               user.userState?.sync.calcCurrentEpoch()

@@ -197,32 +197,38 @@ export default observer(
                                         </Button>
                                     </div>
                                     {/* only allow offer submit after valid proof */}
-                                    {/* {repProof.valid ? ( */}
-                                    <input
-                                        style={{ marginTop: '0.5rem' }}
-                                        type="submit"
-                                        value="SUBMIT OFFER"
-                                        onClick={() => {
-                                            const epoch =
-                                                user.userState?.sync.calcCurrentEpoch()
-                                            const responderId = user.epochKey(
-                                                reqInfo.nonce ?? 0
-                                            )
-                                            const scoreString =
-                                                JSON.stringify(rScores)
-                                            app.submitOffer(
-                                                epoch,
-                                                listingId,
-                                                listingTitle,
-                                                responderId,
-                                                offerAmount,
-                                                scoreString
-                                            )
-                                        }}
-                                    />
-                                    {/* ) : ( */}
-                                    {/* <button style={{marginTop: '0.5rem'}} className='blocked'>SUBMIT OFFER</button> */}
-                                    {/* )} */}
+                                    {repProof.valid ? (
+                                        <input
+                                            style={{ marginTop: '0.5rem' }}
+                                            type="submit"
+                                            value="SUBMIT OFFER"
+                                            onClick={() => {
+                                                const epoch =
+                                                    user.userState?.sync.calcCurrentEpoch()
+                                                const responderId =
+                                                    user.epochKey(
+                                                        reqInfo.nonce ?? 0
+                                                    )
+                                                const scoreString =
+                                                    JSON.stringify(rScores)
+                                                app.submitOffer(
+                                                    epoch,
+                                                    listingId,
+                                                    listingTitle,
+                                                    responderId,
+                                                    offerAmount,
+                                                    scoreString
+                                                )
+                                            }}
+                                        />
+                                    ) : (
+                                        <button
+                                            style={{ marginTop: '0.5rem' }}
+                                            className="blocked"
+                                        >
+                                            SUBMIT OFFER
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             <button
