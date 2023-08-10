@@ -1,65 +1,65 @@
 input.checked {
-  accent-color: rgb(7, 156, 7);
+    accent-color: rgb(7, 156, 7);
 }
 
 .deal-content {
-  border-radius: 0.5rem;
-  border: 0.2rem solid rgb(238, 235, 235);
-  margin: 1rem 4rem 4rem;
-  padding: 0rem 3rem 2rem;
+    border-radius: 0.5rem;
+    border: 0.2rem solid rgb(238, 235, 235);
+    margin: 1rem 4rem 4rem;
+    padding: 0rem 3rem 2rem;
 }
 
 .deal-info {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .member-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
 }
 
 .checked {
-  border-radius: 0.5rem;
-  border: 0.2rem solid green;
-  margin: 0.5rem;
-  font-size: 2rem;
-  width: 3rem;
-  padding: 0.2rem 0 0.1rem;
-  text-align: center;
+    border-radius: 0.5rem;
+    border: 0.2rem solid green;
+    margin: 0.5rem;
+    font-size: 2rem;
+    width: 3rem;
+    padding: 0.2rem 0 0.1rem;
+    text-align: center;
 }
 
 .unchecked {
-  border-radius: 0.5rem;
-  border: 0.2rem solid red;
-  margin: 0.5rem;
-  font-size: 2rem;
-  color: rgb(212, 210, 210);
-  cursor: pointer;
-  width: 3rem;
-  padding: 0.4rem 0 0.2rem;
-  text-align: center;
+    border-radius: 0.5rem;
+    border: 0.2rem solid red;
+    margin: 0.5rem;
+    font-size: 2rem;
+    color: rgb(212, 210, 210);
+    cursor: pointer;
+    width: 3rem;
+    padding: 0.3rem 0 0.2rem;
+    text-align: center;
 }
 
 .attestation-container {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
 }
 
 .attestation-form {
-  width: 42%;
-  height: fit-content;
-  background-color: rgb(238, 235, 235);
-  border-radius: 8px;
-  padding: 0 1rem 1rem;
+    width: 42%;
+    height: fit-content;
+    background-color: rgb(238, 235, 235);
+    border-radius: 8px;
+    padding: 0 1rem 1rem;
 }
 
 .sentiments {
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 0 0 1rem 2rem ;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0 0 1rem 2rem;
 }

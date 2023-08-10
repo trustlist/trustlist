@@ -9,7 +9,7 @@ module.exports = (env) => ({
     entry: ['./src/index.tsx'],
     mode: 'development',
     devServer: {
-        port: 3000,
+        port: 4000,
         historyApiFallback: true,
     },
     optimization: {

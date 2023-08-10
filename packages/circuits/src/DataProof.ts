@@ -14,12 +14,12 @@ export class DataProof extends BaseProof {
     public value: BigNumberish[]
 
     /**
-     * @param _publicSignals The public signals of the reputation proof that can be verified by the prover
+     * @param _publicSignals The public signals of the data proof that can be verified by the prover
      * @param _proof The proof that can be verified by the prover
      * @param prover The prover that can verify the public signals and the proof
      */
     constructor(
-        _publicSignals: BigNumberish[],
+        _publicSignals: (string | bigint)[],
         _proof: SnarkProof,
         prover?: Prover
     ) {

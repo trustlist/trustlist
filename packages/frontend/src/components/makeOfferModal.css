@@ -1,50 +1,50 @@
 .nested {
-  width: 730px;
-  height: 250px;
-  padding: 1.5rem;
-  background: white;
-  z-index: 10;
-  border-radius: 16px;
-  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+    width: 730px;
+    height: 250px;
+    padding: 1.5rem;
+    background: white;
+    z-index: 10;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
 .offer-content {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: 60% 40%;
-  color: blue;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: 60% 40%;
+    color: blue;
 }
 
 .offer-container {
-  width: 80%;
-  background-color: rgb(212, 210, 210);
-  border-radius: 0.4rem;
-  margin: 1rem 0 1rem;
-  padding: 1.2rem 1.5rem 0;
+    width: 80%;
+    background-color: rgb(212, 210, 210);
+    border-radius: 0.4rem;
+    margin: 1rem 0 1rem;
+    padding: 1.2rem 1.5rem 0;
 }
 
 .score-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin: 1rem 2.5rem 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 1rem 2.5rem 0;
 }
 
 .score-name {
-  font-weight: 600;
-  font-size: 0.8rem;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
 
 .reveal-container {
-  display: flex;
-  flex-direction: column;
-  width: 7rem;
+    display: flex;
+    flex-direction: column;
+    width: 7rem;
 }
 
 .icon-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.8rem 1rem;
 }
 
 /* .offer-input {
@@ -53,6 +53,6 @@
 } */
 
 .offer-buttons {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }

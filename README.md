@@ -1,6 +1,6 @@
 # create-unirep-app
 
-This is a demo app of a [unirep](https://github.com/Unirep/Unirep) attester. In this demo app, users can request reputation from the example attester. After transition, user can prove how much reputation he has.
+This is a demo app of a [unirep](https://github.com/Unirep/Unirep) attester. In this demo app, users can request data from the example attester. After transition, user can prove how much data he has.
 
 > See: [Users and Attesters](https://developer.unirep.io/docs/protocol/users-and-attesters)
 
@@ -12,7 +12,7 @@ npx create-unirep-app
 
 Then `cd` into the directory that was created.
 
-## 2 Start each daemon
+## 2. Start each daemon
 
 ### 2.1 Build the files
 
@@ -49,3 +49,17 @@ yarn frontend start
 ```
 
 It will be running at: http://127.0.0.1:3000/
+
+## 3. Linter
+
+### 3.1 Format the code
+
+```shell
+yarn lint:fix
+```
+
+### 3.2 Check if the code is formatted
+
+```shell
+yarn lint:check
+```
