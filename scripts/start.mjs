@@ -2,7 +2,8 @@ import { spawn, exec } from 'child_process'
 import fetch from 'node-fetch'
 console.log('Starting a hardhat node...')
 const providerURL = `http://127.0.0.1:8545`
-const serverURL = `http://127.0.0.1:8000`
+// const serverURL = `http://127.0.0.1:8000`
+const serverURL = `http://trustlist-backend.vercel.app`
 const frontendURL = `http://127.0.0.1:4000`
 
 const hardhat = spawn('yarn contracts hardhat node', { shell: true })
