@@ -129,10 +129,14 @@ export default observer(({ listing, setShowDetail }: Props) => {
                         <div style={{ display: 'flex' }}>
                             <div className="detail-container">
                                 <div className="detail-title">
-                                    <div>{listing.title.slice(0,60)}</div>
-                                    <div style={{color: "blue"}}>${listing.amount} /{' '}{listing.amountType}</div>                      
+                                    <div>{listing.title.slice(0, 60)}</div>
+                                    <div style={{ color: 'blue' }}>
+                                        ${listing.amount} / {listing.amountType}
+                                    </div>
                                 </div>
-                                <div className='detail-description'>{listing.description}</div>
+                                <div className="detail-description">
+                                    {listing.description}
+                                </div>
                             </div>
                             <div className="trust-container">
                                 {app.scoreDescriptions.map((desc, i) => (

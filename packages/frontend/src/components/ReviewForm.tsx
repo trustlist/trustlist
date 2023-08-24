@@ -117,10 +117,12 @@ export default observer(
                             !currentMemberReview ? (
                                 <Button
                                     onClick={async () => {
-                                      if (!sentiment) {
-                                        window.alert('please provide a value for your review.')
-                                        return
-                                      }
+                                        if (!sentiment) {
+                                            window.alert(
+                                                'please provide a value for your review.'
+                                            )
+                                            return
+                                        }
                                         // +1 to current member's completed CB score
                                         await user.requestData(
                                             { [1]: 1 },

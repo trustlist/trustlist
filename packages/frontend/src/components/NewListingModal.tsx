@@ -82,26 +82,28 @@ export default observer(({ setShowNewListing }: Props) => {
 
                         <div>
                             <p style={{ fontWeight: '600' }}>category:</p>
-                            {section ?
-                              app.categoriesBySection
-                                  .get(section)
-                                  .map((category: string) => (
-                                      <div style={{ fontSize: '0.8rem' }}>
-                                          <input
-                                              type="radio"
-                                              id={category}
-                                              name="category"
-                                              value={category}
-                                              onChange={(e) =>
-                                                  setCategory(e.target.value)
-                                              }
-                                          />
-                                          <label htmlFor={category}></label>
-                                          {category}
-                                          <br />
-                                      </div>
-                              ))
-                            : null }
+                            {section
+                                ? app.categoriesBySection
+                                      .get(section)
+                                      .map((category: string) => (
+                                          <div style={{ fontSize: '0.8rem' }}>
+                                              <input
+                                                  type="radio"
+                                                  id={category}
+                                                  name="category"
+                                                  value={category}
+                                                  onChange={(e) =>
+                                                      setCategory(
+                                                          e.target.value
+                                                      )
+                                                  }
+                                              />
+                                              <label htmlFor={category}></label>
+                                              {category}
+                                              <br />
+                                          </div>
+                                      ))
+                                : null}
                         </div>
 
                         <div className="form-flex">
@@ -302,24 +304,34 @@ export default observer(({ setShowNewListing }: Props) => {
                                 <Button
                                     onClick={async () => {
                                         if (!section) {
-                                          window.alert('please select a section for your listing.')
-                                          return
+                                            window.alert(
+                                                'please select a section for your listing.'
+                                            )
+                                            return
                                         }
                                         if (!category) {
-                                          window.alert('please select a category for your listing.')
-                                          return
+                                            window.alert(
+                                                'please select a category for your listing.'
+                                            )
+                                            return
                                         }
                                         if (!title) {
-                                          window.alert('please provide a title for your listing.')
-                                          return
+                                            window.alert(
+                                                'please provide a title for your listing.'
+                                            )
+                                            return
                                         }
                                         if (!amount) {
-                                          window.alert('please provide an amount for your listing.')
-                                          return
+                                            window.alert(
+                                                'please provide an amount for your listing.'
+                                            )
+                                            return
                                         }
                                         if (!description) {
-                                          window.alert('please provide a description for your listing.')
-                                          return
+                                            window.alert(
+                                                'please provide a description for your listing.'
+                                            )
+                                            return
                                         }
                                         const proof = await user.proveData(
                                             proveData

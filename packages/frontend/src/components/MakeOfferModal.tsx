@@ -187,12 +187,18 @@ export default observer(
                                         <Button
                                             onClick={async () => {
                                                 if (!offerAmount) {
-                                                  window.alert('please provide an amount for your offer.')
-                                                  return
+                                                    window.alert(
+                                                        'please provide an amount for your offer.'
+                                                    )
+                                                    return
                                                 }
-                                                if (Number(offerAmount) > 9999) {
-                                                  window.alert('please choose an amount less than 10,000.')
-                                                  return
+                                                if (
+                                                    Number(offerAmount) > 9999
+                                                ) {
+                                                    window.alert(
+                                                        'please choose an amount less than 10,000.'
+                                                    )
+                                                    return
                                                 }
                                                 const proof =
                                                     await user.proveData(
