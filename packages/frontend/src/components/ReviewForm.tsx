@@ -28,7 +28,7 @@ export default observer(
     }: Props) => {
         const app = useContext(Trustlist)
         const user = useContext(User)
-        const [sentiment, setSentiment] = useState(3)
+        const [sentiment, setSentiment] = useState(0)
         const [dealAgain, setDealAgain] = useState(1)
         const sentiments = [
             'hard no',
@@ -117,6 +117,10 @@ export default observer(
                             !currentMemberReview ? (
                                 <Button
                                     onClick={async () => {
+                                      if (!sentiment) {
+                                        window.alert('please provide a value for your review.')
+                                        return
+                                      }
                                         // +1 to current member's completed CB score
                                         await user.requestData(
                                             { [1]: 1 },
