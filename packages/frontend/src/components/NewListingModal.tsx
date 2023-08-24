@@ -26,7 +26,7 @@ export default observer(({ setShowNewListing }: Props) => {
     const app = useContext(Trustlist)
     const user = useContext(User)
 
-    const [section, setSection] = useState('for sale')
+    const [section, setSection] = useState('')
     const [category, setCategory] = useState('')
     const [title, setTitle] = useState('')
     const [amount, setAmount] = useState('')
@@ -82,24 +82,28 @@ export default observer(({ setShowNewListing }: Props) => {
 
                         <div>
                             <p style={{ fontWeight: '600' }}>category:</p>
-                            {app.categoriesBySection
-                                .get(section)
-                                .map((category: string) => (
-                                    <div style={{ fontSize: '0.8rem' }}>
-                                        <input
-                                            type="radio"
-                                            id={category}
-                                            name="category"
-                                            value={category}
-                                            onChange={(e) =>
-                                                setCategory(e.target.value)
-                                            }
-                                        />
-                                        <label htmlFor={category}></label>
-                                        {category}
-                                        <br />
-                                    </div>
-                                ))}
+                            {section
+                                ? app.categoriesBySection
+                                      .get(section)
+                                      .map((category: string) => (
+                                          <div style={{ fontSize: '0.8rem' }}>
+                                              <input
+                                                  type="radio"
+                                                  id={category}
+                                                  name="category"
+                                                  value={category}
+                                                  onChange={(e) =>
+                                                      setCategory(
+                                                          e.target.value
+                                                      )
+                                                  }
+                                              />
+                                              <label htmlFor={category}></label>
+                                              {category}
+                                              <br />
+                                          </div>
+                                      ))
+                                : null}
                         </div>
 
                         <div className="form-flex">
@@ -119,7 +123,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                     <div className="form-flex">
                                         <label htmlFor="amount">amount</label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             id="amount"
                                             name="amount"
                                             onChange={(e) =>
@@ -299,6 +303,36 @@ export default observer(({ setShowNewListing }: Props) => {
 
                                 <Button
                                     onClick={async () => {
+                                        if (!section) {
+                                            window.alert(
+                                                'please select a section for your listing.'
+                                            )
+                                            return
+                                        }
+                                        if (!category) {
+                                            window.alert(
+                                                'please select a category for your listing.'
+                                            )
+                                            return
+                                        }
+                                        if (!title) {
+                                            window.alert(
+                                                'please provide a title for your listing.'
+                                            )
+                                            return
+                                        }
+                                        if (!amount) {
+                                            window.alert(
+                                                'please provide an amount for your listing.'
+                                            )
+                                            return
+                                        }
+                                        if (!description) {
+                                            window.alert(
+                                                'please provide a description for your listing.'
+                                            )
+                                            return
+                                        }
                                         const proof = await user.proveData(
                                             proveData
                                         )
@@ -323,7 +357,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                                     (await user.userState.latestTransitionedEpoch())
                                             ) {
                                                 throw new Error(
-                                                    'Needs transition'
+                                                    'please transition to the current epoch before posting'
                                                 )
                                             }
                                             // +1 to current member's expected LP score
@@ -339,17 +373,6 @@ export default observer(({ setShowNewListing }: Props) => {
                                             )
                                             const scoreString =
                                                 JSON.stringify(pScores)
-                                            console.log(
-                                                epoch,
-                                                section,
-                                                category,
-                                                title,
-                                                amount,
-                                                amountType,
-                                                description,
-                                                posterId,
-                                                scoreString
-                                            )
                                             await app.createNewListing(
                                                 epoch,
                                                 section,

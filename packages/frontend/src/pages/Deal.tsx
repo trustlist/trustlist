@@ -114,7 +114,7 @@ export default observer(() => {
                         </div>
 
                         <div>
-                            <h3>{deal.title}</h3>
+                            <h3>{deal.title.slice(0, 25)}</h3>
                             <h3>${deal.offerAmount}</h3>
                         </div>
 
