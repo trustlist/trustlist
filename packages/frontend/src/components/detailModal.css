@@ -27,6 +27,11 @@
     padding-bottom: 1rem;
 }
 
+.detail-description {
+    height: 6rem;
+    overflow: scroll;
+}
+
 .trust-container {
     /* padding-top: 2rem; */
 }

@@ -85,7 +85,7 @@ export default observer(({ section, category }: Props) => {
                                       <div className="thumbnail">TL</div>
                                       <div>
                                           <div className="listing-title">
-                                              {listing.title}
+                                              {listing.title.slice(0,50)}
                                           </div>
                                           {listing.posterDealClosed &&
                                           listing.responderDealClosed ? (
@@ -138,7 +138,7 @@ export default observer(({ section, category }: Props) => {
                                           )}
                                       </div>
                                       <div className="score-container">
-                                          {/* {scores.map((score, i) => (
+                                          {scores.map((score, i) => (
                     <div className='score-item' key={i}>
                       <Tooltip 
                         text={app.scoreDescriptions[i]}
@@ -150,7 +150,7 @@ export default observer(({ section, category }: Props) => {
                         }
                       />
                     </div>
-                  ))} */}
+                  ))}
                                       </div>
                                   </div>
 
