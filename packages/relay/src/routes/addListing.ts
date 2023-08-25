@@ -63,9 +63,9 @@ export default (
                 posterReview: '',
                 responderReview: '',
             })
-            res.json({ message: 'success!' })
+            res.json({ message: 'listing added!' })
         } catch (error: any) {
-            res.status(500).json({ error })
+            res.status(500).json({ message: error })
         }
     })
 }

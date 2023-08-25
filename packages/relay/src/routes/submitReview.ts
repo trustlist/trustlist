@@ -31,9 +31,9 @@ export default (
                     },
                 })
             }
-            res.json({ message: 'success!' })
+            res.json({ message: 'review submitted!' })
         } catch (error: any) {
-            res.status(500).json({ error })
+            res.status(500).json({ message: error })
         }
     })
 }

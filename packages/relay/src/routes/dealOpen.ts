@@ -22,9 +22,9 @@ export default (
                     dealOpened: true,
                 },
             })
-            res.json({ message: 'success!' })
+            res.json({ message: 'offer accepted! redirecting to your DEAL.' })
         } catch (error: any) {
-            res.status(500).json({ error })
+            res.status(500).json({ message: error })
         }
     })
 }

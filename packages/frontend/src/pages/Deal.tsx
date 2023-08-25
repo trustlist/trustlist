@@ -61,10 +61,11 @@ export default observer(() => {
                                                     fontSize: '2rem',
                                                 }}
                                                 onClick={async () => {
-                                                    await app.dealClose(
-                                                        deal._id,
-                                                        'poster'
-                                                    )
+                                                    const message =
+                                                        await app.dealClose(
+                                                            deal._id,
+                                                            'poster'
+                                                        )
                                                     if (
                                                         deal.responderDealClosed
                                                     ) {
@@ -89,6 +90,7 @@ export default observer(() => {
                                                             ''
                                                         )
                                                     }
+                                                    window.alert(message)
                                                     window.location.reload()
                                                 }}
                                             >
@@ -141,45 +143,43 @@ export default observer(() => {
                                                     fontSize: '2rem',
                                                 }}
                                                 onClick={async () => {
-                                                    if (
-                                                        memberKeys.includes(
-                                                            deal.responderId
-                                                        )
-                                                    ) {
+                                                    // if (
+                                                    //     memberKeys.includes(
+                                                    //         deal.responderId
+                                                    //     )
+                                                    // ) {
+                                                    const message =
                                                         await app.dealClose(
                                                             deal._id,
                                                             'responder'
                                                         )
-                                                        if (
-                                                            deal.posterDealClosed
-                                                        ) {
-                                                            // +1 to responder's expected CB score
-                                                            await user.requestData(
-                                                                {
-                                                                    [1]:
-                                                                        1 << 23,
-                                                                },
-                                                                memberKeys.indexOf(
-                                                                    deal.responderId
-                                                                ) ?? 0,
-                                                                ''
-                                                            )
-                                                            // +1 to poster's completed LP score
-                                                            // +1 to poster's expected CB score
-                                                            await user.requestData(
-                                                                {
-                                                                    [0]: 1,
-                                                                    [1]:
-                                                                        1 << 23,
-                                                                },
-                                                                memberKeys.indexOf(
-                                                                    deal.responderId
-                                                                ) ?? 0,
-                                                                deal.posterId
-                                                            )
-                                                        }
-                                                        window.location.reload()
+                                                    if (deal.posterDealClosed) {
+                                                        // +1 to responder's expected CB score
+                                                        await user.requestData(
+                                                            {
+                                                                [1]: 1 << 23,
+                                                            },
+                                                            memberKeys.indexOf(
+                                                                deal.responderId
+                                                            ) ?? 0,
+                                                            ''
+                                                        )
+                                                        // +1 to poster's completed LP score
+                                                        // +1 to poster's expected CB score
+                                                        await user.requestData(
+                                                            {
+                                                                [0]: 1,
+                                                                [1]: 1 << 23,
+                                                            },
+                                                            memberKeys.indexOf(
+                                                                deal.responderId
+                                                            ) ?? 0,
+                                                            deal.posterId
+                                                        )
                                                     }
+                                                    window.alert(message)
+                                                    window.location.reload()
+                                                    // }
                                                 }}
                                             >
                                                 ☑️

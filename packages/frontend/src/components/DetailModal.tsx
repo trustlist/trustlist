@@ -286,10 +286,14 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                       <button
                                                           className="accept"
                                                           onClick={async () => {
-                                                              await app.dealOpen(
-                                                                  listing._id,
-                                                                  offer.offerAmount,
-                                                                  offer.responderId
+                                                              const message =
+                                                                  await app.dealOpen(
+                                                                      listing._id,
+                                                                      offer.offerAmount,
+                                                                      offer.responderId
+                                                                  )
+                                                              window.alert(
+                                                                  message
                                                               )
                                                               navigate(
                                                                   `deal/${listing._id}`

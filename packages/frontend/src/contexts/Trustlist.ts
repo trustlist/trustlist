@@ -143,7 +143,7 @@ class Trustlist {
                 scoreString,
             }),
         }).then((r) => r.json())
-        console.log(data.message)
+        return data.message
     }
 
     async submitOffer(
@@ -168,7 +168,7 @@ class Trustlist {
                 scoreString,
             }),
         }).then((r) => r.json())
-        console.log(data.message)
+        return data.message
     }
 
     async dealOpen(id: string, offerAmount: string, responderId: string) {
@@ -183,7 +183,7 @@ class Trustlist {
                 responderId,
             }),
         }).then((r) => r.json())
-        console.log(data.message)
+        return data.message
     }
 
     async dealClose(id: string, member: string) {
@@ -197,7 +197,7 @@ class Trustlist {
                 member,
             }),
         }).then((r) => r.json())
-        console.log(data.message)
+        return data.message
     }
 
     async submitReview(id: string, member: string, review: string) {
@@ -212,7 +212,7 @@ class Trustlist {
                 review,
             }),
         }).then((r) => r.json())
-        console.log(data.message)
+        return data.message
     }
 
     async loadSelectedCategory(section: string, category: string) {

@@ -31,9 +31,12 @@ export default (
                     },
                 })
             }
-            res.json({ message: 'success!' })
+            res.json({
+                message:
+                    'success! please complete your review after both parties have confirmed this transaction as complete.',
+            })
         } catch (error: any) {
-            res.status(500).json({ error })
+            res.status(500).json({ message: error })
         }
     })
 }

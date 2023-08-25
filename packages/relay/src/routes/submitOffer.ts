@@ -27,9 +27,9 @@ export default (
                 responderId,
                 scoreString,
             })
-            res.json({ message: 'success!' })
+            res.json({ message: 'offer submitted!' })
         } catch (error: any) {
-            res.status(500).json({ error })
+            res.status(500).json({ message: error })
         }
     })
 }

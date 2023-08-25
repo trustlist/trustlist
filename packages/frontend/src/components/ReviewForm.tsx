@@ -157,11 +157,12 @@ export default observer(
                                             [2]: TDscore,
                                             [3]: GVscore,
                                         })
-                                        await app.submitReview(
+                                        const message = await app.submitReview(
                                             dealId,
                                             member,
                                             review
                                         )
+                                        window.alert(message)
                                         window.location.reload()
                                     }}
                                 >

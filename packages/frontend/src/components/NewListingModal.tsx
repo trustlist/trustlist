@@ -373,17 +373,19 @@ export default observer(({ setShowNewListing }: Props) => {
                                             )
                                             const scoreString =
                                                 JSON.stringify(pScores)
-                                            await app.createNewListing(
-                                                epoch,
-                                                section,
-                                                category,
-                                                title,
-                                                amount,
-                                                amountType,
-                                                description,
-                                                posterId,
-                                                scoreString
-                                            )
+                                            const message =
+                                                await app.createNewListing(
+                                                    epoch,
+                                                    section,
+                                                    category,
+                                                    title,
+                                                    amount,
+                                                    amountType,
+                                                    description,
+                                                    posterId,
+                                                    scoreString
+                                                )
+                                            window.alert(message)
                                             setShowNewListing(false)
                                             window.location.reload()
                                         }}

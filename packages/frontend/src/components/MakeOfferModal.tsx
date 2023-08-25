@@ -54,178 +54,162 @@ export default observer(
             <div className="dark-bg">
                 <div className="centered">
                     <div className="nested">
-                        <form>
-                            <div className="offer-content">
-                                <div className="offer-container">
-                                    <div className="">
-                                        <label
-                                            htmlFor="offerAmount"
-                                            style={{
-                                                fontSize: '1.2rem',
-                                                fontWeight: '600',
-                                                paddingLeft: '3rem',
-                                            }}
-                                        >
-                                            amount: $
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="offerAmount"
-                                            name="offerAmount"
-                                            onChange={(e) =>
-                                                setOfferAmount(e.target.value)
-                                            }
-                                            className="offer-input"
-                                        />
-                                    </div>
-
-                                    <div className="score-grid">
-                                        {app.scoreNames.map((name, i) => {
-                                            const score = Number(
-                                                user.provableData[i]
-                                            )
-                                            return (
-                                                <div
-                                                    key={name}
-                                                    className="reveal-container"
-                                                >
-                                                    <div className="score-name">
-                                                        {name} Score:{' '}
-                                                        {app.calcScoreFromUserData(
-                                                            score
-                                                        )}
-                                                        %
-                                                    </div>
-                                                    <div className="icon-container">
-                                                        <div
-                                                            onClick={() => {
-                                                                setHidden(
-                                                                    () => ({
-                                                                        ...hidden,
-                                                                        [i]: false,
-                                                                    })
-                                                                )
-                                                                setRScores(
-                                                                    () => ({
-                                                                        ...rScores,
-                                                                        [i]: score,
-                                                                    })
-                                                                )
-                                                                setProveData(
-                                                                    () => ({
-                                                                        ...proveData,
-                                                                        [i]: score,
-                                                                    })
-                                                                )
-                                                            }}
-                                                        >
-                                                            <ScoreReveal
-                                                                hidden={
-                                                                    hidden[i]
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            onClick={() => {
-                                                                setHidden(
-                                                                    () => ({
-                                                                        ...hidden,
-                                                                        [i]: true,
-                                                                    })
-                                                                )
-                                                                setRScores(
-                                                                    () => ({
-                                                                        ...rScores,
-                                                                        [i]: 'X',
-                                                                    })
-                                                                )
-                                                            }}
-                                                        >
-                                                            <ScoreHide
-                                                                hidden={
-                                                                    hidden[i]
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
+                        <div className="offer-content">
+                            <div className="offer-container">
+                                <div className="">
+                                    <label
+                                        htmlFor="offerAmount"
+                                        style={{
+                                            fontSize: '1.2rem',
+                                            fontWeight: '600',
+                                            paddingLeft: '3rem',
+                                        }}
+                                    >
+                                        amount: $
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="offerAmount"
+                                        name="offerAmount"
+                                        onChange={(e) =>
+                                            setOfferAmount(e.target.value)
+                                        }
+                                        className="offer-input"
+                                    />
                                 </div>
 
-                                <div className="offer-buttons">
-                                    <div style={{ display: 'flex' }}>
-                                        <select
-                                            value={reqInfo.nonce ?? 0}
-                                            onChange={(event) => {
-                                                setReqInfo((v) => ({
-                                                    ...v,
-                                                    nonce: Number(
-                                                        event.target.value
-                                                    ),
-                                                }))
-                                            }}
-                                        >
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            {/* <option value="2">2</option> */}
-                                        </select>
-                                        <p style={{ fontSize: '12px' }}>
-                                            submit offer with epoch key:
-                                        </p>
-                                    </div>
-                                    <p className="epoch-key">
-                                        {user.epochKey(reqInfo.nonce ?? 0)}
-                                    </p>
-                                    <div style={{ display: 'flex' }}>
-                                        {repProof.proof.length ? (
-                                            <div className="proof">
-                                                {repProof.valid ? '✅' : '❌'}
+                                <div className="score-grid">
+                                    {app.scoreNames.map((name, i) => {
+                                        const score = Number(
+                                            user.provableData[i]
+                                        )
+                                        return (
+                                            <div
+                                                key={name}
+                                                className="reveal-container"
+                                            >
+                                                <div className="score-name">
+                                                    {name} Score:{' '}
+                                                    {app.calcScoreFromUserData(
+                                                        score
+                                                    )}
+                                                    %
+                                                </div>
+                                                <div className="icon-container">
+                                                    <div
+                                                        onClick={() => {
+                                                            setHidden(() => ({
+                                                                ...hidden,
+                                                                [i]: false,
+                                                            }))
+                                                            setRScores(() => ({
+                                                                ...rScores,
+                                                                [i]: score,
+                                                            }))
+                                                            setProveData(
+                                                                () => ({
+                                                                    ...proveData,
+                                                                    [i]: score,
+                                                                })
+                                                            )
+                                                        }}
+                                                    >
+                                                        <ScoreReveal
+                                                            hidden={hidden[i]}
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        onClick={() => {
+                                                            setHidden(() => ({
+                                                                ...hidden,
+                                                                [i]: true,
+                                                            }))
+                                                            setRScores(() => ({
+                                                                ...rScores,
+                                                                [i]: 'X',
+                                                            }))
+                                                        }}
+                                                    >
+                                                        <ScoreHide
+                                                            hidden={hidden[i]}
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
-                                        ) : null}
-                                        <Button
-                                            onClick={async () => {
-                                                if (!offerAmount) {
-                                                    window.alert(
-                                                        'please provide an amount for your offer.'
-                                                    )
-                                                    return
-                                                }
-                                                if (
-                                                    Number(offerAmount) > 9999
-                                                ) {
-                                                    window.alert(
-                                                        'please choose an amount less than 10,000.'
-                                                    )
-                                                    return
-                                                }
-                                                const proof =
-                                                    await user.proveData(
-                                                        proveData
-                                                    )
-                                                setRepProof(proof)
-                                            }}
-                                        >
-                                            prove trust scores
-                                        </Button>
-                                    </div>
-                                    {/* only allow offer submit after valid proof */}
-                                    {repProof.valid ? (
-                                        <input
-                                            style={{ marginTop: '0.5rem' }}
-                                            type="submit"
-                                            value="SUBMIT OFFER"
-                                            onClick={() => {
-                                                const epoch =
-                                                    user.userState?.sync.calcCurrentEpoch()
-                                                const responderId =
-                                                    user.epochKey(
-                                                        reqInfo.nonce ?? 0
-                                                    )
-                                                const scoreString =
-                                                    JSON.stringify(rScores)
-                                                app.submitOffer(
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="offer-buttons">
+                                <div style={{ display: 'flex' }}>
+                                    <select
+                                        value={reqInfo.nonce ?? 0}
+                                        onChange={(event) => {
+                                            setReqInfo((v) => ({
+                                                ...v,
+                                                nonce: Number(
+                                                    event.target.value
+                                                ),
+                                            }))
+                                        }}
+                                    >
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        {/* <option value="2">2</option> */}
+                                    </select>
+                                    <p style={{ fontSize: '12px' }}>
+                                        submit offer with epoch key:
+                                    </p>
+                                </div>
+                                <p className="epoch-key">
+                                    {user.epochKey(reqInfo.nonce ?? 0)}
+                                </p>
+                                <div style={{ display: 'flex' }}>
+                                    {repProof.proof.length ? (
+                                        <div className="proof">
+                                            {repProof.valid ? '✅' : '❌'}
+                                        </div>
+                                    ) : null}
+                                    <Button
+                                        onClick={async () => {
+                                            if (!offerAmount) {
+                                                window.alert(
+                                                    'please provide an amount for your offer.'
+                                                )
+                                                return
+                                            }
+                                            if (Number(offerAmount) > 9999) {
+                                                window.alert(
+                                                    'please choose an amount less than 10,000.'
+                                                )
+                                                return
+                                            }
+                                            const proof = await user.proveData(
+                                                proveData
+                                            )
+                                            setRepProof(proof)
+                                        }}
+                                    >
+                                        prove trust scores
+                                    </Button>
+                                </div>
+                                {/* only allow offer submit after valid proof */}
+                                {repProof.valid ? (
+                                    <input
+                                        style={{ marginTop: '0.5rem' }}
+                                        type="submit"
+                                        value="SUBMIT OFFER"
+                                        onClick={async () => {
+                                            const epoch =
+                                                user.userState?.sync.calcCurrentEpoch()
+                                            const responderId = user.epochKey(
+                                                reqInfo.nonce ?? 0
+                                            )
+                                            const scoreString =
+                                                JSON.stringify(rScores)
+                                            const message =
+                                                await app.submitOffer(
                                                     epoch,
                                                     listingId,
                                                     listingTitle,
@@ -233,25 +217,27 @@ export default observer(
                                                     offerAmount,
                                                     scoreString
                                                 )
-                                            }}
-                                        />
-                                    ) : (
-                                        <button
-                                            style={{ marginTop: '0.5rem' }}
-                                            className="blocked"
-                                        >
-                                            SUBMIT OFFER
-                                        </button>
-                                    )}
-                                </div>
+                                            window.alert(message)
+                                            setShowMakeOffer(false)
+                                            window.location.reload()
+                                        }}
+                                    />
+                                ) : (
+                                    <button
+                                        style={{ marginTop: '0.5rem' }}
+                                        className="blocked"
+                                    >
+                                        SUBMIT OFFER
+                                    </button>
+                                )}
                             </div>
-                            <button
-                                className="close-btn"
-                                onClick={() => setShowMakeOffer(false)}
-                            >
-                                X
-                            </button>
-                        </form>
+                        </div>
+                        <button
+                            className="close-btn"
+                            onClick={() => setShowMakeOffer(false)}
+                        >
+                            X
+                        </button>
                     </div>
                 </div>
             </div>
