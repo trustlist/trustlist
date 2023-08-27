@@ -38,7 +38,12 @@ export default observer(({ section, category }: Props) => {
             await app.loadSelectedCategory(section, category)
         }
         loadData()
-    }, [section, category])
+        if (showDetail) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'auto'
+        }
+    }, [section, category, showDetail])
 
     let listings = []
     if (section === 'for sale') {

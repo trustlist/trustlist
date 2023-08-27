@@ -29,7 +29,12 @@ export default observer(() => {
         setInterval(() => {
             updateTimer()
         }, 1000)
-    }, [])
+        if (showMemberDash || showNewListing) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'auto'
+        }
+    }, [showMemberDash, showNewListing])
 
     const hours = Math.floor(remainingTime / 3600)
     const minutes = Math.floor((remainingTime - hours * 3600) / 60)
