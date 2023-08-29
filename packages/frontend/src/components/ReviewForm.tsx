@@ -125,7 +125,7 @@ export default observer(
                                         }
                                         // +1 to current member's completed CB score
                                         await user.requestData(
-                                            { [1]: 1 },
+                                            { [2]: 1 },
                                             memberKeys.indexOf(
                                                 currentMemberId
                                             ) ?? 0,

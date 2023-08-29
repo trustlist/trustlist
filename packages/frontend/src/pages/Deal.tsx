@@ -69,9 +69,13 @@ export default observer(() => {
                                                     if (
                                                         deal.responderDealClosed
                                                     ) {
+                                                        // +1 to responder's completed LO score
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
-                                                            { [1]: 1 << 23 },
+                                                            { 
+                                                              // [1]: 1,
+                                                              [2]: 1 << 23
+                                                            },
                                                             memberKeys.indexOf(
                                                                 deal.posterId
                                                             ) ?? 0,
@@ -82,7 +86,7 @@ export default observer(() => {
                                                         await user.requestData(
                                                             {
                                                                 [0]: 1,
-                                                                [1]: 1 << 23,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.posterId
@@ -154,10 +158,12 @@ export default observer(() => {
                                                             'responder'
                                                         )
                                                     if (deal.posterDealClosed) {
+                                                        // +1 to responder's completed LO score
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
                                                             {
-                                                                [1]: 1 << 23,
+                                                                // [1]: 1,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.responderId
@@ -169,7 +175,7 @@ export default observer(() => {
                                                         await user.requestData(
                                                             {
                                                                 [0]: 1,
-                                                                [1]: 1 << 23,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.responderId
