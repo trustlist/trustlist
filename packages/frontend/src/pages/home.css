@@ -47,7 +47,7 @@ p {
 }
 
 .dark-bg {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(3, 3, 3, 0.7);
     width: 100%;
     height: 100%;
     z-index: 20;
@@ -72,7 +72,6 @@ p {
     z-index: 30;
     border-radius: 16px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
-    /* pointer-events: none; */
 }
 
 .proof {

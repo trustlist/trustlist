@@ -53,10 +53,7 @@ export default observer(({ setShowNewListing }: Props) => {
     }
 
     return (
-        <div
-            className="dark-bg"
-            // onClick={() => setShowNewListing(false)}
-        >
+        <div className="dark-bg">
             <div className="centered">
                 <div className="modal">
                     <div className="form-content">

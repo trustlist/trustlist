@@ -10,9 +10,7 @@
 }
 
 .action-item {
-    /* align-content: center; */
     font-size: 0.8rem;
-    /* cursor: not-allowed; */
 }
 
 .detail-container {
@@ -30,10 +28,6 @@
 .detail-description {
     height: 6rem;
     overflow: scroll;
-}
-
-.trust-container {
-    /* padding-top: 2rem; */
 }
 
 .detail-tooltip {
