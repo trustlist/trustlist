@@ -29,7 +29,6 @@ export default observer(
         const app = useContext(Trustlist)
         const user = useContext(User)
         const [sentiment, setSentiment] = useState(0)
-        // const [dealAgain, setDealAgain] = useState(1)
         const sentiments = [
             'hard no',
             'not really',
@@ -88,29 +87,6 @@ export default observer(
                                 </div>
                             ))}
                         </div>
-                        {/* <p>I would</p>
-                        <div style={{ paddingLeft: '2rem' }}>
-                            <input
-                                type="radio"
-                                id="gladly"
-                                name="again"
-                                value="gladly"
-                                onChange={(e) => setDealAgain(1)}
-                            />
-                            <label htmlFor="gladly">GLADLY</label>
-                            <br />
-                            <input
-                                type="radio"
-                                id="never"
-                                name="again"
-                                value="never"
-                                onChange={(e) => setDealAgain(0)}
-                            />
-                            <label htmlFor="gladly">NEVER</label>
-                        </div>
-                        <p style={{ paddingLeft: '5rem' }}>
-                            deal with this member again
-                        </p> */}
 
                         <div style={{ padding: '1rem' }}>
                             {memberKeys.includes(currentMemberId) &&
@@ -131,9 +107,7 @@ export default observer(
                                             ) ?? 0,
                                             ''
                                         )
-                                        // +1 to opposite member's expected and +1 || 0 to completed TD score
                                         // +5 to opposite member's expected and +0-5 to completed GV score
-                                        // const TDscore = (1 << 23) + dealAgain
                                         const GVscore = (5 << 23) + sentiment
                                         if (oppositeMemberReview) {
                                             await user.requestData(
@@ -154,7 +128,6 @@ export default observer(
                                             )
                                         }
                                         const review = JSON.stringify({
-                                            // [2]: TDscore,
                                             [3]: GVscore,
                                         })
                                         const message = await app.submitReview(

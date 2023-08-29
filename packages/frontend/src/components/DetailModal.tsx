@@ -285,16 +285,25 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                         listing.posterId
                                                     ) && !listing.dealOpened ? (
                                                       <Button
-                                                          // className="accept"
                                                           style={{
-                                                              backgroundColor: 'blue',
+                                                              backgroundColor:
+                                                                  'blue',
                                                               color: 'white',
-                                                              marginLeft: '0.5rem',
+                                                              fontSize:
+                                                                  '0.65rem',
+                                                              padding:
+                                                                  '0.25rem 0.5rem',
+                                                              marginLeft:
+                                                                  '0.5rem',
                                                           }}
                                                           onClick={async () => {
                                                               // +1 to offering member's expected LO score
                                                               await user.requestData(
-                                                                  { [1]: 1 << 23 },
+                                                                  {
+                                                                      [1]:
+                                                                          1 <<
+                                                                          23,
+                                                                  },
                                                                   memberKeys.indexOf(
                                                                       listing.posterId
                                                                   ) ?? 0,
