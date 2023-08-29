@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
+import Button from './Button'
 import './detailModal.css'
 
 import Trustlist from '../contexts/Trustlist'
@@ -283,9 +284,22 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                   ) : memberKeys.includes(
                                                         listing.posterId
                                                     ) && !listing.dealOpened ? (
-                                                      <button
-                                                          className="accept"
+                                                      <Button
+                                                          // className="accept"
+                                                          style={{
+                                                              backgroundColor: 'blue',
+                                                              color: 'white',
+                                                              marginLeft: '0.5rem',
+                                                          }}
                                                           onClick={async () => {
+                                                              // +1 to offering member's expected LO score
+                                                              await user.requestData(
+                                                                  { [1]: 1 << 23 },
+                                                                  memberKeys.indexOf(
+                                                                      listing.posterId
+                                                                  ) ?? 0,
+                                                                  offer.responderId
+                                                              )
                                                               const message =
                                                                   await app.dealOpen(
                                                                       listing._id,
@@ -301,7 +315,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                           }}
                                                       >
                                                           accept deal
-                                                      </button>
+                                                      </Button>
                                                   ) : null}
                                               </div>
                                           )

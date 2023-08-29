@@ -73,7 +73,7 @@ export default observer(() => {
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
                                                             { 
-                                                              // [1]: 1,
+                                                              [1]: 1,
                                                               [2]: 1 << 23
                                                             },
                                                             memberKeys.indexOf(
@@ -162,7 +162,7 @@ export default observer(() => {
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
                                                             {
-                                                                // [1]: 1,
+                                                                [1]: 1,
                                                                 [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
