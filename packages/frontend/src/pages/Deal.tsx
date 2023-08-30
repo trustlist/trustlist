@@ -3,15 +3,10 @@ import { useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import ReviewForm from '../components/ReviewForm'
 import Button from '../components/Button'
-import Tooltip from '../components/Tooltip'
 import './deal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
-
-type ReqInfo = {
-    nonce: number
-}
 
 export default observer(() => {
     const { id }: any = useParams()
@@ -69,9 +64,13 @@ export default observer(() => {
                                                     if (
                                                         deal.responderDealClosed
                                                     ) {
+                                                        // +1 to responder's completed LO score
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
-                                                            { [1]: 1 << 23 },
+                                                            {
+                                                                [1]: 1,
+                                                                [2]: 1 << 23,
+                                                            },
                                                             memberKeys.indexOf(
                                                                 deal.posterId
                                                             ) ?? 0,
@@ -82,7 +81,7 @@ export default observer(() => {
                                                         await user.requestData(
                                                             {
                                                                 [0]: 1,
-                                                                [1]: 1 << 23,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.posterId
@@ -143,21 +142,18 @@ export default observer(() => {
                                                     fontSize: '2rem',
                                                 }}
                                                 onClick={async () => {
-                                                    // if (
-                                                    //     memberKeys.includes(
-                                                    //         deal.responderId
-                                                    //     )
-                                                    // ) {
                                                     const message =
                                                         await app.dealClose(
                                                             deal._id,
                                                             'responder'
                                                         )
                                                     if (deal.posterDealClosed) {
+                                                        // +1 to responder's completed LO score
                                                         // +1 to responder's expected CB score
                                                         await user.requestData(
                                                             {
-                                                                [1]: 1 << 23,
+                                                                [1]: 1,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.responderId
@@ -169,7 +165,7 @@ export default observer(() => {
                                                         await user.requestData(
                                                             {
                                                                 [0]: 1,
-                                                                [1]: 1 << 23,
+                                                                [2]: 1 << 23,
                                                             },
                                                             memberKeys.indexOf(
                                                                 deal.responderId
@@ -179,7 +175,6 @@ export default observer(() => {
                                                     }
                                                     window.alert(message)
                                                     window.location.reload()
-                                                    // }
                                                 }}
                                             >
                                                 ☑️

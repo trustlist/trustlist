@@ -24,12 +24,13 @@ class Trustlist {
     }
 
     async load() {
-        this.scoreNames = ['LP', 'CB', 'TD', 'GV']
+        this.scoreNames = ['LP', 'LO', 'CB', 'GV']
         this.scoreDescriptions = [
-            "Legitimate Poster score: percentage of this member's listings that have resulted in completed deals.",
-            "Community Builder score: this member's record for submitting reviews of the deals they have been involved in.",
-            'Trusted DealMaker score: percentage of positive recommendations from others who have transacted with with this member.',
-            'Good Vibes score : percentage of all possible points given to this member by others for being friendly, communicative, and respectful.',
+            "Legit Posting score: percentage of member's listings that have resulted in completed deals.",
+            "Legit Offer score: member's record for completing deals after their offer has been accepted.",
+            "Community Building score: member's record for submitting reviews of the deals they have been involved in.",
+            // 'Trusted DealMaker score: percentage of positive recommendations from others who have transacted with with this member.',
+            'Good Vibes score : percentage of all possible points others have awarded this member for being friendly, communicative, and respectful.',
         ]
         this.categoriesBySection.set('for sale', [
             'antiques',
