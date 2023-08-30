@@ -79,13 +79,6 @@
     font-size: 0.9rem;
 }
 
-/* .accept {
-    background-color: rgb(8, 8, 247);
-    color: white;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.65rem;
-} */
-
 .offer-accepted {
     background-color: green;
     border-color: green;
