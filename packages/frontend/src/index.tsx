@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './pages/Header'
 import Home from './pages/Home'
+import List from './pages/List'
 import Deal from './pages/Deal'
 import Dashboard from './pages/Dashboard'
 import './index.css'
@@ -13,6 +14,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Header />}>
                     <Route index element={<Home />} />
+                    <Route path="list/:section/:category" element={<List />} />
                     <Route path="deal/:id" element={<Deal />} />
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>

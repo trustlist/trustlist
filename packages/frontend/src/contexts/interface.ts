@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { makeAutoObservable } from 'mobx'
 
-const MAX_MOBILE_WIDTH = 780
+const MAX_MOBILE_WIDTH = 950
 
 export class Interface {
     // dark/light mode

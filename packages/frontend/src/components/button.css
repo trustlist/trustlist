@@ -21,7 +21,7 @@
 }
 
 @media only screen and (max-width: 950px) {
-  .button-inner {
-    padding: 0.8rem 1.2rem;
-  }
+    .button-inner {
+        padding: 0.8rem 1.2rem;
+    }
 }
