@@ -35,3 +35,31 @@ button {
     display: flex;
     justify-content: right;
 }
+
+@media only screen and (max-width: 950px) {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+  }
+
+  .app-title {
+    font-size: 3.5rem;
+  }
+
+  .header-buttons {
+    margin-top: 1rem;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 0.7rem;
+  }
+
+  button {
+    font-size: 1.5rem;
+    padding: 0.5rem 0.8rem;
+    margin-left: 0;
+  }
+}

@@ -8,9 +8,11 @@ import Tooltip from '../components/Tooltip'
 import './header.css'
 
 import User from '../contexts/User'
+import Interface from '../contexts/interface'
 
 export default observer(() => {
     const user = React.useContext(User)
+    const ui = React.useContext(Interface)
 
     const [remainingTime, setRemainingTime] = React.useState<number>(0)
     const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
@@ -47,7 +49,8 @@ export default observer(() => {
         seconds.toString().padStart(2, '0')
 
     return (
-        <>
+        <>  
+            {!ui.isMobile ?
             <div className="header">
                 <div className="app-title">
                     <Link to="/">trustlist</Link>
@@ -119,6 +122,59 @@ export default observer(() => {
                     </div>
                 </div>
             </div>
+            : 
+              <div className='header'>
+                <div>
+                  <div className='app-title'>
+                    <Link to="/">trustlist</Link>
+                  </div>
+                  <div className='epoch-info'>
+                    <div>epoch: {user.userState?.sync.calcCurrentEpoch()}</div>
+                    <div>
+                        next epoch in:{' '}
+                        <span style={{ color: 'red' }}>{timeString}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='header-buttons'>
+                    {!user.hasSignedUp ? (
+                        <Button onClick={() => user.signup()}>JOIN</Button>
+                    ) : (
+                        <div>
+                            <Button>connected</Button>
+                        </div>
+                    )}
+                  <div className='actions'>
+                      {user.hasSignedUp ? (
+                          <>
+                              <button onClick={() => setShowMemberDash(true)}>👤</button>
+                              {showMemberDash && (
+                                  <MemberDashboardModal
+                                      setShowMemberDash={setShowMemberDash}
+                                  />
+                              )}
+                          </>
+                      ) : (
+                          <button>👤</button>
+                      )}
+                      {user.hasSignedUp ? (
+                          <>
+                              <button onClick={() => setShowNewListing(true)}>🖌️</button>
+                              {showNewListing && (
+                                  <NewListingModal
+                                      setShowNewListing={setShowNewListing}
+                                  />
+                              )}
+                          </>
+                      ) : (
+                          <button>🖌️</button>
+                      )}
+                  </div>
+                </div>
+
+              </div>
+            }
 
             <Outlet />
         </>

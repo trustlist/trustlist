@@ -19,3 +19,9 @@
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+@media only screen and (max-width: 950px) {
+  .button-inner {
+    padding: 0.8rem 1.2rem;
+  }
+}
