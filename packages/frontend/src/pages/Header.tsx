@@ -116,7 +116,7 @@ export default observer(() => {
                                     >
                                         list{' '}
                                         <span style={{ fontSize: '0.6rem' }}>
-                                            🖌️
+                                            ✏️
                                         </span>
                                     </button>
                                     {showNewListing && (
@@ -131,7 +131,7 @@ export default observer(() => {
                                 <button style={{ cursor: 'not-allowed' }}>
                                     list{' '}
                                     <span style={{ fontSize: '0.6rem' }}>
-                                        🖌️
+                                        ✏️
                                     </span>
                                 </button>
                             )}
@@ -189,7 +189,7 @@ export default observer(() => {
                                     <button
                                         onClick={() => setShowNewListing(true)}
                                     >
-                                        🖌️
+                                        ✏️
                                     </button>
                                     {showNewListing && (
                                         <NewListingModal
@@ -200,7 +200,7 @@ export default observer(() => {
                                     )}
                                 </>
                             ) : (
-                                <button>🖌️</button>
+                                <button>✏️</button>
                             )}
                         </div>
                     </div>
