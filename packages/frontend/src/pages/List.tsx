@@ -6,7 +6,7 @@ import './deal.css'
 export default observer(() => {
     const { section, category }: any = useParams()
     return (
-        <div>
+        <div style={{ marginBottom: '4rem' }}>
             <div className="list-heading">{category}</div>
             <Listings section={section} category={category} />
         </div>

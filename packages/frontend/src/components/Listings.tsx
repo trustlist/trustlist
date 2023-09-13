@@ -40,11 +40,11 @@ export default observer(({ section, category }: Props) => {
             await app.loadSelectedCategory(section, category)
         }
         loadData()
-        if (showDetail) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
+        // if (showDetail) {
+        //     document.body.style.overflow = 'hidden'
+        // } else {
+        //     document.body.style.overflow = 'auto'
+        // }
     }, [section, category, showDetail])
 
     let listings = []

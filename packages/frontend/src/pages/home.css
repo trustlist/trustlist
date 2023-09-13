@@ -67,7 +67,7 @@ p {
 
 .modal {
     width: 800px;
-    height: 500px;
+    height: auto;
     padding: 1.5rem;
     margin-bottom: 3rem;
     background: white;
@@ -150,12 +150,6 @@ input[type='submit'] {
     }
 
     .modal {
-        width: 290px;
-        height: auto;
-        padding: 1.5rem;
-        background: white;
-        z-index: 30;
-        border-radius: 16px;
-        box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+        width: 80vw;
     }
 }

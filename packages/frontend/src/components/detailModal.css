@@ -14,6 +14,11 @@
 }
 
 .detail-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.listing-detail {
     font-family: 'Times New Roman', Times, serif;
     width: 75%;
     margin-right: 2rem;
@@ -28,6 +33,10 @@
 .detail-description {
     height: 6rem;
     overflow: scroll;
+}
+
+.detail-score {
+    display: flex;
 }
 
 .detail-tooltip {
@@ -85,4 +94,46 @@
     color: white;
     padding: 0.25rem 0.7rem;
     font-size: 0.75rem;
+}
+
+@media only screen and (max-width: 950px) {
+    .action-bar {
+        padding: 0 0 2rem;
+    }
+
+    .detail-container {
+        flex-direction: column;
+    }
+
+    .listing-detail {
+        width: 100%;
+        margin-right: 0rem;
+    }
+
+    .detail-description {
+        height: 8rem;
+        margin-bottom: 2rem;
+        font-size: 1.2rem;
+    }
+
+    .detail-score {
+        justify-content: center;
+        font-size: 1.3rem;
+    }
+
+    .offers-container {
+        margin: 3rem 0 0 0;
+        width: 100%;
+    }
+
+    .offer-scroll {
+        background-color: rgb(248, 246, 246);
+        border-radius: 0.4rem;
+        border: 2px solid rgb(238, 235, 235);
+        height: 8rem;
+        overflow: scroll;
+        margin: 0rem;
+        padding: 0.2rem 1rem;
+        font-size: 0.8rem;
+    }
 }
