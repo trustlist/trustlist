@@ -52,18 +52,14 @@ export default observer(
 
         return (
             <div className="dark-bg">
-                <div className="centered">
+                <div className="detail-centered">
                     <div className="nested">
                         <div className="offer-content">
                             <div className="offer-container">
                                 <div className="">
                                     <label
                                         htmlFor="offerAmount"
-                                        style={{
-                                            fontSize: '1.2rem',
-                                            fontWeight: '600',
-                                            paddingLeft: '3rem',
-                                        }}
+                                        className="offer-amount"
                                     >
                                         amount: $
                                     </label>
@@ -158,11 +154,9 @@ export default observer(
                                         <option value="1">1</option>
                                         {/* <option value="2">2</option> */}
                                     </select>
-                                    <p style={{ fontSize: '12px' }}>
-                                        submit offer with epoch key:
-                                    </p>
+                                    <p>submit offer with epoch key:</p>
                                 </div>
-                                <p className="epoch-key">
+                                <p className="offer-epoch-key">
                                     {user.epochKey(reqInfo.nonce ?? 0)}
                                 </p>
                                 <div style={{ display: 'flex' }}>

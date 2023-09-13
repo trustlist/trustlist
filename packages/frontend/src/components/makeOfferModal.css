@@ -1,6 +1,13 @@
+.detail-centered {
+    position: fixed;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .nested {
     width: 730px;
-    height: 250px;
+    height: auto;
     padding: 1.5rem;
     background: white;
     z-index: 10;
@@ -22,6 +29,17 @@
     border-radius: 0.4rem;
     margin: 1rem 0 1rem;
     padding: 1.2rem 1.5rem 0;
+}
+
+.offer-amount {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-left: 3rem;
+}
+
+.offer-input {
+    width: 100px;
+    margin-left: 0.3rem;
 }
 
 .score-grid {
@@ -47,12 +65,70 @@
     padding: 0 0.8rem 1rem;
 }
 
-/* .offer-input {
-  width: 200px;
-  margin: 0.3rem;
-} */
+.offer-epoch-key {
+    font-size: 0.85rem;
+    max-width: 180px;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .offer-buttons {
     display: flex;
     flex-direction: column;
+}
+
+@media only screen and (max-width: 950px) {
+    .detail-centered {
+        top: 40%;
+    }
+
+    .nested {
+        width: 70vw;
+    }
+
+    .offer-content {
+        align-items: center;
+        justify-items: center;
+        grid-template-columns: auto;
+        grid-template-rows: auto auto;
+        padding: 0;
+    }
+
+    .offer-container {
+        width: 80%;
+        margin: 1rem 0 1rem;
+        padding: 1.2rem 1.5rem 0;
+    }
+
+    .offer-amount {
+        padding: 0;
+    }
+
+    .offer-input {
+        margin-bottom: 1.5rem;
+    }
+
+    .score-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        margin: 0;
+    }
+
+    .icon-container {
+        padding: 0 0.8rem 0.5rem;
+    }
+
+    .offer-buttons {
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .offer-buttons p {
+        font-size: 1rem;
+    }
+
+    .offer-epoch-key {
+        max-width: 100%;
+    }
 }
