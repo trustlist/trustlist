@@ -79,3 +79,23 @@
     font-size: 0.9rem;
     cursor: pointer;
 }
+
+@media only screen and (max-width: 950px) {
+    .listings {
+        margin: 0.3rem 1rem 1rem;
+    }
+
+    .listing-item {
+        grid-template-columns: 70% 30%;
+        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    }
+
+    .listing-expired {
+        grid-template-columns: 70% 30%;
+        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    }
+
+    .score-container {
+        margin-right: 0rem;
+    }
+}

@@ -8,9 +8,11 @@ import Tooltip from '../components/Tooltip'
 import './header.css'
 
 import User from '../contexts/User'
+import Interface from '../contexts/interface'
 
 export default observer(() => {
     const user = React.useContext(User)
+    const ui = React.useContext(Interface)
 
     const [remainingTime, setRemainingTime] = React.useState<number>(0)
     const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
@@ -48,23 +50,114 @@ export default observer(() => {
 
     return (
         <>
-            <div className="header">
-                <div className="app-title">
-                    <Link to="/">trustlist</Link>
-                </div>
-                {/* alternate title:
+            {!ui.isMobile ? (
+                <div className="header">
+                    <div className="app-title">
+                        <Link to="/">trustlist</Link>
+                    </div>
+                    {/* alternate title:
           <div className='app-title'><Link to='/'>zk<span style={{fontSize: '1.5rem', fontWeight: '200'}}>lassified</span></Link></div> */}
 
-                <div className="epoch-info">
-                    <div>epoch: {user.userState?.sync.calcCurrentEpoch()}</div>
-                    <div>
-                        next epoch in:{' '}
-                        <span style={{ color: 'red' }}>{timeString}</span>
+                    <div className="epoch-info">
+                        <div>
+                            epoch: {user.userState?.sync.calcCurrentEpoch()}
+                        </div>
+                        <div>
+                            next epoch in:{' '}
+                            <span style={{ color: 'red' }}>{timeString}</span>
+                        </div>
+                    </div>
+
+                    <div className="actions">
+                        <div className="action-item">
+                            {!user.hasSignedUp ? (
+                                <Button onClick={() => user.signup()}>
+                                    JOIN
+                                </Button>
+                            ) : (
+                                <div>
+                                    <Button>connected</Button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="action-item">
+                            {user.hasSignedUp ? (
+                                <>
+                                    <button
+                                        onClick={() => setShowMemberDash(true)}
+                                    >
+                                        <span style={{ fontSize: '0.6rem' }}>
+                                            👤
+                                        </span>{' '}
+                                        my TL
+                                    </button>
+                                    {showMemberDash && (
+                                        <MemberDashboardModal
+                                            setShowMemberDash={
+                                                setShowMemberDash
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <button style={{ cursor: 'not-allowed' }}>
+                                    <span style={{ fontSize: '0.6rem' }}>
+                                        👤
+                                    </span>{' '}
+                                    my TL
+                                </button>
+                            )}
+                        </div>
+                        <div className="action-item">
+                            {user.hasSignedUp ? (
+                                <>
+                                    <button
+                                        onClick={() => setShowNewListing(true)}
+                                    >
+                                        list{' '}
+                                        <span style={{ fontSize: '0.6rem' }}>
+                                            ✏️
+                                        </span>
+                                    </button>
+                                    {showNewListing && (
+                                        <NewListingModal
+                                            setShowNewListing={
+                                                setShowNewListing
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <button style={{ cursor: 'not-allowed' }}>
+                                    list{' '}
+                                    <span style={{ fontSize: '0.6rem' }}>
+                                        ✏️
+                                    </span>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
+            ) : (
+                <div className="header">
+                    <div>
+                        <div className="app-title">
+                            <Link to="/">trustlist</Link>
+                        </div>
+                        <div className="epoch-info">
+                            <div>
+                                epoch: {user.userState?.sync.calcCurrentEpoch()}
+                            </div>
+                            <div>
+                                next epoch in:{' '}
+                                <span style={{ color: 'red' }}>
+                                    {timeString}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div className="actions">
-                    <div className="action-item">
+                    <div className="header-buttons">
                         {!user.hasSignedUp ? (
                             <Button onClick={() => user.signup()}>JOIN</Button>
                         ) : (
@@ -72,53 +165,47 @@ export default observer(() => {
                                 <Button>connected</Button>
                             </div>
                         )}
-                    </div>
-                    <div className="action-item">
-                        {user.hasSignedUp ? (
-                            <>
-                                <button onClick={() => setShowMemberDash(true)}>
-                                    <span style={{ fontSize: '0.6rem' }}>
+                        <div className="actions">
+                            {user.hasSignedUp ? (
+                                <>
+                                    <button
+                                        onClick={() => setShowMemberDash(true)}
+                                    >
                                         👤
-                                    </span>{' '}
-                                    my TL
-                                </button>
-                                {showMemberDash && (
-                                    <MemberDashboardModal
-                                        setShowMemberDash={setShowMemberDash}
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <button style={{ cursor: 'not-allowed' }}>
-                                <span style={{ fontSize: '0.6rem' }}>👤</span>{' '}
-                                my TL
-                            </button>
-                        )}
-                    </div>
-                    <div className="action-item">
-                        {user.hasSignedUp ? (
-                            <>
-                                <button onClick={() => setShowNewListing(true)}>
-                                    list{' '}
-                                    <span style={{ fontSize: '0.6rem' }}>
-                                        🖌️
-                                    </span>
-                                </button>
-                                {showNewListing && (
-                                    <NewListingModal
-                                        setShowNewListing={setShowNewListing}
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <button style={{ cursor: 'not-allowed' }}>
-                                list{' '}
-                                <span style={{ fontSize: '0.6rem' }}>🖌️</span>
-                            </button>
-                        )}
+                                    </button>
+                                    {showMemberDash && (
+                                        <MemberDashboardModal
+                                            setShowMemberDash={
+                                                setShowMemberDash
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <button>👤</button>
+                            )}
+                            {user.hasSignedUp ? (
+                                <>
+                                    <button
+                                        onClick={() => setShowNewListing(true)}
+                                    >
+                                        ✏️
+                                    </button>
+                                    {showNewListing && (
+                                        <NewListingModal
+                                            setShowNewListing={
+                                                setShowNewListing
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <button>✏️</button>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             <Outlet />
         </>
