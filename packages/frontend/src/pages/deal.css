@@ -1,3 +1,9 @@
+.deal-expired {
+    text-align: center;
+    color: black;
+    padding-top: 1rem;
+}
+
 input.checked {
     accent-color: rgb(7, 156, 7);
 }
@@ -5,8 +11,8 @@ input.checked {
 .deal-content {
     border-radius: 0.5rem;
     border: 0.2rem solid rgb(238, 235, 235);
-    margin: 1rem 4rem 4rem;
-    padding: 0rem 3rem 2rem;
+    margin: 1rem 4rem;
+    padding: 0rem 10rem 2rem;
 }
 
 .deal-info {
@@ -47,7 +53,7 @@ input.checked {
 .attestation-container {
     display: flex;
     justify-content: space-between;
-    padding-top: 1rem;
+    margin: 2rem 8rem;
 }
 
 .attestation-form {
@@ -62,4 +68,23 @@ input.checked {
     display: flex;
     flex-direction: column-reverse;
     padding: 0 0 1rem 2rem;
+}
+
+@media only screen and (max-width: 950px) {
+    .deal-content {
+        margin: 2rem 1rem 0;
+        padding: 0 1rem 2rem;
+    }
+
+    .member-info {
+        padding-top: 1rem;
+    }
+
+    .attestation-container {
+        margin: 1rem 1rem 4rem;
+    }
+
+    .attestation-form {
+        padding: 0 0.5rem 1rem;
+    }
 }

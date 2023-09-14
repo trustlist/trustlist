@@ -32,7 +32,7 @@ export default observer(
         const sentiments = [
             'hard no',
             'not really',
-            'whatever idc',
+            'whatever',
             'mostly',
             'yeah def',
         ]
@@ -40,7 +40,7 @@ export default observer(
         return (
             <div className="attestation-form">
                 <div className="icon">
-                    <h2>{member}'s review</h2>
+                    <h2>{member} review</h2>
                     <Tooltip
                         text="Your review of your experience with this member will become part of their trustlist reputation. Neither member will receive reputational data for this deal unless both parties sumbit their review before the epoch expires."
                         content={
