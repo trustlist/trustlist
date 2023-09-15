@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { useNavigate, redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
