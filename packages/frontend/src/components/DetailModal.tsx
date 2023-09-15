@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, redirect } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
@@ -325,7 +325,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                                   message
                                                               )
                                                               navigate(
-                                                                  `deal/${listing._id}`
+                                                                  `/deal/${listing._id}`
                                                               )
                                                           }}
                                                       >

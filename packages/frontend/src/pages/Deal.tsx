@@ -36,7 +36,7 @@ export default observer(() => {
                 deal.epoch !== user.userState?.sync.calcCurrentEpoch() ? (
                     <div className="deal-expired">🚫 this deal has expired</div>
                 ) : null}
-                {ui.isMobile ? (
+                {deal && ui.isMobile ? (
                     <div style={{ textAlign: 'center' }}>
                         <h3>{deal.title.slice(0, 25)}</h3>
                         <h3>${deal.offerAmount}</h3>
