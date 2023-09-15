@@ -325,7 +325,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                                   message
                                                               )
                                                               navigate(
-                                                                  `deal/${listing._id}`
+                                                                  `/deal/${listing._id}`
                                                               )
                                                           }}
                                                       >
