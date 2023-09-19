@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
+import Button from './Button'
 import './detailModal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
+import Interface from '../contexts/interface'
 
 type Props = {
     listing: {
@@ -38,6 +40,7 @@ type Offer = {
 export default observer(({ listing, setShowDetail }: Props) => {
     const app = useContext(Trustlist)
     const user = useContext(User)
+    const ui = useContext(Interface)
     const navigate = useNavigate()
     const [showMakeOffer, setShowMakeOffer] = useState<boolean>(false)
 
@@ -110,24 +113,24 @@ export default observer(({ listing, setShowDetail }: Props) => {
                             </div>
                             <div className="action-item">
                                 <div>⭐️</div>
-                                <div>favorite</div>
+                                {!ui.isMobile ? <div>favorite</div> : null}
                             </div>
                             <div className="action-item">
                                 <div>🚫</div>
-                                <div>hide</div>
+                                {!ui.isMobile ? <div>hide</div> : null}
                             </div>
                             <div className="action-item">
                                 <div>🚩</div>
-                                <div>flag</div>
+                                {!ui.isMobile ? <div>flag</div> : null}
                             </div>
                             <div className="action-item">
                                 <div>📤</div>
-                                <div>share</div>
+                                {!ui.isMobile ? <div>share</div> : null}
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex' }}>
-                            <div className="detail-container">
+                        <div className="detail-container">
+                            <div className="listing-detail">
                                 <div className="detail-title">
                                     <div>{listing.title.slice(0, 60)}</div>
                                     <div style={{ color: 'blue' }}>
@@ -140,7 +143,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                             </div>
                             <div>
                                 {app.scoreDescriptions.map((desc, i) => (
-                                    <div style={{ display: 'flex' }}>
+                                    <div className="detail-score">
                                         <div className="detail-tooltip">
                                             <Tooltip
                                                 text={desc}
@@ -239,8 +242,12 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                       >
                                                           ${offer.offerAmount}{' '}
                                                       </span>{' '}
-                                                      ---- offering member's
-                                                      scores:{' '}
+                                                      {!ui.isMobile ? (
+                                                          <span>
+                                                              ---- offering
+                                                              member's scores:{' '}
+                                                          </span>
+                                                      ) : null}
                                                   </div>
                                                   {responderScores.map(
                                                       (score, i) => (
@@ -283,9 +290,31 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                   ) : memberKeys.includes(
                                                         listing.posterId
                                                     ) && !listing.dealOpened ? (
-                                                      <button
-                                                          className="accept"
+                                                      <Button
+                                                          style={{
+                                                              backgroundColor:
+                                                                  'blue',
+                                                              color: 'white',
+                                                              fontSize:
+                                                                  '0.65rem',
+                                                              padding:
+                                                                  '0.25rem 0.5rem',
+                                                              marginLeft:
+                                                                  '0.5rem',
+                                                          }}
                                                           onClick={async () => {
+                                                              // +1 to offering member's expected LO score
+                                                              await user.requestData(
+                                                                  {
+                                                                      [1]:
+                                                                          1 <<
+                                                                          23,
+                                                                  },
+                                                                  memberKeys.indexOf(
+                                                                      listing.posterId
+                                                                  ) ?? 0,
+                                                                  offer.responderId
+                                                              )
                                                               const message =
                                                                   await app.dealOpen(
                                                                       listing._id,
@@ -296,12 +325,12 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                                                   message
                                                               )
                                                               navigate(
-                                                                  `deal/${listing._id}`
+                                                                  `/deal/${listing._id}`
                                                               )
                                                           }}
                                                       >
                                                           accept deal
-                                                      </button>
+                                                      </Button>
                                                   ) : null}
                                               </div>
                                           )

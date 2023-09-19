@@ -6,6 +6,7 @@ import './listings.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
+import Interface from '../contexts/interface'
 
 type Props = {
     section: string
@@ -29,6 +30,7 @@ type Listing = {
 export default observer(({ section, category }: Props) => {
     const app = useContext(Trustlist)
     const user = useContext(User)
+    const ui = useContext(Interface)
     const [showDetail, setShowDetail] = useState<boolean>(false)
     const [detailData, setDetailData] = useState<any>()
     let listingClass = 'listing-item'
@@ -38,11 +40,11 @@ export default observer(({ section, category }: Props) => {
             await app.loadSelectedCategory(section, category)
         }
         loadData()
-        if (showDetail) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
+        // if (showDetail) {
+        //     document.body.style.overflow = 'hidden'
+        // } else {
+        //     document.body.style.overflow = 'auto'
+        // }
     }, [section, category, showDetail])
 
     let listings = []
@@ -87,11 +89,19 @@ export default observer(({ section, category }: Props) => {
                                           setShowDetail(true)
                                       }}
                                   >
-                                      <div className="thumbnail">TL</div>
+                                      {!ui.isMobile ? (
+                                          <div className="thumbnail">TL</div>
+                                      ) : null}
                                       <div>
-                                          <div className="listing-title">
-                                              {listing.title.slice(0, 50)}
-                                          </div>
+                                          {!ui.isMobile ? (
+                                              <div className="listing-title">
+                                                  {listing.title.slice(0, 50)}
+                                              </div>
+                                          ) : (
+                                              <div className="listing-title">
+                                                  {listing.title.slice(0, 25)}
+                                              </div>
+                                          )}
                                           {listing.posterDealClosed &&
                                           listing.responderDealClosed ? (
                                               <div style={{ display: 'flex' }}>

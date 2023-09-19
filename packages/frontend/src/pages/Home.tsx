@@ -4,9 +4,12 @@ import Listings from '../components/Listings'
 import './home.css'
 
 import Trustlist from '../contexts/Trustlist'
+import Interface from '../contexts/interface'
+import { Link } from 'react-router-dom'
 
 export default observer(() => {
     const app = useContext(Trustlist)
+    const ui = useContext(Interface)
     const [selectedSection, setSelectedSection] = useState('for sale')
     const [selectedCategory, setSelectedCategory] = useState('')
 
@@ -41,38 +44,53 @@ export default observer(() => {
                 {app.categoriesBySection
                     .get(selectedSection)
                     .map((category: string) =>
-                        category === selectedCategory ? (
-                            <div style={{ display: 'flex' }}>
+                        !ui.isMobile ? (
+                            category === selectedCategory ? (
+                                <div style={{ display: 'flex' }}>
+                                    <div
+                                        className="category-item"
+                                        style={{
+                                            fontSize: '1.1rem',
+                                            textDecoration: 'underline',
+                                        }}
+                                        key={category}
+                                    >
+                                        {category}
+                                    </div>
+                                    <div>
+                                        <hr />
+                                    </div>
+                                </div>
+                            ) : (
                                 <div
                                     className="category-item"
-                                    style={{
-                                        fontSize: '1.1rem',
-                                        textDecoration: 'underline',
-                                    }}
+                                    style={{ color: '#8080ff' }}
                                     key={category}
+                                    onClick={async () => {
+                                        setSelectedCategory(category)
+                                    }}
                                 >
                                     {category}
                                 </div>
-                                <div>
-                                    <hr />
-                                </div>
-                            </div>
+                            )
                         ) : (
-                            <div
-                                className="category-item"
-                                style={{ color: '#8080ff' }}
-                                key={category}
-                                onClick={async () => {
-                                    setSelectedCategory(category)
-                                }}
-                            >
-                                {category}
+                            <div className="category-item">
+                                <Link
+                                    to={`/list/${selectedSection}/${category}`}
+                                >
+                                    {category}
+                                </Link>
                             </div>
                         )
                     )}
             </div>
 
-            <Listings section={selectedSection} category={selectedCategory} />
+            {!ui.isMobile ? (
+                <Listings
+                    section={selectedSection}
+                    category={selectedCategory}
+                />
+            ) : null}
         </div>
     )
 })

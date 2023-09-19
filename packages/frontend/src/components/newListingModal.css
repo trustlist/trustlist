@@ -1,6 +1,6 @@
 .form-content {
     display: grid;
-    grid-template-columns: 15% 15% 70%;
+    grid-template-columns: 30% 70%;
 }
 
 .form-container {
@@ -27,6 +27,16 @@
     margin-top: 0;
 }
 
+.score-display {
+    display: flex;
+    justify-content: space-around;
+}
+
+.score-boxes {
+    display: flex;
+    justify-content: space-around;
+}
+
 .choose {
     background-color: white;
     border-radius: 0.3rem;
@@ -51,4 +61,42 @@
     word-break: break-all;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 950px) {
+    .form-content {
+        grid-template-columns: 100%;
+        grid-auto-flow: row;
+    }
+
+    #category-class {
+        height: 5rem;
+        overflow-y: scroll;
+    }
+
+    .form-container {
+        margin: 1rem 0rem;
+    }
+
+    .form-input-sm {
+        width: 120px;
+    }
+
+    .form-textarea {
+        width: auto;
+    }
+
+    .score-display {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-auto-flow: row;
+    }
+
+    .score-boxes {
+        justify-content: center;
+    }
+
+    .choose {
+        margin: 0.3rem 0.4rem 1.2rem 0;
+    }
 }

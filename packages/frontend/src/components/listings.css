@@ -4,7 +4,7 @@
 
 .listing-item {
     display: grid;
-    grid-template-columns: 17% 65% 18%;
+    grid-template-columns: 6rem 1fr 6rem;
     align-items: center;
     background-color: rgb(235, 232, 232);
     border-radius: 0.5rem;
@@ -15,7 +15,7 @@
 
 .listing-expired {
     display: grid;
-    grid-template-columns: 17% 65% 18%;
+    grid-template-columns: 6rem 1fr 6rem;
     align-items: center;
     background-color: rgb(230, 228, 228);
     border-radius: 0.5rem;
@@ -78,4 +78,24 @@
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 950px) {
+    .listings {
+        margin: 0.3rem 1rem 1rem;
+    }
+
+    .listing-item {
+        grid-template-columns: 70% 30%;
+        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    }
+
+    .listing-expired {
+        grid-template-columns: 70% 30%;
+        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    }
+
+    .score-container {
+        margin-right: 0rem;
+    }
 }

@@ -7,6 +7,7 @@ import './newListingModal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
+import Interface from '../contexts/interface'
 
 type Props = {
     setShowNewListing: (value: boolean) => void
@@ -25,6 +26,7 @@ type ProofInfo = {
 export default observer(({ setShowNewListing }: Props) => {
     const app = useContext(Trustlist)
     const user = useContext(User)
+    const ui = useContext(Interface)
 
     const [section, setSection] = useState('')
     const [category, setCategory] = useState('')
@@ -57,50 +59,58 @@ export default observer(({ setShowNewListing }: Props) => {
             <div className="centered">
                 <div className="modal">
                     <div className="form-content">
-                        <div>
-                            <p style={{ fontWeight: '600' }}>listing type:</p>
-                            {app.sections.map((section) => (
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id={section}
-                                        name="section"
-                                        value={section}
-                                        onChange={(e) =>
-                                            setSection(e.target.value)
-                                        }
-                                    />
-                                    <label htmlFor={section}></label>
-                                    {section}
-                                    <br />
-                                </div>
-                            ))}
-                        </div>
+                        <div style={{ display: 'flex' }}>
+                            <div style={{ marginRight: '1rem' }}>
+                                <p style={{ fontWeight: '600' }}>
+                                    listing type:
+                                </p>
+                                {app.sections.map((section) => (
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            id={section}
+                                            name="section"
+                                            value={section}
+                                            onChange={(e) =>
+                                                setSection(e.target.value)
+                                            }
+                                        />
+                                        <label htmlFor={section}></label>
+                                        {section}
+                                        <br />
+                                    </div>
+                                ))}
+                            </div>
 
-                        <div>
-                            <p style={{ fontWeight: '600' }}>category:</p>
-                            {section
-                                ? app.categoriesBySection
-                                      .get(section)
-                                      .map((category: string) => (
-                                          <div style={{ fontSize: '0.8rem' }}>
-                                              <input
-                                                  type="radio"
-                                                  id={category}
-                                                  name="category"
-                                                  value={category}
-                                                  onChange={(e) =>
-                                                      setCategory(
-                                                          e.target.value
-                                                      )
-                                                  }
-                                              />
-                                              <label htmlFor={category}></label>
-                                              {category}
-                                              <br />
-                                          </div>
-                                      ))
-                                : null}
+                            <div>
+                                <p style={{ fontWeight: '600' }}>category:</p>
+                                <div id="category-class">
+                                    {section
+                                        ? app.categoriesBySection
+                                              .get(section)
+                                              .map((category: string) => (
+                                                  <div>
+                                                      <input
+                                                          type="radio"
+                                                          id={category}
+                                                          name="category"
+                                                          value={category}
+                                                          onChange={(e) =>
+                                                              setCategory(
+                                                                  e.target.value
+                                                              )
+                                                          }
+                                                      />
+                                                      <label
+                                                          htmlFor={category}
+                                                      ></label>
+                                                      {category}
+                                                      <br />
+                                                  </div>
+                                              ))
+                                        : null}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="form-flex">
@@ -175,18 +185,13 @@ export default observer(({ setShowNewListing }: Props) => {
                                 className="form-container"
                                 style={{ paddingBottom: '0.3rem' }}
                             >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-around',
-                                    }}
-                                >
+                                <div className="score-display">
                                     {app.scoreNames.map((name, i) => {
                                         const score = Number(
                                             user.provableData[i]
                                         )
                                         return (
-                                            <div key={i} className="">
+                                            <div key={i}>
                                                 <div
                                                     style={{
                                                         fontWeight: '600',
@@ -198,13 +203,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                                     )}
                                                     %
                                                 </div>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent:
-                                                            'space-around',
-                                                    }}
-                                                >
+                                                <div className="score-boxes">
                                                     <div
                                                         onClick={() => {
                                                             setHidden(() => ({
@@ -336,7 +335,9 @@ export default observer(({ setShowNewListing }: Props) => {
                                         setRepProof(proof)
                                     }}
                                 >
-                                    prove trust scores
+                                    {!ui.isMobile
+                                        ? 'prove trust scores'
+                                        : 'prove scores'}
                                 </Button>
 
                                 {/* only allow post after valid proof */}
