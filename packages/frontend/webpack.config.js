@@ -4,6 +4,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const webpack = require('webpack')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = (env) => ({
     entry: ['./src/index.tsx'],
@@ -11,7 +12,7 @@ module.exports = (env) => ({
     devServer: {
         port: 4000,
         historyApiFallback: true,
-        allowedHosts: "all",
+        allowedHosts: 'all',
     },
     optimization: {
         splitChunks: {
@@ -82,6 +83,9 @@ module.exports = (env) => ({
         ],
     },
     plugins: [
+        new Dotenv({
+            systemvars: true,
+        }),
         new HtmlWebpackPlugin({
             template: 'public/index.html',
             filename: 'index.html',

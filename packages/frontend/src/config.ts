@@ -1,3 +1,6 @@
+import { config } from 'dotenv'
+config()
+
 export const SERVER = process.env.HTTP_SERVER ?? 'http://127.0.0.1:8000'
 
 // export const SERVER = 'https://relay.demo.unirep.io'

@@ -29,9 +29,9 @@ class Trustlist {
             "Legit Posting score: percentage of member's listings that have resulted in completed deals.",
             "Legit Offer score: member's record for completing deals after their offer has been accepted.",
             "Community Building score: member's record for submitting reviews of the deals they have been involved in.",
-            // 'Trusted DealMaker score: percentage of positive recommendations from others who have transacted with with this member.',
             'Good Vibes score : percentage of all possible points others have awarded this member for being friendly, communicative, and respectful.',
         ]
+        this.categoriesBySection.set('DevConnect!', ['available', 'wanted'])
         this.categoriesBySection.set('for sale', [
             'antiques',
             'appliances',
