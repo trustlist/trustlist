@@ -7,7 +7,7 @@ env=$2
 [ $build = "enable" ] || exit 0
 
 # Workaround to set env variables for frontend
-sed -i "s/127.0.0.1/trustlist-api-$env.pse.dev/g" packages/frontend/src/config.ts
+sed -i "s/http:\/\/127.0.0.1:8000/https:\/\/trustlist-api-$env.pse.dev/g" packages/frontend/src/config.ts
 
 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
 
