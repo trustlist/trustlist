@@ -6,6 +6,9 @@ env=$2
 
 [ $build = "enable" ] || exit 0
 
+# Workaround to set env variables for frontend
+sed -i "s/127.0.0.1/relayer.trustlist.$env/g" packages/frontend/src/config.ts
+
 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
 
 docker build -t trustlist-frontend-$env -f apps/frontend/Dockerfile .
@@ -20,5 +23,4 @@ docker build -t trustlist-node-$env -f apps/node/Dockerfile .
 docker tag trustlist-node-$env:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/trustlist-node-$env:latest
 docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/trustlist-node-$env:latest
 
-exit 0
 exit 0
