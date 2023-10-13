@@ -58,6 +58,7 @@ export default observer(({ setShowNewListing }: Props) => {
         <div className="dark-bg">
             <div className="centered">
                 <div className="modal">
+                    <h2 className="text-lg font-bold">NEW MODAL</h2>
                     <div className="form-content">
                         <div style={{ display: 'flex' }}>
                             <div style={{ marginRight: '1rem' }}>
