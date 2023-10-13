@@ -150,11 +150,14 @@ export default observer(
                                             }))
                                         }}
                                     >
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                        {/* <option value="2">2</option> */}
+                                        <option value="0">1</option>
+                                        <option value="1">2</option>
+                                        <option value="2">3</option>
                                     </select>
-                                    <p>submit offer with epoch key:</p>
+                                    <p>
+                                        Choose one of your anonymous identifiers
+                                        to make this offer
+                                    </p>
                                 </div>
                                 <p className="offer-epoch-key">
                                     {user.epochKey(reqInfo.nonce ?? 0)}

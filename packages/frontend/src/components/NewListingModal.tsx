@@ -267,12 +267,13 @@ export default observer(({ setShowNewListing }: Props) => {
                                                 }))
                                             }}
                                         >
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            {/* <option value="2">2</option> */}
+                                            <option value="0">1</option>
+                                            <option value="1">2</option>
+                                            <option value="2">3</option>
                                         </select>
                                         <p style={{ fontSize: '12px' }}>
-                                            Create listing with epoch key:
+                                            Choose one of your anonymous
+                                            identifiers to post this listing
                                         </p>
                                     </div>
                                     <p
