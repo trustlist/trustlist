@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import ScoreReveal from './ScoreReveal'
 import ScoreHide from './ScoreHide'
 import Button from './Button'
-import './newListingModal.css'
+// import './newListingModal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
@@ -58,7 +58,6 @@ export default observer(({ setShowNewListing }: Props) => {
         <div className="dark-bg">
             <div className="centered">
                 <div className="modal">
-                    <h2 className="text-lg font-bold">NEW MODAL</h2>
                     <div className="form-content">
                         <div style={{ display: 'flex' }}>
                             <div style={{ marginRight: '1rem' }}>

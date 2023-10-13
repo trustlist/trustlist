@@ -2,13 +2,14 @@ import React from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MemberDashboardModal from '../components/MemberDashboardModal'
-import NewListingModal from '../components/NewListingModal'
+// import NewListingModal from '../components/NewListingModal'
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip'
 import './header.css'
 
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
+import NewListing from '@/components/NewListing'
 
 export default observer(() => {
     const user = React.useContext(User)
@@ -109,32 +110,35 @@ export default observer(() => {
                             )}
                         </div>
                         <div className="action-item">
-                            {user.hasSignedUp ? (
-                                <>
-                                    <button
-                                        onClick={() => setShowNewListing(true)}
-                                    >
-                                        list{' '}
-                                        <span style={{ fontSize: '0.6rem' }}>
-                                            ✏️
-                                        </span>
-                                    </button>
-                                    {showNewListing && (
-                                        <NewListingModal
-                                            setShowNewListing={
-                                                setShowNewListing
-                                            }
-                                        />
-                                    )}
-                                </>
-                            ) : (
-                                <button style={{ cursor: 'not-allowed' }}>
-                                    list{' '}
-                                    <span style={{ fontSize: '0.6rem' }}>
-                                        ✏️
-                                    </span>
-                                </button>
-                            )}
+                            {user.hasSignedUp && <NewListing />
+                                // (
+                                //     <>
+                                //         <button
+                                //             onClick={() => setShowNewListing(true)}
+                                //         >
+                                //             list{' '}
+                                //             <span style={{ fontSize: '0.6rem' }}>
+                                //                 ✏️
+                                //             </span>
+                                //         </button>
+                                //         {showNewListing && (
+                                //             <NewListingModal
+                                //                 setShowNewListing={
+                                //                     setShowNewListing
+                                //                 }
+                                //             />
+                                //         )}
+                                //     </>
+                                // ) : (
+                                //     <button style={{ cursor: 'not-allowed' }}>
+                                //         list{' '}
+                                //         <span style={{ fontSize: '0.6rem' }}>
+                                //             ✏️
+                                //         </span>
+                                //     </button>
+                                // )
+
+                            }
                         </div>
                     </div>
                 </div>
@@ -184,7 +188,7 @@ export default observer(() => {
                             ) : (
                                 <button>👤</button>
                             )}
-                            {user.hasSignedUp ? (
+                            {/* {user.hasSignedUp ? (
                                 <>
                                     <button
                                         onClick={() => setShowNewListing(true)}
@@ -201,7 +205,7 @@ export default observer(() => {
                                 </>
                             ) : (
                                 <button>✏️</button>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>
