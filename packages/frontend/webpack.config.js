@@ -25,7 +25,7 @@ module.exports = (env) => ({
         publicPath: '/',
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx', '.json', '.scss', '.ts', '.tsx'],
+        extensions: ['.*', '.js', '.jsx', '.json', '.scss', '.ts', '.tsx'],
         fallback: {
             path: require.resolve('path-browserify'),
             crypto: require.resolve('crypto-browserify'),
@@ -37,6 +37,9 @@ module.exports = (env) => ({
             readline: false,
             constants: false,
         },
+        alias: {
+        '@': path.resolve(__dirname, 'src/')
+    }
     },
     module: {
         rules: [

@@ -15,12 +15,18 @@
     },
     "dependencies": {
         "@cloudflare/kv-asset-handler": "^0.2.0",
+        "@radix-ui/react-dialog": "^1.0.5",
         "@unirep-app/circuits": "1.0.0",
         "@unirep/core": "2.0.0-beta-4",
+        "class-variance-authority": "^0.7.0",
+        "clsx": "^2.0.0",
         "dotenv-webpack": "^8.0.1",
         "ethers": "^5.7.2",
         "file-loader": "^6.2.0",
-        "mobx-react-lite": "^3.4.0"
+        "lucide-react": "^0.286.0",
+        "mobx-react-lite": "^3.4.0",
+        "tailwind-merge": "^1.14.0",
+        "tailwindcss-animate": "^1.0.7"
     },
     "devDependencies": {
         "@babel/core": "^7.19.6",

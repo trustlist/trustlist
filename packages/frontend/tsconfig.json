@@ -17,8 +17,12 @@
         "jsx": "react-jsx",
         "typeRoots": ["./types", "./node_modules/@types"],
         "useDefineForClassFields": true,
-        "outDir": "build"
+        "outDir": "build",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
-    "include": ["src"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "typings", "build/**/*"]
 }
