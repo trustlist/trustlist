@@ -75,10 +75,14 @@ module.exports = (env) => ({
                     },
                 ],
             },
+            // {
+            //     test: /\.(css)$/,
+            //     // exclude: /node_modules/,
+            //     use: [MiniCssExtractPlugin.loader, 'css-loader'],
+            // },
             {
-                test: /\.(css)$/,
-                // exclude: /node_modules/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
             },
         ],
     },
@@ -106,8 +110,8 @@ module.exports = (env) => ({
             },
             ...(env.CYPRESS
                 ? {
-                      ['process.env.CYPRESS']: 'true',
-                  }
+                    ['process.env.CYPRESS']: 'true',
+                }
                 : {}),
         }),
         new webpack.ProvidePlugin({
