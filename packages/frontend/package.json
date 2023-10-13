@@ -16,6 +16,7 @@
     "dependencies": {
         "@cloudflare/kv-asset-handler": "^0.2.0",
         "@radix-ui/react-dialog": "^1.0.5",
+        "@radix-ui/react-select": "^2.0.0",
         "@unirep-app/circuits": "1.0.0",
         "@unirep/core": "2.0.0-beta-4",
         "class-variance-authority": "^0.7.0",

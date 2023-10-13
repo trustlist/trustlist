@@ -1,4 +1,7 @@
-import React, { useReducer, useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import React, { useReducer } from 'react'
 
 type NewListingResponse = {
   epoch: any,
@@ -35,7 +38,7 @@ type FormAction =
   | { type: 'CHANGE_CATEGORIES_FOR_SUBMISSION', payload: Record<string, string[]> }
   | { type: 'CHANGE_TEXT', payload: { key: string, value: string } }
   | { type: 'CHANGE_FORM_STEP', payload: FormStep }
-  | { type: 'CHANGE_SELECTED_CATEGORY_LABELS', payload: string }
+  | { type: 'CHANGE_SELECTED_CATEGORIES', payload: string }
 
 type StepSectionProps = {
   dispatch: React.Dispatch<FormAction>,
@@ -45,7 +48,7 @@ type StepSectionProps = {
 const listingTypes = [
   {
     label: 'devconnect',
-    categories: ['available', 'wanted']
+    categories: ['available', 'wanted', 'digital asset', 'souvenir']
   },
   {
     label: 'for sale',
@@ -58,10 +61,10 @@ const listingTypes = [
       'bikes',
       'boats',
       'books',
-      'cars+trucks',
+      'cars/trucks',
       'clothes',
       'electronics',
-      'farm+garden',
+      'farm/garden',
       'furniture',
       'household',
       'jewelry',
@@ -129,7 +132,7 @@ function reducer(state: FormState, action: FormAction): FormState {
         ...state,
         step: action.payload
       };
-    case 'CHANGE_SELECTED_CATEGORY_LABELS':
+    case 'CHANGE_SELECTED_CATEGORIES':
       return {
         ...state,
         selectedLabels: state.selectedLabels.includes(action.payload)
@@ -158,7 +161,7 @@ const SelectCategory = ({ dispatch, parentState }: StepSectionProps) => {
                       <div key={index} className='flex space-x-1'>
                         <input type="checkbox" id={newLabel} name={newLabel} value={newLabel}
                           checked={parentState.selectedLabels.includes(newLabel)}
-                          onChange={() => dispatch({ type: 'CHANGE_SELECTED_CATEGORY_LABELS', payload: newLabel })} />
+                          onChange={() => dispatch({ type: 'CHANGE_SELECTED_CATEGORIES', payload: newLabel })} />
                         <label htmlFor={newLabel} className='text-muted-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</label>
                       </div>
                     )
@@ -169,7 +172,6 @@ const SelectCategory = ({ dispatch, parentState }: StepSectionProps) => {
           ))}
         </div>
       </section>
-      <button onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[1] })}>Continue</button>
     </div>
   )
 }
@@ -177,9 +179,34 @@ const SelectCategory = ({ dispatch, parentState }: StepSectionProps) => {
 const GeneralInfo = ({ dispatch, parentState }: StepSectionProps) => {
   return (
     <section>
-      <h2>General info</h2>
-      <button onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[0] })}>Bac</button>
-      <button onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[2] })}>Continue</button>
+      <form className='flex flex-col gap-3'>
+        <div>
+          <label htmlFor="title">Title</label>
+          <Input type="text" id="title" name="title" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'title', value: e.target.value } })} />
+        </div>
+        <div>
+          <label htmlFor="description">Description</label>
+          <Textarea id="description" name="description" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'description', value: e.target.value } })} />
+        </div>
+        <div className="flex space-x-3">
+          <div>
+            <label htmlFor="amount">Amount</label>
+            <Input type="number" id="amount" name="amount" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'amount', value: e.target.value } })} />
+          </div>
+          <div>
+            <label htmlFor="frequency">Frequency</label>
+            <Select  name="frequency">
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Frequency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="one time" onClick={() => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'frequency', value: 'one time' } })}>One Time</SelectItem>
+                <SelectItem value="every week" onClick={() => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'frequency', value: 'every week' } })}>Every Week</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </form>
     </section>
   )
 }
@@ -195,6 +222,8 @@ const NewListingPage = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const { step } = state;
 
+  const currentStep = FormSteps.findIndex(fs => fs.id === step.id) + 1
+
   let content;
   switch (step.id) {
     case 'select-category':
@@ -207,18 +236,27 @@ const NewListingPage = () => {
       content = <TrustScores dispatch={dispatch} parentState={state} />;
       break;
     default:
-      content = <div>Invalid step</div>;
+      content = <div>Wait! This isn't a step... how did you get here?</div>;
   }
 
   return (
-    <main className='flex flex-col p-3 justify-center container py-6 space-y-3'>
+    <main className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl'>
       <h1 className='text-3xl'>New Listing</h1>
       <div className='flex space-x-1 text-primary/70'>
-        <p>Step {FormSteps.findIndex(fs => fs.id === step.id) + 1} of {FormSteps.length}</p>
+        <p>Step {currentStep} of {FormSteps.length}</p>
         <p>&mdash;</p>
         <p>{FormSteps.find(fs => fs.id === step.id)?.description}</p>
       </div>
       {content}
+      <section className='flex space-x-3 justify-end'>
+      {currentStep > 1 &&
+        <button className="px-2 py-1" onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[currentStep - 2] })}>Back</button>
+      }
+      {currentStep < FormSteps.length &&
+        <button className='px-2 py-1' onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[currentStep]})}>Continue</button>
+      }
+
+      </section>
     </main>
   );
 }
