@@ -1,11 +1,20 @@
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Toggle } from '@/components/ui/toggle'
 import { cn } from '@/utils/cn'
-import React, { useReducer, useState } from 'react'
-import { FieldErrors, FieldValues, UseFormRegister, useForm } from 'react-hook-form'
+import React, { useEffect, useReducer, useState } from 'react'
+import { Control, FieldErrors, FieldValues, UseFormRegister, UseFormReturn, UseFormWatch, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 //TODO: Unlock for full validation
 // const NewListingResponseSchema = z.object({
@@ -25,7 +34,7 @@ const NewListingResponseSchema = z.object({
   epoch: z.string(),
   categories: z.record(z.array(z.string().min(1))),
   title: z.string(),
-  price: z.string(),
+  price: z.number(),
   frequency: z.literal("one time"),
   description: z.string(),
   posterId: z.string(),
@@ -81,14 +90,9 @@ type FormAction =
 
 type ListFormValues = FieldValues & NewListingResponse
 
-type StepSectionProps = {
-  // dispatch: React.Dispatch<FormAction>,
-  // parentState: Readonly<FormState> // no mutating for you
-  register: UseFormRegister<ListFormValues>,
-  errors: FieldErrors<ListFormValues>
-}
+type StepSectionProps = UseFormReturn<ListFormValues>
 
-type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number }
+type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>>}
 
 const listingTypes = [
   {
@@ -143,7 +147,7 @@ const initialFormState: FormState = {
     epoch: '',
     categories: {},
     title: '',
-    price: '',
+    price: 0,
     frequency: 'one time',
     description: '',
     posterId: '',
@@ -206,7 +210,7 @@ type SelectCategoryStepSectionProps = StepSectionProps & {
   setSelectedCategories: React.Dispatch<React.SetStateAction<{}>>
   selectedCategories: Readonly<Record<string, string[]>>
 }
-const SelectCategoryFormStep = ({ register, errors, setSelectedCategories, selectedCategories }: SelectCategoryStepSectionProps) => {
+const SelectCategoryFormStep = ({ register, setSelectedCategories, selectedCategories }: SelectCategoryStepSectionProps) => {
   return (
     <section>
       <div className='flex flex-col text-left'>
@@ -253,40 +257,68 @@ const SelectCategoryFormStep = ({ register, errors, setSelectedCategories, selec
   )
 }
 
-// const GeneralInfoFormStep = ({ dispatch, parentState }: StepSectionProps) => {
-//   return (
-//     <section>
-//       <form className='flex flex-col gap-3'>
-//         <div>
-//           <label htmlFor="title">Title</label>
-//           <Input type="text" id="title" name="title" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'title', value: e.target.value } })} />
-//         </div>
-//         <div>
-//           <label htmlFor="description">Description</label>
-//           <Textarea id="description" name="description" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'description', value: e.target.value } })} />
-//         </div>
+const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => {
+  const price = watch('price')
+  const [displayPrice, setDisplayPrice] = useState('');
 
-//         <div className='w-[180px]'>
-//           <label htmlFor="amount">Price</label>
-//           <Input type="number" id="amount" name="amount" onChange={(e) => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'price', value: e.target.value } })} />
-//         </div>
-//         {/* <div>
-//             <label htmlFor="frequency">Frequency</label>
-//             <Select name="frequency">
-//               <SelectTrigger className="w-[180px]">
-//                 <SelectValue placeholder="Frequency" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="one time" onClick={() => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'frequency', value: 'one time' } })}>One Time</SelectItem>
-//                 <SelectItem value="every week" onClick={() => dispatch({ type: 'CHANGE_TEXT', payload: { key: 'frequency', value: 'every week' } })}>Every Week</SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div> */}
-
-//       </form>
-//     </section>
-//   )
-// }
+  return (
+    <section>
+      <FormField
+        control={control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
+        name="price"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Price</FormLabel>
+            <FormControl>
+              <Input
+                type='text'
+                value={displayPrice}
+                className='w-[180px]'
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value.replace(/[^\d\.]/g, ''));
+                  if (!isNaN(value)) {
+                    setValue('price', value);
+                    setDisplayPrice(e.target.value)
+                  }
+                }}
+                onBlur={() => {
+                  setDisplayPrice(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price));
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
+        name="description"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Description</FormLabel>
+            <FormControl>
+              <Textarea {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </section >
+  )
+}
 
 // const TrustScoreFormStep = ({ register, errors }: StepSectionProps) => {
 //   return (
@@ -325,32 +357,33 @@ const SelectCategoryFormStep = ({ register, errors, setSelectedCategories, selec
 //   </section>
 // )
 
-// const FormFooter = ({ dispatch, parentState, currentStep }: FormFooterAndHeaderProps) => (
-//   <section>
-//     {/* Post preview */}
-//     {parentState.data.title && parentState.data.description && parentState.data.price && parentState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
-//       <div className='p-4 border-2 border-foreground bg-foreground/5 rounded-sm'>
-//         <p>Post preview</p>
-//         <h2 className='text-xl font-semibold'>{parentState.data.title}</h2>
-//         <p className="text-foreground/70">{parentState.selectedLabels.length} categories • ${parentState.data.price}</p>
-//         <p className='text-gray-600 max-h-16 overflow-hidden text-clip'>{parentState.data.description}</p>
-//       </div>
-//     )}
+const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
+  return (
+  <section>
+    {/* Post preview */}
+    {/* {getValues().title && getValues().description && getValues().price && formState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
+      <div className='p-4 border-2 border-foreground bg-foreground/5 rounded-sm'>
+        <p>Post preview</p>
+        <h2 className='text-xl font-semibold'>{formState.data.title}</h2>
+        <p className="text-foreground/70">{formState.selectedLabels.length} categories • ${formState.data.price}</p>
+        <p className='text-gray-600 max-h-16 overflow-hidden text-clip'>{formState.data.description}</p>
+      </div>
+    )} */}
 
-//     {/* Back, continue and publish buttons */}
-//     <section className='flex space-x-3 justify-end'>
-//       {currentStep > 1 &&
-//         <button className="px-2 py-1" onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[currentStep - 2] })}>Back</button>
-//       }
-//       {currentStep < FormSteps.length &&
-//         <button className='px-2 py-1' onClick={() => dispatch({ type: 'CHANGE_FORM_STEP', payload: FormSteps[currentStep] })}>Continue</button>
-//       }
-//       {currentStep === FormSteps.length &&
-//         <button className='px-2 py-1' onClick={() => console.log('Publish Post')}>Publish</button>
-//       }
-//     </section>
-//   </section>
-// )
+    {/* Back, continue and publish buttons */}
+    <section className='flex space-x-3 justify-end'>
+      {currentStep > 1 &&
+        <button className="px-2 py-1" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
+      }
+      {currentStep < FormSteps.length &&
+        <button className='px-2 py-1' onClick={() => changeStep( FormSteps[currentStep])}>Continue</button>
+      }
+      {currentStep === FormSteps.length &&
+        <button className='px-2 py-1' type="submit">Publish</button>
+      }
+    </section>
+  </section>
+)}
 
 
 const NewListingPage = () => {
@@ -358,23 +391,20 @@ const NewListingPage = () => {
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
   const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({});
 
-
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const listForm = useForm({
     resolver: zodResolver(NewListingResponseSchema),
     defaultValues: initialFormState.fields
   });
 
-
   const onFormError = (errors: FieldErrors) => console.error({ errors })
 
   const publishPost = (data: ListFormValues) => {
-    console.log({ data })
     try {
       const newData = {
         ...data,
         categories: selectedCategories
       } as NewListingResponse
-      console.log(newData);
+      console.log({ newData });
     } catch (error) {
       console.error("Error while publishing post: ", error);
     }
@@ -386,15 +416,14 @@ const NewListingPage = () => {
   switch (step.id) {
     case 'select-category':
       content = <SelectCategoryFormStep
-        register={register}
-        errors={errors}
+        {...listForm}
         setSelectedCategories={setSelectedCategories}
         selectedCategories={selectedCategories}
       />;
       break;
-    // case 'general-info':
-    //   content = <GeneralInfoFormStep register={register} errors={errors} />;
-    //   break;
+    case 'general-info':
+      content = <GeneralInfoFormStep {...listForm} />;
+      break;
     // case 'trust-scores':
     //   content = <TrustScoreFormStep register={register} errors={errors} />;
     //   break;
@@ -403,12 +432,13 @@ const NewListingPage = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-      {/* <FormHeader dispatch={dispatch} parentState={formState} currentStep={currentStepNumber} /> */}
-      {content}
-      <button type="submit">Submit</button>
-      {/* <FormFooter dispatch={dispatch} parentState={formState} currentStep={currentStepNumber} /> */}
-    </form>
+    <Form {...listForm} >
+      <form onSubmit={listForm.handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
+        {/* <FormHeader dispatch={dispatch} parentState={formState} currentStep={currentStepNumber} /> */}
+        {content}
+        <FormFooter {...listForm} currentStep={currentStepNumber} changeStep={changeStep}/>
+      </form>
+    </Form>
   );
 }
 
