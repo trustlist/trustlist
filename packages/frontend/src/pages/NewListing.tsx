@@ -1,20 +1,18 @@
-import { Textarea } from '@/components/ui/textarea'
-import { Toggle } from '@/components/ui/toggle'
-import { cn } from '@/utils/cn'
-import React, { useEffect, useReducer, useState } from 'react'
-import { Control, FieldErrors, FieldValues, UseFormRegister, UseFormReturn, UseFormWatch, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from '@/components/ui/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
+import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 //TODO: Unlock for full validation
 // const NewListingResponseSchema = z.object({
@@ -42,7 +40,6 @@ const NewListingResponseSchema = z.object({
 })
 
 type NewListingResponse = z.infer<typeof NewListingResponseSchema>
-
 
 type FormStep = {
   id: string,
@@ -81,18 +78,11 @@ type FormState = {
   error?: string
 }
 
-type FormAction =
-  | { type: 'CHANGE_CATEGORIES_FOR_SUBMISSION', payload: Record<string, string[]> }
-  | { type: 'CHANGE_TEXT', payload: { key: string, value: string } }
-  | { type: 'CHANGE_FORM_STEP', payload: FormStep }
-  | { type: 'CHANGE_SELECTED_CATEGORIES', payload: string }
-  | { type: 'TOGGLE_TRUST_SCORE', payload: { key: TrustScoreKey } }
-
 type ListFormValues = FieldValues & NewListingResponse
 
 type StepSectionProps = UseFormReturn<ListFormValues>
 
-type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>>}
+type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>> }
 
 const listingTypes = [
   {
@@ -159,103 +149,95 @@ const initialFormState: FormState = {
   trustScores
 }
 
-function formReducer(state: FormState, action: FormAction): FormState {
-  switch (action.type) {
-    case 'CHANGE_CATEGORIES_FOR_SUBMISSION':
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          categories: action.payload
-        }
-      };
-    case 'CHANGE_TEXT': // just one action for the string literals
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          [action.payload.key]: action.payload.value
-        }
-      };
-    case 'CHANGE_FORM_STEP':
-      return {
-        ...state,
-        step: action.payload
-      };
-    case 'CHANGE_SELECTED_CATEGORIES':
-      return {
-        ...state,
-        selectedLabels: state.selectedLabels.includes(action.payload)
-          ? state.selectedLabels.filter(label => label !== action.payload)
-          : [...state.selectedLabels, action.payload]
-      };
-    case 'TOGGLE_TRUST_SCORE':
-      console.log({ ...action })
-      return {
-        ...state,
-        trustScores: Object.fromEntries(
-          Object.entries(state.trustScores).map(([key, score]) =>
-            key === action.payload.key
-              ? [key, { ...score, active: !score.active }]
-              : [key, score]
-          )
-        ) as Record<TrustScoreKey, TrustScoreInfo>
-      }
-    default:
-      return state;
-  }
-}
+// function formReducer(state: FormState, action: FormAction): FormState {
+//   switch (action.type) {
+//     case 'CHANGE_CATEGORIES_FOR_SUBMISSION':
+//       return {
+//         ...state,
+//         fields: {
+//           ...state.fields,
+//           categories: action.payload
+//         }
+//       };
+//     case 'CHANGE_TEXT': // just one action for the string literals
+//       return {
+//         ...state,
+//         fields: {
+//           ...state.fields,
+//           [action.payload.key]: action.payload.value
+//         }
+//       };
+//     case 'CHANGE_FORM_STEP':
+//       return {
+//         ...state,
+//         step: action.payload
+//       };
+//     case 'CHANGE_SELECTED_CATEGORIES':
+//       return {
+//         ...state,
+//         selectedLabels: state.selectedLabels.includes(action.payload)
+//           ? state.selectedLabels.filter(label => label !== action.payload)
+//           : [...state.selectedLabels, action.payload]
+//       };
+//     case 'TOGGLE_TRUST_SCORE':
+//       console.log({ ...action })
+//       return {
+//         ...state,
+//         trustScores: Object.fromEntries(
+//           Object.entries(state.trustScores).map(([key, score]) =>
+//             key === action.payload.key
+//               ? [key, { ...score, active: !score.active }]
+//               : [key, score]
+//           )
+//         ) as Record<TrustScoreKey, TrustScoreInfo>
+//       }
+//     default:
+//       return state;
+//   }
+// }
 
-type SelectCategoryStepSectionProps = StepSectionProps & {
-  setSelectedCategories: React.Dispatch<React.SetStateAction<{}>>
-  selectedCategories: Readonly<Record<string, string[]>>
-}
-const SelectCategoryFormStep = ({ register, setSelectedCategories, selectedCategories }: SelectCategoryStepSectionProps) => {
-  return (
-    <section>
-      <div className='flex flex-col text-left'>
-        {listingTypes.map(({ label: section, categories }) => (
-          <div key={section} className='mt-4'>
-            <p className='text-base font-semibold'>{section}</p>
-            <hr className='my-1' />
-            <section className='flex flex-wrap gap-3'>
-              {
-                categories.map((category, index) => {
-                  const newLabel = `${section}--${category}`;
-                  return (
-                    <div key={index} className='flex space-x-1'>
-                      <input
-                        type="checkbox"
-                        id={newLabel}
-                        name={newLabel}
-                        checked={selectedCategories[section]?.includes(category)}
-                        onChange={(e) => {
-                          setSelectedCategories((prev: Record<string, string[]>) => {
-                            const newCategories = { ...prev }
-                            if (e.target.checked) {
-                              if (newCategories[section]) {
-                                newCategories[section].push(category)
-                              } else newCategories[section] = [category]
-                            } else {
-                              newCategories[section] = newCategories[section].filter(cat => cat !== category)
-                            }
-                            register(`categories.${section}`, { value: newCategories[section] });
-                            return newCategories;
-                          });
-                        }}
-                      />
-                      <label htmlFor={newLabel} className='text-muted-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</label>
-                    </div>
-                  )
-                })
-              }
-            </section>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
+const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
+  <section>
+    <div className='flex flex-col text-left'>
+      {listingTypes.map(({ label: section, categories }) => (
+        <div key={section} className='mt-4'>
+          <h6 className='text-base font-semibold'>{section}</h6>
+          <hr className='my-1' />
+          <section className='flex flex-wrap gap-3'>
+            {
+              categories.map((category, index) => {
+                const newLabel = `${section}--${category}`;
+                return (
+                  <FormField
+                    control={control}
+                    key={newLabel}
+                    name={`categories.${section}`}
+                    render={({ field }) => (
+                      <FormItem key={index} className='flex justify-center items-center space-x-1 space-y-0'>
+                        <FormControl>
+                          <Checkbox
+                            id={newLabel}
+                            className='data-[state=checked]:bg-blue-600'
+                            checked={field.value?.includes(category)}
+                            onCheckedChange={(checked) => {
+                              if (checked) field.onChange([...(field.value || []), category])
+                              else field.onChange((field.value || []).filter(cat => cat !== category))
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel htmlFor={newLabel} className='text-muted-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                )
+              })
+            }
+          </section>
+        </div>
+      ))}
+    </div>
+  </section>
+)
 
 const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => {
   const price = watch('price')
@@ -359,9 +341,9 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
 
 const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
   return (
-  <section>
-    {/* Post preview */}
-    {/* {getValues().title && getValues().description && getValues().price && formState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
+    <section>
+      {/* Post preview */}
+      {/* {getValues().title && getValues().description && getValues().price && formState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
       <div className='p-4 border-2 border-foreground bg-foreground/5 rounded-sm'>
         <p>Post preview</p>
         <h2 className='text-xl font-semibold'>{formState.data.title}</h2>
@@ -370,26 +352,25 @@ const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
       </div>
     )} */}
 
-    {/* Back, continue and publish buttons */}
-    <section className='flex space-x-3 justify-end'>
-      {currentStep > 1 &&
-        <button className="px-2 py-1" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
-      }
-      {currentStep < FormSteps.length &&
-        <button className='px-2 py-1' onClick={() => changeStep( FormSteps[currentStep])}>Continue</button>
-      }
-      {currentStep === FormSteps.length &&
-        <button className='px-2 py-1' type="submit">Publish</button>
-      }
+      {/* Back, continue and publish buttons */}
+      <section className='flex space-x-3 justify-end'>
+        {currentStep > 1 &&
+          <button className="px-2 py-1" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
+        }
+        {currentStep < FormSteps.length &&
+          <button className='px-2 py-1' onClick={() => changeStep(FormSteps[currentStep])}>Continue</button>
+        }
+        {currentStep === FormSteps.length &&
+          <button className='px-2 py-1' type="submit">Publish</button>
+        }
+      </section>
     </section>
-  </section>
-)}
+  )
+}
 
 
 const NewListingPage = () => {
-  // const [formState, dispatch] = useReducer(formReducer, initialFormState);
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
-  const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({});
 
   const listForm = useForm({
     resolver: zodResolver(NewListingResponseSchema),
@@ -402,7 +383,6 @@ const NewListingPage = () => {
     try {
       const newData = {
         ...data,
-        categories: selectedCategories
       } as NewListingResponse
       console.log({ newData });
     } catch (error) {
@@ -415,11 +395,7 @@ const NewListingPage = () => {
   let content;
   switch (step.id) {
     case 'select-category':
-      content = <SelectCategoryFormStep
-        {...listForm}
-        setSelectedCategories={setSelectedCategories}
-        selectedCategories={selectedCategories}
-      />;
+      content = <SelectCategoryFormStep {...listForm} />;
       break;
     case 'general-info':
       content = <GeneralInfoFormStep {...listForm} />;
@@ -436,7 +412,7 @@ const NewListingPage = () => {
       <form onSubmit={listForm.handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
         {/* <FormHeader dispatch={dispatch} parentState={formState} currentStep={currentStepNumber} /> */}
         {content}
-        <FormFooter {...listForm} currentStep={currentStepNumber} changeStep={changeStep}/>
+        <FormFooter {...listForm} currentStep={currentStepNumber} changeStep={changeStep} />
       </form>
     </Form>
   );
