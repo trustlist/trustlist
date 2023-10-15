@@ -9,7 +9,6 @@ import './header.css'
 
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
-import NewListing from '@/components/NewListing'
 
 export default observer(() => {
     const user = React.useContext(User)
@@ -110,34 +109,10 @@ export default observer(() => {
                             )}
                         </div>
                         <div className="action-item">
-                            {user.hasSignedUp && <NewListing />
-                                // (
-                                //     <>
-                                //         <button
-                                //             onClick={() => setShowNewListing(true)}
-                                //         >
-                                //             list{' '}
-                                //             <span style={{ fontSize: '0.6rem' }}>
-                                //                 ✏️
-                                //             </span>
-                                //         </button>
-                                //         {showNewListing && (
-                                //             <NewListingModal
-                                //                 setShowNewListing={
-                                //                     setShowNewListing
-                                //                 }
-                                //             />
-                                //         )}
-                                //     </>
-                                // ) : (
-                                //     <button style={{ cursor: 'not-allowed' }}>
-                                //         list{' '}
-                                //         <span style={{ fontSize: '0.6rem' }}>
-                                //             ✏️
-                                //         </span>
-                                //     </button>
-                                // )
-
+                            {user.hasSignedUp &&
+                                <Link to={'/listings/new'}>
+                                    <button className='px-2 py-1 font-semibold'>Create Listing</button>
+                                </Link>
                             }
                         </div>
                     </div>
