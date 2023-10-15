@@ -157,6 +157,7 @@ const initialFormState: FormState = {
   trustScores
 }
 
+// TODO: Persist categories when steps change
 const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
   <section>
     <div className='flex flex-col text-left'>
@@ -186,7 +187,7 @@ const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
                             }}
                           />
                         </FormControl>
-                        <FormLabel htmlFor={newLabel} className='text-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</FormLabel>
+                        <FormLabel htmlFor={newLabel} className='text-base text-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</FormLabel>
                       </FormItem>
                     )}
                   />
@@ -205,15 +206,15 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
   const [displayPrice, setDisplayPrice] = useState('');
 
   return (
-    <section>
+    <section className='flex flex-col space-y-4'>
       <FormField
         control={control}
         name="title"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Title</FormLabel>
+            <FormLabel className="text-base">Title</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input className='text-base' {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -224,12 +225,12 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
         name="price"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Price</FormLabel>
+            <FormLabel className='text-base'>Price</FormLabel>
             <FormControl>
               <Input
                 type='text'
                 value={displayPrice}
-                className='w-[180px]'
+                className='w-[180px] text-base'
                 onChange={(e) => {
                   const value = parseFloat(e.target.value.replace(/[^\d\.]/g, ''));
                   if (!isNaN(value)) {
@@ -251,9 +252,9 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Description</FormLabel>
+            <FormLabel className='text-base'>Description</FormLabel>
             <FormControl>
-              <Textarea {...field} />
+              <Textarea className='text-base' {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -272,7 +273,7 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
           control={control}
           name={`revealTrustScores.${key}`}
           render={({ field }) => (
-            <FormItem className='flex justify-between space-x-6' key={key}>
+            <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
               <div>
                 <FormLabel className="text-foreground text-lg" htmlFor={key}>{scoreInfo.title}</FormLabel>
                 <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
@@ -313,7 +314,7 @@ const FormHeader = ({ currentStep }: FormFooterAndHeaderProps) => (
 
 const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
   return (
-    <section>
+    <section className='py-3'>
       {/* Post preview */}
       {/* {getValues().title && getValues().description && getValues().price && formState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
       <div className='p-4 border-2 border-foreground bg-foreground/5 rounded-sm'>
@@ -325,15 +326,15 @@ const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
     )} */}
 
       {/* Back, continue and publish buttons */}
-      <section className='flex space-x-3 justify-end'>
+      <section className={cn('flex space-x-3', currentStep > 1 ? 'justify-between' : 'justify-end')}>
         {currentStep > 1 &&
-          <button className="px-2 py-1" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
+          <button className="px-2 py-1 border-muted-foreground text-muted-foreground" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
         }
         {currentStep < FormSteps.length &&
-          <button className='px-2 py-1' onClick={() => changeStep(FormSteps[currentStep])}>Next step</button>
+          <button className='px-2 py-1 justify-self-end' onClick={() => changeStep(FormSteps[currentStep])}>Next step</button>
         }
         {currentStep === FormSteps.length &&
-          <button className='px-2 py-1' type="submit">Publish</button>
+          <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Publish</button>
         }
       </section>
     </section>
