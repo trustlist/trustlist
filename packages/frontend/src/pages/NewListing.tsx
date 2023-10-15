@@ -9,26 +9,14 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Switch } from '@/components/ui/switch'
-import { cn } from '@/utils/cn'
-//TODO: Unlock for full validation
-// const NewListingResponseSchema = z.object({
-//   epoch: z.string().min(1),
-//   categories: z.record(z.array(z.string().min(1))).refine(data => Object.keys(data).length > 0, {
-//   message: "Categories should not be empty",
-// }),
-//   title: z.string().min(1),
-//   price: z.string().min(1),
-//   frequency: z.literal("one time"),
-//   description: z.string().min(1),
-//   posterId: z.string().min(1),
-//   totalTrustScore: z.string().min(1)
-// })
+
 
 enum TrustScoreKeyEnum {
   LP = 'LP',
@@ -45,10 +33,7 @@ const NewListingResponseSchema = z.object({
   frequency: z.literal("one time"),
   description: z.string(),
   posterId: z.string(),
-  trustScores: z.record(z.object({
-    score: z.number(),
-    isRevealed: z.boolean()
-  }), z.nativeEnum(TrustScoreKeyEnum))
+  revealTrustScores: z.record(z.boolean())
 })
 
 type NewListingResponse = z.infer<typeof NewListingResponseSchema>
@@ -74,8 +59,6 @@ type TrustScoreInfo = {
 
 type TrustScoreKey = keyof typeof TrustScoreKeyEnum;
 
-// type TrustScoreResponse = Record<TrustScoreKey, { score: number, isRevealed: boolean }>
-
 const trustScores: Record<TrustScoreKey, TrustScoreInfo> = {
   [TrustScoreKeyEnum.LP]: { title: 'Legit Posting Score', description: "Percentage of the member's listings that have resulted in successful deals.", isRevealed: true, score: 0 },
   [TrustScoreKeyEnum.LO]: { title: 'Legit Offer Score', description: "The member's record for successfully completing deals after their offer has been accepted.", isRevealed: true, score: 0 },
@@ -98,68 +81,69 @@ type StepSectionProps = UseFormReturn<ListFormValues>
 
 type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>> }
 
-const listingTypes = [
-  {
-    label: 'devconnect',
-    categories: ['available', 'wanted', 'digital asset', 'souvenir']
-  },
-  {
-    label: 'for sale',
-    categories: [
-      'antiques',
-      'appliances',
-      'auto parts',
-      'baby',
-      'beauty',
-      'bikes',
-      'boats',
-      'books',
-      'cars/trucks',
-      'clothes',
-      'electronics',
-      'farm/garden',
-      'furniture',
-      'household',
-      'jewelry',
-      'materials',
-      'sporting',
-      'tickets',
-      'tools',
-      'toys',
-      'trailers',
-      'video',
-      'wanted',
-    ]
-  },
-  {
-    label: 'housing',
-    categories: [
-      'apts/houses',
-      'swap',
-      'wanted',
-      'commercial',
-      'parking/storage',
-      'rooms/shared',
-      'sublets/temporary',
-      'vacation rentals',
-    ]
-  }
-]
+const listingCategories = {
+  'devconnect': ['available', 'wanted', 'digital asset', 'souvenir'],
+  'for sale': [
+    'antiques',
+    'appliances',
+    'auto parts',
+    'baby',
+    'beauty',
+    'bikes',
+    'boats',
+    'books',
+    'cars/trucks',
+    'clothes',
+    'electronics',
+    'farm/garden',
+    'furniture',
+    'household',
+    'jewelry',
+    'materials',
+    'sporting',
+    'tickets',
+    'tools',
+    'toys',
+    'trailers',
+    'video',
+    'wanted',
+  ],
+  'housing': [
+    'apts/houses',
+    'swap',
+    'wanted',
+    'commercial',
+    'parking/storage',
+    'rooms/shared',
+    'sublets/temporary',
+    'vacation rentals',
+  ]
+}
+
+const createInitialCategories = (sectionsWithCategories: Record<string, string[]>) => {
+  // create an empty array for each section in listing type
+  return Object.keys(sectionsWithCategories).reduce<Record<string, string[]>>((acc, key) => {
+    acc[key] = [];
+    return acc;
+  }, {});
+}
+
+const initialCategories = createInitialCategories(listingCategories);
 
 const initialFormState: FormState = {
   fields: {
     epoch: '',
-    categories: {},
+    categories: initialCategories,
     title: '',
     price: 0,
     frequency: 'one time',
     description: '',
     posterId: '',
-    trustScores: {
-      [TrustScoreKeyEnum.LP]: { score: 0, isRevealed: true },
-      [TrustScoreKeyEnum.LO]: { score: 0, isRevealed: true },
-      [TrustScoreKeyEnum.CB]: { score: 0, isRevealed: true },
-      [TrustScoreKeyEnum.GV]: { score: 0, isRevealed: true },
+    revealTrustScores: {
+      [TrustScoreKeyEnum.LP]: true,
+      [TrustScoreKeyEnum.LO]: true,
+      [TrustScoreKeyEnum.CB]: true,
+      [TrustScoreKeyEnum.GV]: true,
     }
   },
   step: FormSteps[0],
@@ -218,7 +202,7 @@ const initialFormState: FormState = {
 const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
   <section>
     <div className='flex flex-col text-left'>
-      {listingTypes.map(({ label: section, categories }) => (
+      {Object.entries(listingCategories).map(([section, categories]) => (
         <div key={section} className='mt-4'>
           <h6 className='text-base font-semibold'>{section}</h6>
           <hr className='my-1' />
@@ -326,8 +310,9 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScores).map(([key, scoreInfo]) => (
         <FormField
+          key={key}
           control={control}
-          name={`trustScores.${key}.isRevealed`}
+          name={`revealTrustScores.${key}`}
           render={({ field }) => (
             <FormItem className='flex justify-between space-x-6' key={key}>
               <div>
