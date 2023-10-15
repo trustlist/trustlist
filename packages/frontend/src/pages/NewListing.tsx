@@ -17,10 +17,11 @@ import React, { useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-// TODO
-// - Validate fields
-// - Hook up to Trustlist hook (doesn't exist)
-// - User must be logged in to add listing
+//TODO: Add field validation
+//TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
+//TODO: User must be logged in to add listing
+//TODO: When do we calculate trust scores and how? Seems like before sending the formData we calc it but ask to be sure
+// TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
 
 enum TrustScoreKeyEnum {
   LP = 'LP',
@@ -185,7 +186,7 @@ const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
                             }}
                           />
                         </FormControl>
-                        <FormLabel htmlFor={newLabel} className='text-muted-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</FormLabel>
+                        <FormLabel htmlFor={newLabel} className='text-foreground hover:cursor-pointer active:text-foreground hover:text-foreground hover:underline underline-offset-1'>{category}</FormLabel>
                       </FormItem>
                     )}
                   />
@@ -273,16 +274,19 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
           render={({ field }) => (
             <FormItem className='flex justify-between space-x-6' key={key}>
               <div>
-                <FormLabel className="font-semibold text-foreground" htmlFor={key}>{scoreInfo.title}</FormLabel>
+                <FormLabel className="text-foreground text-lg" htmlFor={key}>{scoreInfo.title}</FormLabel>
                 <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
               </div>
               <FormControl>
-                <Switch
-                  id={key}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
-                />
+                <div className="flex space-x-2">
+                  <Switch
+                    id={key}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
+                  />
+                  <p className='text-muted-foreground'>{field.value ? 'Shown' : 'Hidden'}</p>
+                </div>
               </FormControl>
             </FormItem>
           )}
@@ -326,7 +330,7 @@ const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
           <button className="px-2 py-1" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
         }
         {currentStep < FormSteps.length &&
-          <button className='px-2 py-1' onClick={() => changeStep(FormSteps[currentStep])}>Continue</button>
+          <button className='px-2 py-1' onClick={() => changeStep(FormSteps[currentStep])}>Next step</button>
         }
         {currentStep === FormSteps.length &&
           <button className='px-2 py-1' type="submit">Publish</button>
@@ -354,6 +358,9 @@ const NewListingPage = () => {
       } as NewListingResponse
 
       console.log({ newData });
+
+      //  TODO: Send form to DB
+      //  TODO: Reroute to home page
     } catch (error) {
       console.error("Error while publishing post: ", error);
     }
