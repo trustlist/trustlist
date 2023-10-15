@@ -2,6 +2,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,7 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
 import { z } from 'zod'
-
+import { Switch } from '@/components/ui/switch'
+import { cn } from '@/utils/cn'
 //TODO: Unlock for full validation
 // const NewListingResponseSchema = z.object({
 //   epoch: z.string().min(1),
@@ -28,15 +30,25 @@ import { z } from 'zod'
 //   totalTrustScore: z.string().min(1)
 // })
 
+enum TrustScoreKeyEnum {
+  LP = 'LP',
+  LO = 'LO',
+  CB = 'CB',
+  GV = 'GV',
+}
+
 const NewListingResponseSchema = z.object({
   epoch: z.string(),
-  categories: z.record(z.array(z.string().min(1))),
+  categories: z.record(z.array(z.string())),
   title: z.string(),
   price: z.number(),
   frequency: z.literal("one time"),
   description: z.string(),
   posterId: z.string(),
-  totalTrustScore: z.string()
+  trustScores: z.record(z.object({
+    score: z.number(),
+    isRevealed: z.boolean()
+  }), z.nativeEnum(TrustScoreKeyEnum))
 })
 
 type NewListingResponse = z.infer<typeof NewListingResponseSchema>
@@ -56,17 +68,19 @@ const FormSteps: FormStep[] = [
 type TrustScoreInfo = {
   title: string
   description: string
-  active: boolean
+  isRevealed: boolean
   score: number
 }
 
-type TrustScoreKey = 'LP' | 'LO' | 'CB' | 'GV';
+type TrustScoreKey = keyof typeof TrustScoreKeyEnum;
+
+// type TrustScoreResponse = Record<TrustScoreKey, { score: number, isRevealed: boolean }>
 
 const trustScores: Record<TrustScoreKey, TrustScoreInfo> = {
-  'LP': { title: 'Legit Posting Score', description: "Percentage of the member's listings that have resulted in successful deals.", active: true, score: 0 },
-  'LO': { title: 'Legit Offer Score', description: "The member's record for successfully completing deals after their offer has been accepted.", active: true, score: 0 },
-  'CB': { title: 'Community Building Score', description: "The member's record for submitting reviews of their deals.", active: true, score: 0 },
-  'GV': { title: 'Good Vibes Score', description: 'Percentage of all possible points awarded to this member for being friendly, communicative, and respectful.', active: true, score: 0 }
+  [TrustScoreKeyEnum.LP]: { title: 'Legit Posting Score', description: "Percentage of the member's listings that have resulted in successful deals.", isRevealed: true, score: 0 },
+  [TrustScoreKeyEnum.LO]: { title: 'Legit Offer Score', description: "The member's record for successfully completing deals after their offer has been accepted.", isRevealed: true, score: 0 },
+  [TrustScoreKeyEnum.CB]: { title: 'Community Building Score', description: "The member's record for submitting reviews of their deals.", isRevealed: true, score: 0 },
+  [TrustScoreKeyEnum.GV]: { title: 'Good Vibes Score', description: 'Percentage of all possible points awarded to this member for being friendly, communicative, and respectful.', isRevealed: true, score: 0 }
 }
 
 type FormState = {
@@ -141,7 +155,12 @@ const initialFormState: FormState = {
     frequency: 'one time',
     description: '',
     posterId: '',
-    totalTrustScore: ''
+    trustScores: {
+      [TrustScoreKeyEnum.LP]: { score: 0, isRevealed: true },
+      [TrustScoreKeyEnum.LO]: { score: 0, isRevealed: true },
+      [TrustScoreKeyEnum.CB]: { score: 0, isRevealed: true },
+      [TrustScoreKeyEnum.GV]: { score: 0, isRevealed: true },
+    }
   },
   step: FormSteps[0],
   isLoading: true,
@@ -302,27 +321,34 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
   )
 }
 
-// const TrustScoreFormStep = ({ register, errors }: StepSectionProps) => {
-//   return (
-//     <section className='flex flex-col space-y-4'>
-//       {Object.entries(parentState.trustScores).map(([key, scoreInfo]) => (
-//         <div className='flex justify-between space-x-6' key={key}>
-//           <div>
-//             <label className="font-semibold text-foreground" htmlFor={key}>{scoreInfo.title}</label>
-//             <p className='text-foreground/80'>{scoreInfo.description}</p>
-//           </div>
-//           <Toggle size={'lg'} name={key} aria-label={`Toggle ${key} score`} variant={'outline'} defaultChecked={scoreInfo.active}
-//             className={cn(scoreInfo.active ? 'border-blue-700' : '')}
-//             onClick={(e) =>
-//               dispatch({ type: 'TOGGLE_TRUST_SCORE', payload: { key: key as TrustScoreKey } })
-//             }>
-//             <label>{scoreInfo.active ? 'ON' : 'OFF'}</label>
-//           </Toggle>
-//         </div>
-//       ))}
-//     </section>
-//   )
-// }
+const TrustScoreFormStep = ({ control }: StepSectionProps) => {
+  return (
+    <section className='flex flex-col space-y-4'>
+      {Object.entries(trustScores).map(([key, scoreInfo]) => (
+        <FormField
+          control={control}
+          name={`trustScores.${key}.isRevealed`}
+          render={({ field }) => (
+            <FormItem className='flex justify-between space-x-6' key={key}>
+              <div>
+                <FormLabel className="font-semibold text-foreground" htmlFor={key}>{scoreInfo.title}</FormLabel>
+                <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  id={key}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      ))}
+    </section>
+  )
+}
 
 // const FormHeader = ({ parentState, currentStep }: FormFooterAndHeaderProps) => (
 //   <section>
@@ -384,6 +410,7 @@ const NewListingPage = () => {
       const newData = {
         ...data,
       } as NewListingResponse
+
       console.log({ newData });
     } catch (error) {
       console.error("Error while publishing post: ", error);
@@ -400,9 +427,9 @@ const NewListingPage = () => {
     case 'general-info':
       content = <GeneralInfoFormStep {...listForm} />;
       break;
-    // case 'trust-scores':
-    //   content = <TrustScoreFormStep register={register} errors={errors} />;
-    //   break;
+    case 'trust-scores':
+      content = <TrustScoreFormStep {...listForm} />;
+      break;
     default:
       content = <div>Wait! This isn't a step... how did you get here?</div>;
   }
