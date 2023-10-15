@@ -17,6 +17,10 @@ import React, { useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+// TODO
+// - Validate fields
+// - Hook up to Trustlist hook (doesn't exist)
+// - User must be logged in to add listing
 
 enum TrustScoreKeyEnum {
   LP = 'LP',
@@ -79,7 +83,7 @@ type ListFormValues = FieldValues & NewListingResponse
 
 type StepSectionProps = UseFormReturn<ListFormValues>
 
-type FormFooterAndHeaderProps = StepSectionProps & { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>> }
+type FormFooterAndHeaderProps = { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>> }
 
 const listingCategories = {
   'devconnect': ['available', 'wanted', 'digital asset', 'souvenir'],
@@ -151,53 +155,6 @@ const initialFormState: FormState = {
   selectedLabels: [],
   trustScores
 }
-
-// function formReducer(state: FormState, action: FormAction): FormState {
-//   switch (action.type) {
-//     case 'CHANGE_CATEGORIES_FOR_SUBMISSION':
-//       return {
-//         ...state,
-//         fields: {
-//           ...state.fields,
-//           categories: action.payload
-//         }
-//       };
-//     case 'CHANGE_TEXT': // just one action for the string literals
-//       return {
-//         ...state,
-//         fields: {
-//           ...state.fields,
-//           [action.payload.key]: action.payload.value
-//         }
-//       };
-//     case 'CHANGE_FORM_STEP':
-//       return {
-//         ...state,
-//         step: action.payload
-//       };
-//     case 'CHANGE_SELECTED_CATEGORIES':
-//       return {
-//         ...state,
-//         selectedLabels: state.selectedLabels.includes(action.payload)
-//           ? state.selectedLabels.filter(label => label !== action.payload)
-//           : [...state.selectedLabels, action.payload]
-//       };
-//     case 'TOGGLE_TRUST_SCORE':
-//       console.log({ ...action })
-//       return {
-//         ...state,
-//         trustScores: Object.fromEntries(
-//           Object.entries(state.trustScores).map(([key, score]) =>
-//             key === action.payload.key
-//               ? [key, { ...score, active: !score.active }]
-//               : [key, score]
-//           )
-//         ) as Record<TrustScoreKey, TrustScoreInfo>
-//       }
-//     default:
-//       return state;
-//   }
-// }
 
 const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
   <section>
@@ -335,20 +292,20 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
   )
 }
 
-// const FormHeader = ({ parentState, currentStep }: FormFooterAndHeaderProps) => (
-//   <section>
-//     <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Listing</h6>
-//     <h2 className='text-2xl'>
-//       {/* Create the header text from the step id */}
-//       {parentState.step.id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-//     </h2>
-//     <div className='flex space-x-1 text-primary/70'>
-//       <p>Step {currentStep} of {FormSteps.length}</p>
-//       <p>&mdash;</p>
-//       <p>{FormSteps.find(fs => fs.id === parentState.step.id)?.description}</p>
-//     </div>
-//   </section>
-// )
+const FormHeader = ({ currentStep }: FormFooterAndHeaderProps) => (
+  <section>
+    <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Listing</h6>
+    <h2 className='text-2xl'>
+      {/* Create the header text from the step id */}
+      {FormSteps[currentStep - 1].id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+    </h2>
+    <div className='flex space-x-1 text-primary/70'>
+      <p>Step {currentStep} of {FormSteps.length}</p>
+      <p>&mdash;</p>
+      <p>{FormSteps[currentStep - 1].description}</p>
+    </div>
+  </section>
+)
 
 const FormFooter = ({ currentStep, changeStep }: FormFooterAndHeaderProps) => {
   return (
@@ -422,9 +379,9 @@ const NewListingPage = () => {
   return (
     <Form {...listForm} >
       <form onSubmit={listForm.handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-        {/* <FormHeader dispatch={dispatch} parentState={formState} currentStep={currentStepNumber} /> */}
+        <FormHeader changeStep={changeStep} currentStep={currentStepNumber} />
         {content}
-        <FormFooter {...listForm} currentStep={currentStepNumber} changeStep={changeStep} />
+        <FormFooter currentStep={currentStepNumber} changeStep={changeStep} />
       </form>
     </Form>
   );
