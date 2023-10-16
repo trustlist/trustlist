@@ -11,6 +11,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { TrustScoreKeyEnum, listingCategories, trustScores as trustScoresFromData } from '@/data'
+import { TrustScoreInfo, TrustScoreKey } from '@/types/local'
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
@@ -22,13 +24,6 @@ import { z } from 'zod'
 //TODO: User must be logged in to add listing
 //TODO: When do we calculate trust scores and how? Seems like before sending the formData we calc it but ask to be sure
 // TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
-
-enum TrustScoreKeyEnum {
-  LP = 'LP',
-  LO = 'LO',
-  CB = 'CB',
-  GV = 'GV',
-}
 
 const NewListingResponseSchema = z.object({
   epoch: z.string(),
@@ -55,22 +50,6 @@ const FormSteps: FormStep[] = [
   { id: 'trust-scores', description: 'Choose what trust scores to show' },
 ]
 
-type TrustScoreInfo = {
-  title: string
-  description: string
-  isRevealed: boolean
-  score: number
-}
-
-type TrustScoreKey = keyof typeof TrustScoreKeyEnum;
-
-const trustScores: Record<TrustScoreKey, TrustScoreInfo> = {
-  [TrustScoreKeyEnum.LP]: { title: 'Legit Posting Score', description: "Percentage of the member's listings that have resulted in successful deals.", isRevealed: true, score: 0 },
-  [TrustScoreKeyEnum.LO]: { title: 'Legit Offer Score', description: "The member's record for successfully completing deals after their offer has been accepted.", isRevealed: true, score: 0 },
-  [TrustScoreKeyEnum.CB]: { title: 'Community Building Score', description: "The member's record for submitting reviews of their deals.", isRevealed: true, score: 0 },
-  [TrustScoreKeyEnum.GV]: { title: 'Good Vibes Score', description: 'Percentage of all possible points awarded to this member for being friendly, communicative, and respectful.', isRevealed: true, score: 0 }
-}
-
 type FormState = {
   fields: NewListingResponse
   step: FormStep
@@ -86,44 +65,6 @@ type StepSectionProps = UseFormReturn<ListFormValues>
 
 type FormFooterAndHeaderProps = { currentStep: number, changeStep: React.Dispatch<React.SetStateAction<FormStep>> }
 
-const listingCategories = {
-  'devconnect': ['available', 'wanted', 'digital asset', 'souvenir'],
-  'for sale': [
-    'antiques',
-    'appliances',
-    'auto parts',
-    'baby',
-    'beauty',
-    'bikes',
-    'boats',
-    'books',
-    'cars/trucks',
-    'clothes',
-    'electronics',
-    'farm/garden',
-    'furniture',
-    'household',
-    'jewelry',
-    'materials',
-    'sporting',
-    'tickets',
-    'tools',
-    'toys',
-    'trailers',
-    'video',
-    'wanted',
-  ],
-  'housing': [
-    'apts/houses',
-    'swap',
-    'wanted',
-    'commercial',
-    'parking/storage',
-    'rooms/shared',
-    'sublets/temporary',
-    'vacation rentals',
-  ]
-}
 
 const createInitialCategories = (sectionsWithCategories: Record<string, string[]>) => {
   // create an empty array for each section in listing type
@@ -154,7 +95,7 @@ const initialFormState: FormState = {
   step: FormSteps[0],
   isLoading: true,
   selectedLabels: [],
-  trustScores
+  trustScores: trustScoresFromData
 }
 
 // TODO: Persist categories when steps change
@@ -267,7 +208,7 @@ const GeneralInfoFormStep = ({ watch, control, setValue }: StepSectionProps) => 
 const TrustScoreFormStep = ({ control }: StepSectionProps) => {
   return (
     <section className='flex flex-col space-y-4'>
-      {Object.entries(trustScores).map(([key, scoreInfo]) => (
+      {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
         <FormField
           key={key}
           control={control}
