@@ -36,7 +36,7 @@ const NewListingResponseSchema = z.object({
   revealTrustScores: z.record(z.boolean())
 })
 
-type NewListingResponse = z.infer<typeof NewListingResponseSchema>
+export type NewListingResponse = z.infer<typeof NewListingResponseSchema>
 
 type FormStep = {
   id: string,
