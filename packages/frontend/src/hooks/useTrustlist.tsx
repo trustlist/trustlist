@@ -2,9 +2,7 @@ import { NewListingResponse } from '@/pages/NewListing'
 import { SERVER } from '../config'
 
 const useTrustlist = () => {
-    const createNewListing = async (
-       newListing: NewListingResponse 
-    ) => {
+    const createNewListing = async (newListing: NewListingResponse) => {
         // TODO: /api/listings/new
         const data = await fetch(`${SERVER}/api/addListing`, {
             method: 'POST',
@@ -12,7 +10,7 @@ const useTrustlist = () => {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                ...newListing
+                ...newListing,
                 // epoch,
                 // section,
                 // category,
@@ -52,7 +50,11 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const openDeal = async (id: string, offerAmount: string, responderId: string) => {
+    const openDeal = async (
+        id: string,
+        offerAmount: string,
+        responderId: string
+    ) => {
         const data = await fetch(`${SERVER}/api/dealOpen`, {
             method: 'POST',
             headers: {
@@ -82,7 +84,11 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const addReview = async(listingId: string, member: string, review: string) => {
+    const addReview = async (
+        listingId: string,
+        member: string,
+        review: string
+    ) => {
         // TODO: /api/{listingId}/reviews/new
         const data = await fetch(`${SERVER}/api/submitReview`, {
             method: 'POST',
@@ -100,16 +106,16 @@ const useTrustlist = () => {
 
     const getOffers = async (listingId: string) => {
         // TODO: Should be /api/{listingId}/offers
-        const data = await fetch(`${SERVER}/api/loadOffers/${listingId}`).then((r) =>
-            r.json()
+        const data = await fetch(`${SERVER}/api/loadOffers/${listingId}`).then(
+            (r) => r.json()
         )
-        return { listingId, data };
+        return { listingId, data }
     }
 
     const getDeals = async (listingId: string) => {
         // TODO: Should be /api/{listingId}/deals
-        const data = await fetch(`${SERVER}/api/loadDeal/${listingId}`).then((r) =>
-            r.json()
+        const data = await fetch(`${SERVER}/api/loadDeal/${listingId}`).then(
+            (r) => r.json()
         )
         return { listingId, data }
     }
@@ -149,7 +155,7 @@ const useTrustlist = () => {
                 const score = Math.floor(
                     ((Number(dataValues[i]) % 128) /
                         (Number(dataValues[i]) >> 23)) *
-                    100
+                        100
                 )
                 scores.push(score)
             }
@@ -184,7 +190,18 @@ const useTrustlist = () => {
     //     }
     // }
 
-    return { createNewListing, makeOffer, openDeal, closeDeal, addReview, getOffers, getDeals, getUserActivity, calcScoreFromUserData, calcScoresFromDB }
+    return {
+        createNewListing,
+        makeOffer,
+        openDeal,
+        closeDeal,
+        addReview,
+        getOffers,
+        getDeals,
+        getUserActivity,
+        calcScoreFromUserData,
+        calcScoresFromDB,
+    }
 }
 
-export default useTrustlist;
+export default useTrustlist

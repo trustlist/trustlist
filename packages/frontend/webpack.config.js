@@ -38,8 +38,8 @@ module.exports = (env) => ({
             constants: false,
         },
         alias: {
-        '@': path.resolve(__dirname, 'src/')
-    }
+            '@': path.resolve(__dirname, 'src/'),
+        },
     },
     module: {
         rules: [
@@ -113,8 +113,8 @@ module.exports = (env) => ({
             },
             ...(env.CYPRESS
                 ? {
-                    ['process.env.CYPRESS']: 'true',
-                }
+                      ['process.env.CYPRESS']: 'true',
+                  }
                 : {}),
         }),
         new webpack.ProvidePlugin({

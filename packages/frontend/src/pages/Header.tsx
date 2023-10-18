@@ -109,11 +109,13 @@ export default observer(() => {
                             )}
                         </div>
                         <div className="action-item">
-                            {user.hasSignedUp &&
+                            {user.hasSignedUp && (
                                 <Link to={'/listings/new'}>
-                                    <button className='px-2 py-1 font-semibold'>Create Listing</button>
+                                    <button className="px-2 py-1 font-semibold">
+                                        Create Listing
+                                    </button>
                                 </Link>
-                            }
+                            )}
                         </div>
                     </div>
                 </div>
