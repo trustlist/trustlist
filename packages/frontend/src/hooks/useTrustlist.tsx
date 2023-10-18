@@ -3,7 +3,7 @@ import { SERVER } from '../config'
 
 const useTrustlist = () => {
     const createNewListing = async (
-       newListing: NewListingResponse 
+        newListing: NewListingResponse
     ) => {
         // TODO: /api/listings/new
         const data = await fetch(`${SERVER}/api/addListing`, {
@@ -86,7 +86,7 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const addReview = async(listingId: string, member: string, review: string) => {
+    const addReview = async (listingId: string, member: string, review: string) => {
         // TODO: /api/listings/{listingId}/reviews/new
         const data = await fetch(`${SERVER}/api/submitReview`, {
             method: 'POST',

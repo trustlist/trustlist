@@ -282,17 +282,6 @@ const FormHeader = ({ currentStep }: FormFooterAndHeaderProps) => (
 const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderProps) => {
   return (
     <section className='py-3'>
-      {/* Post preview */}
-      {/* {getValues().title && getValues().description && getValues().price && formState.selectedLabels.length > 0 && currentStep === FormSteps.length && (
-      <div className='p-4 border-2 border-foreground bg-foreground/5 rounded-sm'>
-        <p>Post preview</p>
-        <h2 className='text-xl font-semibold'>{formState.data.title}</h2>
-        <p className="text-foreground/70">{formState.selectedLabels.length} categories • ${formState.data.price}</p>
-        <p className='text-gray-600 max-h-16 overflow-hidden text-clip'>{formState.data.description}</p>
-      </div>
-    )} */}
-
-      {/* Back, continue and publish buttons */}
       <section className={cn('flex space-x-3', currentStep > 1 ? 'justify-between' : 'justify-end')}>
         {currentStep > 1 &&
           <button type="button" className="px-2 py-1 border-muted-foreground text-muted-foreground" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
@@ -334,8 +323,9 @@ const NewListingPage = () => {
     try {
       const newData = {
         ...data,
-        // TODO: Add epochKey
-        //TODO: Add scores (?)
+        // TODO: Add epoch
+        // TODO: Calculate scores (?)
+        // TODO: Add posterID (epochKey)
       } as NewListingResponse
 
       console.log({ newData });
