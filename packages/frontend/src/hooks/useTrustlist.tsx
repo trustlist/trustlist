@@ -35,6 +35,7 @@ const useTrustlist = () => {
         offerAmount: string,
         scoreString: string
     ) => {
+        // TODO: /api/{listingId}/offers/new
         const data = await fetch(`${SERVER}/api/submitOffer`, {
             method: 'POST',
             headers: {
@@ -53,6 +54,7 @@ const useTrustlist = () => {
     }
 
     const openDeal = async (id: string, offerAmount: string, responderId: string) => {
+        // TODO: /api/{listingId}/offers/{offerId}/accept
         const data = await fetch(`${SERVER}/api/dealOpen`, {
             method: 'POST',
             headers: {
@@ -67,15 +69,17 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const closeDeal = async (id: string, member: string) => {
+
+    const closeDeal = async (listingId: string, member: string) => {
         // Is this the dealId or the listingId?
+        // TODO: /api/listings/{listingId}/close
         const data = await fetch(`${SERVER}/api/dealClose`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                id,
+                id: listingId,
                 member,
             }),
         }).then((r) => r.json())
@@ -83,7 +87,7 @@ const useTrustlist = () => {
     }
 
     const addReview = async(listingId: string, member: string, review: string) => {
-        // TODO: /api/{listingId}/reviews/new
+        // TODO: /api/listings/{listingId}/reviews/new
         const data = await fetch(`${SERVER}/api/submitReview`, {
             method: 'POST',
             headers: {
@@ -131,12 +135,27 @@ const useTrustlist = () => {
     }
 
     // TODO: Could the two following fns be one? Core score calc is the same, only diff is what's passed to them
+    // For current user related actions (dashboard, createListings)
     const calcScoreFromUserData = (data: number) => {
         if (data === 0) return 0
         const score = Math.floor(((data % 128) / (data >> 23)) * 100)
         return score
     }
 
+    // TODO: Find out a way to transform the data coming from the contract to be more suitable for a database
+
+    // LP: [X, X] - posted x , completed x
+    // CV: [X, X]
+    // GB: [X, X]
+
+    // LP: {
+    //     created: 0,
+    //     completed: 0
+    // }
+
+    // score = created / completed * 100
+
+    // For showing listings
     const calcScoresFromDB = (data: {}) => {
         const scores: Number[] = []
         const dataValues = Object.values(data)
