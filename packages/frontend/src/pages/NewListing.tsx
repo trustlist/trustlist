@@ -11,20 +11,22 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { TrustScoreKeyEnum, listingCategories, trustScores as trustScoresFromData } from '@/data'
+import User from "@/contexts/User"
+import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
+import useTrustlist from "@/hooks/useTrustlist"
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import User from "@/contexts/User"
-import useTrustlist from "@/hooks/useTrustlist"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
 //TODO: User must be logged in to add listing
 //TODO: When do we calculate trust scores and how? Seems like before sending the formData we calc it but ask to be sure
 // TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
+
+const trustScoresFromData = {...trustScores}; // Make copy we can use
 
 const NewListingResponseSchema = z.object({
   epoch: z.string(),
@@ -233,7 +235,7 @@ const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, 
   )
 }
 
-const TrustScoreFormStep = ({ control, scores }: StepSectionProps & { scores: number[] }) => {
+const TrustScoreFormStep = ({ control }: StepSectionProps) => {
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
@@ -245,7 +247,7 @@ const TrustScoreFormStep = ({ control, scores }: StepSectionProps & { scores: nu
             <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
               <div>
                 <FormLabel className="text-foreground text-lg" htmlFor={key}>
-                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scores[Object.keys(trustScoresFromData).indexOf(key)]}%</span>
+                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scoreInfo.score}%</span>
                 </FormLabel>
                 <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
               </div>
@@ -325,19 +327,19 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 
 
 const NewListingPage = () => {
-  const trustlist = useTrustlist()
-  const user = useContext(User)
-  const [scores, setScores] = useState<number[]>([])
+  const { calcScoreFromUserData } = useTrustlist() // @CJ-Rose: you can destructure just the fns you need
+  const user = useContext(User) // TODO: This should be a hook
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
 
+  // @CJ-Rose: Btw have we been making the assumption that the order of the array and the order of the provableData array are the same? Or do you know?
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
+
   useEffect(() => {
-    let userData = []
+    if (user.provableData.length === 0) return; // @CJ-Rose: Re NaN Provable data was an empty array so provableData[i] was undefined and Number(undefined) is NaN
     for (let i = 0; i < 4; i++) {
-      // not sure why this is producing Nan, need to be able to generate user data to debug
-      let data = trustlist.calcScoreFromUserData(Number(user.provableData[i]))
-      userData.push(data)
+      let data = calcScoreFromUserData(Number(user.provableData[i]))
+      trustScoresFromData[TrustScoreKeyEnum[trustScoreKeys[i]]].score = data; // @CJ-Rose: We can directly update the scores of data/trustScores
     }
-    setScores(userData)
   }, [])
 
   const listForm = useForm({
@@ -377,7 +379,7 @@ const NewListingPage = () => {
       content = <GeneralInfoFormStep {...listForm} />;
       break;
     case 'trust-scores':
-      content = <TrustScoreFormStep {...listForm} scores={scores}/>;
+      content = <TrustScoreFormStep {...listForm} />;
       break;
     default:
       content = <div>Wait! This isn't a step... how did you get here?</div>;
