@@ -56,7 +56,7 @@ export default observer(() => {
                             epoch: {user.userState?.sync.calcCurrentEpoch()}
                           </div>
                           <Tooltip
-                              text='epoch info'
+                              text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                               content={
                                   <img
                                       src={require('../../public/info_icon.svg')}
@@ -132,7 +132,7 @@ export default observer(() => {
                                 epoch: {user.userState?.sync.calcCurrentEpoch()}
                               </div>
                               <Tooltip
-                                  text='epoch info'
+                                  text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                                   content={
                                       <img
                                           src={require('../../public/info_icon.svg')}
