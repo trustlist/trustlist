@@ -14,9 +14,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { TrustScoreKeyEnum, listingCategories, trustScores as trustScoresFromData } from '@/data'
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import User from "@/contexts/User"
+import useTrustlist from "@/hooks/useTrustlist"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -231,7 +233,7 @@ const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, 
   )
 }
 
-const TrustScoreFormStep = ({ control }: StepSectionProps) => {
+const TrustScoreFormStep = ({ control, scores }: StepSectionProps & { scores: number[] }) => {
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
@@ -242,7 +244,9 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
           render={({ field }) => (
             <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
               <div>
-                <FormLabel className="text-foreground text-lg" htmlFor={key}>{scoreInfo.title}</FormLabel>
+                <FormLabel className="text-foreground text-lg" htmlFor={key}>
+                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scores[Object.keys(trustScoresFromData).indexOf(key)]}%</span>
+                </FormLabel>
                 <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
               </div>
               <FormControl>
@@ -253,7 +257,7 @@ const TrustScoreFormStep = ({ control }: StepSectionProps) => {
                     onCheckedChange={field.onChange}
                     className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
                   />
-                  <p className='text-muted-foreground'>{field.value ? 'Shown' : 'Hidden'}</p>
+                  <p className='text-muted-foreground'>{field.value ? 'Show' : 'Hide'}</p>
                 </div>
               </FormControl>
             </FormItem>
@@ -321,7 +325,20 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 
 
 const NewListingPage = () => {
+  const trustlist = useTrustlist()
+  const user = useContext(User)
+  const [scores, setScores] = useState<number[]>([])
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
+
+  useEffect(() => {
+    let userData = []
+    for (let i = 0; i < 4; i++) {
+      // not sure why this is producing Nan, need to be able to generate user data to debug
+      let data = trustlist.calcScoreFromUserData(Number(user.provableData[i]))
+      userData.push(data)
+    }
+    setScores(userData)
+  }, [])
 
   const listForm = useForm({
     resolver: zodResolver(NewListingResponseSchema),
@@ -360,7 +377,7 @@ const NewListingPage = () => {
       content = <GeneralInfoFormStep {...listForm} />;
       break;
     case 'trust-scores':
-      content = <TrustScoreFormStep {...listForm} />;
+      content = <TrustScoreFormStep {...listForm} scores={scores}/>;
       break;
     default:
       content = <div>Wait! This isn't a step... how did you get here?</div>;
