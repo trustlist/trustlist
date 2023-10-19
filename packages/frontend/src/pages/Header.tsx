@@ -38,15 +38,9 @@ export default observer(() => {
         }
     }, [showMemberDash, showNewListing])
 
-    const hours = Math.floor(remainingTime / 3600)
-    const minutes = Math.floor((remainingTime - hours * 3600) / 60)
-    const seconds = remainingTime - hours * 3600 - minutes * 60
-    const timeString =
-        hours.toString().padStart(2, '0') +
-        ':' +
-        minutes.toString().padStart(2, '0') +
-        ':' +
-        seconds.toString().padStart(2, '0')
+    const date = new Date()
+    date.setSeconds(date.getSeconds() + remainingTime)
+    const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${date.getMinutes()}`
 
     return (
         <>
@@ -55,16 +49,25 @@ export default observer(() => {
                     <div className="app-title">
                         <Link to="/">trustlist</Link>
                     </div>
-                    {/* alternate title:
-          <div className='app-title'><Link to='/'>zk<span style={{fontSize: '1.5rem', fontWeight: '200'}}>lassified</span></Link></div> */}
 
                     <div className="epoch-info">
-                        <div>
+                        <div className='flex items-center gap-2'>
+                          <div>
                             epoch: {user.userState?.sync.calcCurrentEpoch()}
+                          </div>
+                          <Tooltip
+                              text='epoch info'
+                              content={
+                                  <img
+                                      src={require('../../public/info_icon.svg')}
+                                      alt="info icon"
+                                  />
+                              }
+                          />
                         </div>
                         <div>
-                            next epoch in:{' '}
-                            <span style={{ color: 'red' }}>{timeString}</span>
+                            ending:{' '}
+                            <span>{dateString}</span>
                         </div>
                     </div>
 
@@ -124,15 +127,22 @@ export default observer(() => {
                             <Link to="/">trustlist</Link>
                         </div>
                         <div className="epoch-info">
-                            <div>
+                            <div className='flex items-center gap-2'>
+                              <div>
                                 epoch: {user.userState?.sync.calcCurrentEpoch()}
+                              </div>
+                              <Tooltip
+                                  text='epoch info'
+                                  content={
+                                      <img
+                                          src={require('../../public/info_icon.svg')}
+                                          alt="info icon"
+                                      />
+                                  }
+                              />
                             </div>
-                            <div>
-                                next epoch in:{' '}
-                                <span style={{ color: 'red' }}>
-                                    {timeString}
-                                </span>
-                            </div>
+                            <div>ending:</div>
+                            <div>{dateString}</div>
                         </div>
                     </div>
 
