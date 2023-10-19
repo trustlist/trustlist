@@ -327,7 +327,7 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 
 
 const NewListingPage = () => {
-  const { calcScoreFromUserData } = useTrustlist() // @CJ-Rose: you can destructure just the fns you need
+  const { calcScoreFromUserData } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
 
@@ -335,10 +335,10 @@ const NewListingPage = () => {
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   useEffect(() => {
-    if (user.provableData.length === 0) return; // @CJ-Rose: Re NaN Provable data was an empty array so provableData[i] was undefined and Number(undefined) is NaN
+    if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
       let data = calcScoreFromUserData(Number(user.provableData[i]))
-      trustScoresFromData[TrustScoreKeyEnum[trustScoreKeys[i]]].score = data; // @CJ-Rose: We can directly update the scores of data/trustScores
+      trustScoresFromData[TrustScoreKeyEnum[trustScoreKeys[i]]].score = data;
     }
   }, [])
 
