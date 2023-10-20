@@ -11,13 +11,12 @@ button {
     border-radius: 0.3rem;
     color: blue;
     padding: 0.8rem 0.5rem;
-    margin-left: 0.5rem;
     cursor: pointer;
 }
 
 .header {
     display: grid;
-    grid-template-columns: 33% 30% 37%;
+    grid-template-columns: 63% 37%;
     margin: 2rem 5rem 0;
 }
 
@@ -25,6 +24,7 @@ button {
     font-family: 'Times New Roman', Times, serif;
     font-size: 2.5rem;
     padding-top: 0.5rem;
+    padding-right: 37%;
 }
 
 .epoch-info {
@@ -33,7 +33,6 @@ button {
 
 .actions {
     display: flex;
-    /* justify-content: space-between; */
     align-items: center;
     justify-content: right;
     gap: 0.5rem;
@@ -41,13 +40,15 @@ button {
 
 @media only screen and (max-width: 950px) {
     .header {
-        display: flex;
-        justify-content: space-between;
+        /* display: flex;
+        justify-content: space-between; */
+        grid-template-columns: 65% 35%;
         margin: 1rem;
     }
 
     .app-title {
         font-size: 3.5rem;
+        padding-right: 0;
     }
 
     .header-buttons {
@@ -55,15 +56,13 @@ button {
     }
 
     .actions {
-        display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        padding-top: 0.7rem;
+        align-items: end;
+        padding-top: 1rem;
     }
 
     button {
-        font-size: 1.5rem;
         padding: 0.5rem 0.8rem;
-        margin-left: 0;
+        width: 100%;
     }
 }
