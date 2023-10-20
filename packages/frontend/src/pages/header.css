@@ -17,7 +17,7 @@ button {
 
 .header {
     display: grid;
-    grid-template-columns: 33% 25% 42%;
+    grid-template-columns: 33% 30% 37%;
     margin: 2rem 5rem 0;
 }
 
@@ -33,7 +33,10 @@ button {
 
 .actions {
     display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
     justify-content: right;
+    gap: 0.5rem;
 }
 
 @media only screen and (max-width: 950px) {
@@ -53,6 +56,7 @@ button {
 
     .actions {
         display: flex;
+        flex-direction: column;
         justify-content: space-around;
         padding-top: 0.7rem;
     }

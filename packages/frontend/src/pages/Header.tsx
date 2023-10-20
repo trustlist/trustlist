@@ -6,6 +6,9 @@ import MemberDashboardModal from '../components/MemberDashboardModal'
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip'
 import './header.css'
+import { User2 } from 'lucide-react'
+import { Pencil } from 'lucide-react'
+import { PenSquare } from 'lucide-react';
 
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
@@ -88,11 +91,13 @@ export default observer(() => {
                                 <>
                                     <button
                                         onClick={() => setShowMemberDash(true)}
+                                        className='px-3 py-1 font-semibold flex items-center gap-1'
                                     >
-                                        <span style={{ fontSize: '0.6rem' }}>
-                                            👤
-                                        </span>{' '}
-                                        my TL
+                                        <User2 color='blue'/>
+                                        <div>
+                                          <div>member</div>
+                                          <div>dashboard</div>
+                                        </div>
                                     </button>
                                     {showMemberDash && (
                                         <MemberDashboardModal
@@ -114,7 +119,13 @@ export default observer(() => {
                         <div className="action-item">
                             {user.hasSignedUp &&
                                 <Link to={'/listings/new'}>
-                                    <button className='px-2 py-1 font-semibold'>Create Listing</button>
+                                    <button className='px-3 py-1 font-semibold flex items-center gap-1'>
+                                      <Pencil color='blue'/>
+                                      <div>
+                                        <div>create</div>
+                                        <div>listing</div>
+                                      </div>
+                                    </button>
                                 </Link>
                             }
                         </div>
@@ -148,10 +159,10 @@ export default observer(() => {
 
                     <div className="header-buttons">
                         {!user.hasSignedUp ? (
-                            <Button onClick={() => user.signup()}>JOIN</Button>
+                            <Button  style={{width: '100%'}} onClick={() => user.signup()}>JOIN</Button>
                         ) : (
                             <div>
-                                <Button>connected</Button>
+                                <Button style={{width: '100%'}}>connected</Button>
                             </div>
                         )}
                         <div className="actions">
@@ -159,8 +170,13 @@ export default observer(() => {
                                 <>
                                     <button
                                         onClick={() => setShowMemberDash(true)}
+                                        className='px-3 py-1 font-semibold flex items-center gap-1 w-full'
                                     >
-                                        👤
+                                        <User2 color='blue'/>
+                                        <div>
+                                          <div>member</div>
+                                          <div>dashboard</div>
+                                        </div>
                                     </button>
                                     {showMemberDash && (
                                         <MemberDashboardModal
@@ -173,24 +189,16 @@ export default observer(() => {
                             ) : (
                                 <button>👤</button>
                             )}
-                            {/* {user.hasSignedUp ? (
-                                <>
-                                    <button
-                                        onClick={() => setShowNewListing(true)}
-                                    >
-                                        ✏️
-                                    </button>
-                                    {showNewListing && (
-                                        <NewListingModal
-                                            setShowNewListing={
-                                                setShowNewListing
-                                            }
-                                        />
-                                    )}
-                                </>
-                            ) : (
-                                <button>✏️</button>
-                            )} */}
+                            <div >
+                                {user.hasSignedUp &&
+                                    <Link to={'/listings/new'}>
+                                      <button className='px-3 py-2 font-semibold flex items-center gap-1 w-full'>
+                                        <Pencil color='blue'/>
+                                        <div>create lsiting</div>
+                                      </button>
+                                    </Link>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
