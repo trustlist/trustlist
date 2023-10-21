@@ -120,7 +120,7 @@ export default observer(({ setShowMemberDash }: Props) => {
 
                             <div className="transition">
                                 <div className="line"></div>
-                                <Button onClick={() => user.stateTransition()}>
+                                <Button onClick={() => user.transitionToCurrentEpoch()}>
                                     TRANSITION
                                 </Button>
                                 <div className="line"></div>

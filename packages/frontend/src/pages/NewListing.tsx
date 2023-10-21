@@ -26,7 +26,7 @@ import { z } from 'zod'
 //TODO: When do we calculate trust scores and how? Seems like before sending the formData we calc it but ask to be sure
 // TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
 
-const trustScoresFromData = {...trustScores}; // Make copy we can use
+const trustScoresFromData = { ...trustScores }; // Make copy we can use
 
 const NewListingResponseSchema = z.object({
   epoch: z.string(),
@@ -315,6 +315,7 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 }
 
 
+
 const NewListingPage = () => {
   const { calcScoreFromUserData } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
@@ -338,24 +339,56 @@ const NewListingPage = () => {
 
   const onFormError = (errors: FieldErrors) => console.error({ errors })
 
-  const publishPost = (data: ListingFormValues) => {
-    try {
-      const newData = {
-        ...data,
-        // TODO: Add epoch
-        // TODO: Calculate scores (?)
-        // TODO: Add posterID (epochKey)
-      } as NewListingResponse
-
-      console.log({ newData });
-
-      //  TODO: Send form to DB
-      //  TODO: Reroute to home page
-      listForm.reset();
-      changeStep(FormSteps[0])
-    } catch (error) {
-      console.error("Error while publishing post: ", error);
+  const getEpochAndKey = async () => {
+    const { userState } = user
+    if (!userState) return;
+    if (userState.sync.calcCurrentEpoch() !== (await userState.latestTransitionedEpoch())) {
+      // transition user to the current epoch if they're not on it
+      // TODO: Set loading state
+      try {
+        console.log('transitioning...') // TODO: Add loading state on UI
+        await user.transitionToCurrentEpoch()
+      } catch (error) {
+        throw new Error("Failed to transition to the new epoch");
+      }
     }
+
+    const epoch = userState.sync.calcCurrentEpoch()
+    const posterId = user.epochKey(Math.floor(Math.random() * 2) // randomly choose between 1 and 0
+    )
+
+    return { currentEpoch: epoch, userEpochKey: posterId }
+  }
+
+
+  const publishPost = async (data: ListingFormValues) => {
+    try {
+      const epochAndKey = await getEpochAndKey();
+      if (!epochAndKey) {
+        throw new Error("Failed to get epoch and key");
+      }
+      const { currentEpoch, userEpochKey } = epochAndKey;
+      try {
+        const newData = {
+          ...data,
+          epoch: currentEpoch.toString(),
+          posterId: userEpochKey
+          // TODO: Calculate scores (?)
+        } as NewListingResponse
+
+        console.log({ newData });
+
+        //  TODO: Send form to DB
+        //  TODO: Reroute to home page
+        listForm.reset();
+        changeStep(FormSteps[0])
+      } catch (publishingError) {
+        console.error("Error while publishing post: ", publishingError);
+      }
+    } catch (epochError) {
+      console.error("Error while getting epoch and key: ", epochError);
+    }
+
   }
 
   const currentStepNumber = FormSteps.findIndex(fs => fs.id === step.id) + 1

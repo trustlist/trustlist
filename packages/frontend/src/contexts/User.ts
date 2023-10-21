@@ -142,7 +142,7 @@ class User {
         await this.loadData()
     }
 
-    async stateTransition() {
+    async transitionToCurrentEpoch() {
         if (!this.userState) throw new Error('user state not initialized')
 
         await this.userState.waitForSync()
