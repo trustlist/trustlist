@@ -21,6 +21,7 @@ p {
     font-size: 1.1rem;
     padding: 1rem 1.5rem;
     cursor: pointer;
+    color: blue;
 }
 
 .section-item:hover {
@@ -35,6 +36,7 @@ p {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
     cursor: pointer;
+    color: blue;
 }
 
 .category-item:hover {
@@ -129,6 +131,7 @@ input[type='submit'] {
     .list-heading {
         font-size: 1.3rem;
         margin-left: 1rem;
+        color: blue;
     }
 
     .dark-bg {
