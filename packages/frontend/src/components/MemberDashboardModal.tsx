@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import Tooltip from './Tooltip'
 import Button from '../components/Button'
 import DetailModal from './DetailModal'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './memberDashboardModal.css'
 
 import Trustlist from '../contexts/Trustlist'
@@ -48,6 +50,8 @@ export default observer(({ setShowMemberDash }: Props) => {
     const deals = app.memberActiveDeals
     const listings = app.memberActiveListings
     const offers = app.memberActiveOffers
+    const transitionSuccess = () => toast.success("Transition successful! Your provable data has been updated and you can now participate in the current epoch.");
+    const transitionFailed = () => toast.error("Failed to transition to the current epoch.");
 
     return (
         <div className="dark-bg">
@@ -57,7 +61,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                         <div className="stats-container">
                             <div>
                                 <div>
-                                    <h3>my latest trust scores:</h3>
+                                    <h3 className='py-3 font-semibold'>my latest trust scores:</h3>
                                 </div>
                                 {app.scoreDescriptions.map((desc, i) => {
                                     const expected = user.data[i]
@@ -120,15 +124,26 @@ export default observer(({ setShowMemberDash }: Props) => {
 
                             <div className="transition">
                                 <div className="line"></div>
-                                <Button onClick={() => user.transitionToCurrentEpoch()}>
+                                <Button 
+                                  loadingText='transitioning...'
+                                  onClick={async () => {
+                                    try {
+                                      await user.transitionToCurrentEpoch()
+                                      transitionSuccess()
+                                    } catch (error) {
+                                      transitionFailed()
+                                    }
+                                  }}
+                                >
                                     TRANSITION
                                 </Button>
                                 <div className="line"></div>
+                                <ToastContainer position='top-left' autoClose={4000} />
                             </div>
 
                             <div>
                                 <div>
-                                    <h3 style={{ marginTop: '2rem' }}>
+                                    <h3 className='pt-8 pb-3 font-semibold'>
                                         my provable trust scores:
                                     </h3>
                                 </div>
