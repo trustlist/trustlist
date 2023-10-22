@@ -38,6 +38,16 @@ button {
     gap: 0.5rem;
 }
 
+.toast {
+  background-color: blue;
+  color: white;
+}
+
+.header-toast {
+  position: fixed;
+  top: 5%;
+}
+
 @media only screen and (max-width: 950px) {
     .header {
         /* display: flex;
@@ -64,5 +74,9 @@ button {
     button {
         padding: 0.5rem 0.8rem;
         width: 100%;
+    }
+
+    .header-toast {
+      top: 15%;
     }
 }

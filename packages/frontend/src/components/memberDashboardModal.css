@@ -93,6 +93,12 @@ li:hover {
     width: 100%;
 }
 
+.dash-toast {
+  width: 100%;
+  position: fixed;
+  top: 30%;
+}
+
 @media only screen and (max-width: 950px) {
     .dash-content {
         grid-template-columns: auto;

@@ -5,7 +5,7 @@ import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
 
 // const epochLength = 86400
-const epochLength = 3600
+const epochLength = 600
 
 deployApp().catch((err) => {
     console.log(`Uncaught error: ${err}`)

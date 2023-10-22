@@ -112,7 +112,7 @@ export default observer(() => {
         </div>
       </div>
 
-      {!showMemberDash && <ToastContainer position='top-right' autoClose={4000} />}
+      {!showMemberDash && <ToastContainer className='header-toast' toastClassName='toast' position='top-right' autoClose={4000} />}
       <Outlet />
     </>
   )

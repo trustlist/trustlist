@@ -138,7 +138,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                                     TRANSITION
                                 </Button>
                                 <div className="line"></div>
-                                <ToastContainer position='top-left' autoClose={4000} />
+                                <ToastContainer className='dash-toast' toastClassName='toast' position='top-center' autoClose={4000} />
                             </div>
 
                             <div>
