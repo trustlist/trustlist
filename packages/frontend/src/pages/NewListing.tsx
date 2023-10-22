@@ -342,7 +342,9 @@ const NewListingPage = () => {
   const getEpochAndKey = async () => {
     const { userState } = user
     if (!userState) return;
-    if (userState.sync.calcCurrentEpoch() !== (await userState.latestTransitionedEpoch())) {
+    // this is the app's current epoch, it won't change when the user transitions
+    const epoch = userState.sync.calcCurrentEpoch()
+    if (epoch !== (await userState.latestTransitionedEpoch())) {
       // transition user to the current epoch if they're not on it
       // TODO: Set loading state
       try {
@@ -353,21 +355,22 @@ const NewListingPage = () => {
       }
     }
 
-    const epoch = userState.sync.calcCurrentEpoch()
-    const posterId = user.epochKey(Math.floor(Math.random() * 2) // randomly choose between 1 and 0
-    )
+    // @thebeyondr we need to pass the 0-2 nonce of the epoch key to @unirep/core function to add the user's new data
+    const epkNonce = Math.floor(Math.random() * 3) // we can use 3 epoch keys with latest unirep update
+    const posterId = user.epochKey(epkNonce)
 
-    return { currentEpoch: epoch, userEpochKey: posterId }
+    return { currentEpoch: epoch, userEpochKey: posterId, nonce: epkNonce }
   }
 
 
   const publishPost = async (data: ListingFormValues) => {
+    
     try {
       const epochAndKey = await getEpochAndKey();
       if (!epochAndKey) {
         throw new Error("Failed to get epoch and key");
       }
-      const { currentEpoch, userEpochKey } = epochAndKey;
+      const { currentEpoch, userEpochKey, nonce } = epochAndKey;
       try {
         const newData = {
           ...data,
@@ -379,6 +382,14 @@ const NewListingPage = () => {
         console.log({ newData });
 
         //  TODO: Send form to DB
+
+        // +1 to current member's expected LP score
+        await user.requestData(
+          { [0]: 1 << 23 },
+          nonce,
+          ''
+        )
+        
         //  TODO: Reroute to home page
         listForm.reset();
         changeStep(FormSteps[0])
