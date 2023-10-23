@@ -3,5 +3,6 @@ export default {
     APP_ADDRESS: '0x9A676e781A523b5d0C0e43731313A708CB607508',
     ETH_PROVIDER_URL: 'http://127.0.0.1:8545',
     PRIVATE_KEY: '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+     PRIVATE_KEY: '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
   }
   
