@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
-// will revert back
+
 // const epochLength = 86400
 const epochLength = 600
 
