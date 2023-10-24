@@ -20,6 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useNavigate } from 'react-router-dom'
+import Trustlist from "@/contexts/Trustlist"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -315,8 +317,10 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 }
 
 const NewListingPage = () => {
-  const { calcScoreFromUserData } = useTrustlist()
+  const { calcScoreFromUserData, createNewListing } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
+  const app = useContext(Trustlist)
+  const navigate = useNavigate()
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores }); // Make copy we can use
   const currentStepNumber = FormSteps.findIndex(fs => fs.id === step.id) + 1
@@ -365,10 +369,10 @@ const NewListingPage = () => {
       }
     }
 
-    const posterId = user.epochKey(Math.floor(Math.random() * 2) // randomly choose between 1 and 0
-    )
+    const epkNonce = Math.floor(Math.random() * 3)
+    const posterId = user.epochKey(epkNonce) // randomly choose between 1 and 0
 
-    return { currentEpoch: currentEpoch, userEpochKey: posterId }
+    return { currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
   }
 
   const publishPost = async (data: ListingFormValues) => {
@@ -377,31 +381,42 @@ const NewListingPage = () => {
       if (!epochAndKey) {
         throw new Error("Failed to get epoch and key");
       }
-      const { currentEpoch, userEpochKey } = epochAndKey;
+      const { currentEpoch, userEpochKey, nonce } = epochAndKey;
+      for (let i=0; i<4; i++) {
+        if (trustScoresFromData[trustScoreKeys[i]].isRevealed) {
+          data.scores[trustScoreKeys[i]] = trustScoresFromData[trustScoreKeys[i]].score
+        }
+      }
       try {
         const newData = {
           ...data,
           epoch: currentEpoch.toString(),
-          posterId: userEpochKey,
-          amountType: data.frequency,
           category: Object.values(data.categories)[0],
-          section: Object.keys(data.categories)[0]
-          // TODO: Calculate scores (?)
+          section: Object.keys(data.categories)[0],
+          posterId: userEpochKey,
+          amount: String(data.price),
+          amountType: data.frequency,
+          // scoreString: JSON.stringify(Object.values(data.scores))
         }
-
         console.log({ newData });
-
         //  TODO: Send form to DB
-        //  TODO: Reroute to home page
-        listForm.reset();
-        changeStep(FormSteps[0])
+        // await createNewListing(newData)
       } catch (publishingError) {
         console.error("Error while publishing post: ", publishingError);
       }
+      // +1 to current member's expected LP score
+      await user.requestData(
+        { [0]: 1 << 23 },
+        nonce,
+        ''
+      )
+      // listForm.reset();
+      // changeStep(FormSteps[0])
+      //  TODO: Reroute to home page
+      // navigate('/')
     } catch (epochError) {
       console.error("Error while getting epoch and key: ", epochError);
     }
-
   }
 
   let content;

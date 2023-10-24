@@ -15,7 +15,7 @@ export const trustScores: Record<TrustScoreKey, TrustScoreInfo> = {
 }
 
 export const listingCategories = {
-    'devconnect': ['for sale', 'wanted'],
+    'DevConnect': ['for sale', 'wanted'],
     // 'for sale': [
     //     'antiques',
     //     'appliances',
