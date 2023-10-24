@@ -36,7 +36,8 @@
         "react-toastify": "^9.1.3",
         "tailwind-merge": "^1.14.0",
         "tailwindcss-animate": "^1.0.7",
-        "zod": "^3.22.4"
+        "zod": "^3.22.4",
+        "@unirep-app/contracts": "1.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.19.6",
