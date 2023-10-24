@@ -14,9 +14,10 @@ import { Textarea } from '@/components/ui/textarea'
 import User from "@/contexts/User"
 import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
 import useTrustlist from "@/hooks/useTrustlist"
+import { TrustScoreInfo, TrustScoreKey } from "@/types/local"
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -25,8 +26,6 @@ import { z } from 'zod'
 //TODO: User must be logged in to add listing
 //TODO: When do we calculate trust scores and how? Seems like before sending the formData we calc it but ask to be sure
 // TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
-
-const trustScoresFromData = { ...trustScores }; // Make copy we can use
 
 const NewListingResponseSchema = z.object({
   epoch: z.string(),
@@ -37,7 +36,7 @@ const NewListingResponseSchema = z.object({
   description: z.string().min(1, 'Please describe what you are listing'),
   posterId: z.string(),
   revealTrustScores: z.record(z.boolean()),
-  // scores: z.record(z.number())
+  scores: z.record(z.number().optional())
 })
 
 export type NewListingResponse = z.infer<typeof NewListingResponseSchema>
@@ -94,12 +93,12 @@ const initialFormState: FormState = {
       [TrustScoreKeyEnum.CB]: true,
       [TrustScoreKeyEnum.GV]: true,
     },
-    // scores: {
-    //   [TrustScoreKeyEnum.LP]: 0.3,
-    //   [TrustScoreKeyEnum.LO]: 0.2,
-    //   [TrustScoreKeyEnum.CB]: 0.03,
-    //   [TrustScoreKeyEnum.GV]: 0.5,
-    // }
+    scores: {
+      [TrustScoreKeyEnum.LP]: undefined,
+      [TrustScoreKeyEnum.LO]: undefined,
+      [TrustScoreKeyEnum.CB]: undefined,
+      [TrustScoreKeyEnum.GV]: undefined,
+    }
   },
   step: FormSteps[0],
   isLoading: true,
@@ -148,7 +147,6 @@ const SelectCategoryFormStep = ({ control }: StepSectionProps) => (
     </div>
   </section>
 )
-
 
 const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, trigger }: StepSectionProps) => {
   const price = watch('price')
@@ -235,7 +233,9 @@ const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, 
   )
 }
 
-const TrustScoreFormStep = ({ control }: StepSectionProps) => {
+type TrustScoreFormStepProps = StepSectionProps & { trustScores: Record<TrustScoreKey, TrustScoreInfo> }
+
+const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: TrustScoreFormStepProps) => {
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
@@ -314,52 +314,62 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
   )
 }
 
-
-
 const NewListingPage = () => {
   const { calcScoreFromUserData } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
-
-  // @CJ-Rose: Btw have we been making the assumption that the order of the array and the order of the provableData array are the same? Or do you know?
-  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
-
-  useEffect(() => {
-    if (user.provableData.length === 0) return;
-    for (let i = 0; i < 4; i++) {
-      let data = calcScoreFromUserData(Number(user.provableData[i]))
-      trustScoresFromData[TrustScoreKeyEnum[trustScoreKeys[i]]].score = data;
-    }
-  }, [])
+  const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores }); // Make copy we can use
+  const currentStepNumber = FormSteps.findIndex(fs => fs.id === step.id) + 1
 
   const listForm = useForm({
     resolver: zodResolver(NewListingResponseSchema),
     defaultValues: initialFormState.fields,
   });
-
   const onFormError = (errors: FieldErrors) => console.error({ errors })
+
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
+
+  const updateScores = useCallback(() => {
+    if (user.provableData.length === 0) return;
+    for (let i = 0; i < 4; i++) {
+      let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      setTrustScoresFromData((prevData) => {
+        return {
+          ...prevData,
+          [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
+            ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
+            score: cumulativeScore
+          }
+        }
+      })
+    }
+  }, [user.provableData]);
+
+  useEffect(() => {
+    updateScores();
+  }, [])
 
   const getEpochAndKey = async () => {
     const { userState } = user
-    if (!userState) return;
-    if (userState.sync.calcCurrentEpoch() !== (await userState.latestTransitionedEpoch())) {
+    if (!userState) throw new Error('Please join as a member and try again');
+    const currentEpoch = userState.sync.calcCurrentEpoch()
+    if (currentEpoch !== (await userState.latestTransitionedEpoch())) {
       // transition user to the current epoch if they're not on it
       // TODO: Set loading state
       try {
         console.log('transitioning...') // TODO: Add loading state on UI
         await user.transitionToCurrentEpoch()
+        updateScores();
       } catch (error) {
         throw new Error("Failed to transition to the new epoch");
       }
     }
 
-    const epoch = userState.sync.calcCurrentEpoch()
     const posterId = user.epochKey(Math.floor(Math.random() * 2) // randomly choose between 1 and 0
     )
 
-    return { currentEpoch: epoch, userEpochKey: posterId }
+    return { currentEpoch: currentEpoch, userEpochKey: posterId }
   }
-
 
   const publishPost = async (data: ListingFormValues) => {
     try {
@@ -391,8 +401,6 @@ const NewListingPage = () => {
 
   }
 
-  const currentStepNumber = FormSteps.findIndex(fs => fs.id === step.id) + 1
-
   let content;
   switch (step.id) {
     case 'select-category':
@@ -402,7 +410,7 @@ const NewListingPage = () => {
       content = <GeneralInfoFormStep {...listForm} />;
       break;
     case 'trust-scores':
-      content = <TrustScoreFormStep {...listForm} />;
+      content = <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />;
       break;
     default:
       content = <div>Wait! This isn't a step... how did you get here?</div>;
