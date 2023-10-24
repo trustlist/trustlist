@@ -382,9 +382,12 @@ const NewListingPage = () => {
         const newData = {
           ...data,
           epoch: currentEpoch.toString(),
-          posterId: userEpochKey
+          posterId: userEpochKey,
+          amountType: data.frequency,
+          category: Object.values(data.categories)[0],
+          section: Object.keys(data.categories)[0]
           // TODO: Calculate scores (?)
-        } as NewListingResponse
+        }
 
         console.log({ newData });
 
