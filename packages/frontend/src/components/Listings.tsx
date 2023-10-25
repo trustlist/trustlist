@@ -50,6 +50,8 @@ export default observer(({ section, category }: Props) => {
     let listings = []
     if (section === 'for sale') {
         listings = app.forSaleByCategory.get(category)
+    } else if (section === 'DevConnect') {
+        listings = app.DevConnectByCategory.get(category)
     } else if (section === 'housing') {
         listings = app.housingByCategory.get(category)
     } else if (section === 'jobs') {

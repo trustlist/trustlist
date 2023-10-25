@@ -21,7 +21,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
-import Trustlist from "@/contexts/Trustlist"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -30,7 +29,7 @@ import Trustlist from "@/contexts/Trustlist"
 // TODO: Choosing what epoch key — I don't think this needs to be a user selected thing. Whats the difference between them choosing one long string vs another? Basically a coin flip right?
 
 const NewListingResponseSchema = z.object({
-  epoch: z.string(),
+  epoch: z.number(),
   categories: z.record(z.string().min(1, 'Please choose an option')),
   title: z.string().min(1, 'Please add a title'),
   price: z.number().min(1, 'Please add the price'), //TODO: usd now , include crypto (?)
@@ -82,7 +81,7 @@ const initialCategories = createInitialCategories(listingCategories);
 
 const initialFormState: FormState = {
   fields: {
-    epoch: '',
+    epoch: 0,
     categories: initialCategories,
     title: '',
     price: 0,
@@ -319,7 +318,6 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 const NewListingPage = () => {
   const { calcScoreFromUserData, createNewListing } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
-  const app = useContext(Trustlist)
   const navigate = useNavigate()
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores }); // Make copy we can use
@@ -369,8 +367,8 @@ const NewListingPage = () => {
       }
     }
 
-    const epkNonce = Math.floor(Math.random() * 3)
-    const posterId = user.epochKey(epkNonce) // randomly choose between 1 and 0
+    const epkNonce = Math.floor(Math.random() * 3)// randomly choose between 2 and 0
+    const posterId = user.epochKey(epkNonce) 
 
     return { currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
   }
@@ -390,17 +388,17 @@ const NewListingPage = () => {
       try {
         const newData = {
           ...data,
-          epoch: currentEpoch.toString(),
+          epoch: currentEpoch,
           category: Object.values(data.categories)[0],
           section: Object.keys(data.categories)[0],
           posterId: userEpochKey,
           amount: String(data.price),
           amountType: data.frequency,
-          // scoreString: JSON.stringify(Object.values(data.scores))
+          scoreString: JSON.stringify(data.scores)
         }
         console.log({ newData });
         //  TODO: Send form to DB
-        // await createNewListing(newData)
+        await createNewListing(newData)
       } catch (publishingError) {
         console.error("Error while publishing post: ", publishingError);
       }
@@ -410,8 +408,8 @@ const NewListingPage = () => {
         nonce,
         ''
       )
-      // listForm.reset();
-      // changeStep(FormSteps[0])
+      listForm.reset();
+      changeStep(FormSteps[0])
       //  TODO: Reroute to home page
       // navigate('/')
     } catch (epochError) {
