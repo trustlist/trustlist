@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
+import {  trustScores } from '@/data'
 import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
 import Button from './Button'
@@ -43,6 +44,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
     const ui = useContext(Interface)
     const navigate = useNavigate()
     const [showMakeOffer, setShowMakeOffer] = useState<boolean>(false)
+    const trustScoreInfo = { ...trustScores }; 
 
     useEffect(() => {
         const loadData = async () => {
@@ -52,8 +54,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
     }, [])
     const offers = app.offersByListingId.get(listing._id)
     const memberKeys = [user.epochKey(0), user.epochKey(1)]
-    const pScores = JSON.parse(listing.scoreString)
-    const posterScores = app.calcScoresFromDB(pScores)
+    const posterScores = JSON.parse(listing.scoreString)
 
     return (
         <div className="dark-bg">
@@ -142,11 +143,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                 </div>
                             </div>
                             <div>
-                                {app.scoreDescriptions.map((desc, i) => (
+                                {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
                                     <div className="detail-score">
                                         <div className="detail-tooltip">
                                             <Tooltip
-                                                text={desc}
+                                                text={`${scoreInfo.title} : ${scoreInfo.description}`}
                                                 content={
                                                     <img
                                                         src={require('../../public/info_icon.svg')}
@@ -157,20 +158,20 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                         </div>
                                         <div className="trust-item">
                                             <div>
-                                                {app.scoreNames[i]} score:
+                                                {key} score:
                                             </div>
                                             <div style={{ fontWeight: '600' }}>
-                                                {posterScores[i] === 9999999 ? (
+                                                {posterScores[key] === 9999999 ? (
                                                     <img
                                                         src={require('../../public/not_visible.svg')}
                                                         alt="eye with slash"
                                                     />
-                                                ) : posterScores[i] === 0 ? (
+                                                ) : posterScores[key] === 0 ? (
                                                     '...'
                                                 ) : (
                                                     <div>
                                                         {String(
-                                                            posterScores[i]
+                                                            posterScores[key]
                                                         )}{' '}
                                                         %
                                                     </div>

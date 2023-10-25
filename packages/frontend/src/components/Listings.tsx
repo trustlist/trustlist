@@ -73,8 +73,7 @@ export default observer(({ section, category }: Props) => {
                       .slice()
                       .reverse()
                       .map((listing: Listing) => {
-                          const posterScores = JSON.parse(listing.scoreString)
-                          const scores = app.calcScoresFromDB(posterScores)
+                          const scores = JSON.parse(listing.scoreString)
                           {
                               listing.epoch !=
                               user.userState?.sync.calcCurrentEpoch()
@@ -155,27 +154,23 @@ export default observer(({ section, category }: Props) => {
                                           )}
                                       </div>
                                       <div className="score-container">
-                                          {scores.map((score, i) => (
+                                          {Object.entries(scores).map(([key, value]) => (
                                               <div
                                                   className="score-item"
-                                                  key={i}
+                                                  key={key}
                                               >
                                                   <Tooltip
-                                                      text={
-                                                          app.scoreDescriptions[
-                                                              i
-                                                          ]
-                                                      }
+                                                      text={key}
                                                       content={
-                                                          score === 9999999 ? (
+                                                          value === 9999999 ? (
                                                               <img
                                                                   src={require('../../public/not_visible.svg')}
                                                                   alt="eye with slash"
                                                               />
-                                                          ) : score === 0 ? (
+                                                          ) : value === 0 ? (
                                                               '...'
                                                           ) : (
-                                                              score
+                                                              value
                                                           )
                                                       }
                                                   />
