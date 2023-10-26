@@ -37,7 +37,7 @@ const NewListingResponseSchema = z.object({
   description: z.string().min(1, 'Please describe what you are listing'),
   posterId: z.string(),
   revealTrustScores: z.record(z.boolean()),
-  scores: z.record(z.number().optional())
+  scores: z.record(z.string().optional())
 })
 
 export type NewListingResponse = z.infer<typeof NewListingResponseSchema>
@@ -95,10 +95,10 @@ const initialFormState: FormState = {
       [TrustScoreKeyEnum.GV]: true,
     },
     scores: {
-      [TrustScoreKeyEnum.LP]: undefined,
-      [TrustScoreKeyEnum.LO]: undefined,
-      [TrustScoreKeyEnum.CB]: undefined,
-      [TrustScoreKeyEnum.GV]: undefined,
+      [TrustScoreKeyEnum.LP]: '',
+      [TrustScoreKeyEnum.LO]: '',
+      [TrustScoreKeyEnum.CB]: '',
+      [TrustScoreKeyEnum.GV]: '',
     }
   },
   step: FormSteps[0],
@@ -248,7 +248,7 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
             <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
               <div>
                 <FormLabel className="text-foreground text-lg" htmlFor={key}>
-                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scoreInfo.score}%</span>
+                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scoreInfo.score}{scoreInfo.score === 'n/a' ? null : '%'}</span>
                 </FormLabel>
                 <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
               </div>
@@ -340,7 +340,7 @@ const NewListingPage = () => {
           ...prevData,
           [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
             ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
-            score: cumulativeScore
+            score: String(cumulativeScore)
           }
         }
       })
@@ -378,7 +378,8 @@ const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
     if(isRevealed){
       return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
     }
-    return newScores;
+    return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
+    // return newScores;
   }, {})
 }
   const publishPost = async (data: ListingFormValues) => {

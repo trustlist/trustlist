@@ -137,7 +137,7 @@ const useTrustlist = () => {
     // TODO: Could the two following fns be one? Core score calc is the same, only diff is what's passed to them
     // For current user related actions (dashboard, createListings)
     const calcScoreFromUserData = (data: number) => {
-        if (data === 0) return 0
+        if (data === 0) return 'n/a'
         const score = Math.floor(((data % 128) / (data >> 23)) * 100)
         return score
     }

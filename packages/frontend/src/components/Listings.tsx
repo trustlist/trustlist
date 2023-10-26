@@ -154,28 +154,22 @@ export default observer(({ section, category }: Props) => {
                                           )}
                                       </div>
                                       <div className="score-container">
-                                          {Object.entries(scores).map(([key, value]) => (
-                                              <div
-                                                  className="score-item"
-                                                  key={key}
-                                              >
-                                                  <Tooltip
-                                                      text={key}
-                                                      content={
-                                                          value === 9999999 ? (
-                                                              <img
-                                                                  src={require('../../public/not_visible.svg')}
-                                                                  alt="eye with slash"
-                                                              />
-                                                          ) : value === 0 ? (
-                                                              '...'
-                                                          ) : (
-                                                              value
-                                                          )
-                                                      }
-                                                  />
-                                              </div>
-                                          ))}
+                                        {Object.entries(scores).map(([key, value]) => (
+                                          <div
+                                            className="score-item"
+                                            key={key}
+                                          >
+                                            <Tooltip
+                                              text={key}
+                                              content={value === 'X' ? 
+                                                <img
+                                                  src={require('../../public/not_visible.svg')}
+                                                  alt="eye with slash"
+                                                />
+                                              : value}
+                                            />
+                                          </div>
+                                        ))}
                                       </div>
                                   </div>
 

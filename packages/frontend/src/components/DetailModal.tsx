@@ -131,56 +131,47 @@ export default observer(({ listing, setShowDetail }: Props) => {
                         </div>
 
                         <div className="detail-container">
-                            <div className="listing-detail">
-                                <div className="detail-title">
-                                    <div>{listing.title.slice(0, 60)}</div>
-                                    <div style={{ color: 'blue' }}>
-                                        ${listing.amount} / {listing.amountType}
-                                    </div>
-                                </div>
-                                <div className="detail-description">
-                                    {listing.description}
-                                </div>
+                          <div className="listing-detail">
+                            <div className="detail-title">
+                              <div>{listing.title.slice(0, 60)}</div>
+                              <div style={{ color: 'blue' }}>
+                                ${listing.amount} / {listing.amountType}
+                              </div>
                             </div>
-                            <div>
-                                {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
-                                    <div className="detail-score">
-                                        <div className="detail-tooltip">
-                                            <Tooltip
-                                                text={`${scoreInfo.title} : ${scoreInfo.description}`}
-                                                content={
-                                                    <img
-                                                        src={require('../../public/info_icon.svg')}
-                                                        alt="info icon"
-                                                    />
-                                                }
-                                            />
-                                        </div>
-                                        <div className="trust-item">
-                                            <div>
-                                                {key} score:
-                                            </div>
-                                            <div style={{ fontWeight: '600' }}>
-                                                {posterScores[key] === 9999999 ? (
-                                                    <img
-                                                        src={require('../../public/not_visible.svg')}
-                                                        alt="eye with slash"
-                                                    />
-                                                ) : posterScores[key] === 0 ? (
-                                                    '...'
-                                                ) : (
-                                                    <div>
-                                                        {String(
-                                                            posterScores[key]
-                                                        )}{' '}
-                                                        %
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                            <div className="detail-description">
+                              {listing.description}
                             </div>
+                          </div>
+                          <div>
+                            {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
+                              <div className="detail-score">
+                                <div className="detail-tooltip">
+                                  <Tooltip
+                                    text={`${scoreInfo.title} : ${scoreInfo.description}`}
+                                    content={
+                                      <img
+                                        src={require('../../public/info_icon.svg')}
+                                        alt="info icon"
+                                      />
+                                    }
+                                  />
+                                </div>
+                                <div className="trust-item">
+                                  <div>
+                                    {key} score:
+                                  </div>
+                                  <div style={{ fontWeight: '600' }}>
+                                    {posterScores[key] === 'X' ?
+                                      <img
+                                          src={require('../../public/not_visible.svg')}
+                                          alt="eye with slash"
+                                      />
+                                    : <div>{posterScores[key]}{' '}{posterScores[key]==='n/a' ? null : '%'}</div>}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
 
                         <div className="offers-container">
