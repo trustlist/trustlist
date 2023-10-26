@@ -374,11 +374,11 @@ const NewListingPage = () => {
   }
 
 const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
-  return Object.entries(scoresRevealed).reduce((acc, [key, value]) => {
-    if(value){
-      return { ...acc, [key as TrustScoreKey]: trustScoresFromData[key as TrustScoreKey].score }
+  return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
+    if(isRevealed){
+      return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
     }
-    return acc;
+    return newScores;
   }, {})
 }
   const publishPost = async (data: ListingFormValues) => {
