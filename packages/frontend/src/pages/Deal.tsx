@@ -40,6 +40,7 @@ export default observer(() => {
                     <div style={{ textAlign: 'center' }}>
                         <h3>{deal.title.slice(0, 25)}</h3>
                         <h3>${deal.offerAmount}</h3>
+                        <h3>{deal.contact}</h3>
                     </div>
                 ) : null}
                 {deal ? (
@@ -135,6 +136,7 @@ export default observer(() => {
                                 <div>
                                     <h3>{deal.title.slice(0, 25)}</h3>
                                     <h3>${deal.offerAmount}</h3>
+                                    <h3>{deal.contact}</h3>
                                 </div>
                             ) : null}
 

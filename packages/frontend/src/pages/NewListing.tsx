@@ -21,6 +21,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
+import Tooltip from "@/components/Tooltip"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -35,6 +36,7 @@ const NewListingResponseSchema = z.object({
   price: z.number().min(1, 'Please add the price'), //TODO: usd now , include crypto (?)
   frequency: z.literal("one time"),
   description: z.string().min(1, 'Please describe what you are listing'),
+  contact: z.string().min(1, 'Please add a TG or Discord handle'),
   posterId: z.string(),
   revealTrustScores: z.record(z.boolean()),
   scores: z.record(z.string().optional())
@@ -87,6 +89,7 @@ const initialFormState: FormState = {
     price: 0,
     frequency: 'one time',
     description: '',
+    contact: '',
     posterId: '',
     revealTrustScores: {
       [TrustScoreKeyEnum.LP]: true,
@@ -227,6 +230,35 @@ const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, 
               />
             </FormControl>
             {errors && <FormMessage>{errors.description?.message}</FormMessage>}
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
+        name="contact"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className='text-base flex gap-2 items-center'>
+              Contact
+              <Tooltip text='Please include a Telegram or Discord handle. Your contact information will only be shown to the member whose offer you accept.'
+                content={
+                  <img
+                    src={require('../../public/info_icon.svg')}
+                    alt="info icon"
+                  />
+                }
+              />
+            </FormLabel>
+            <FormControl>
+              <Input className='text-base'
+                {...field}
+                onBlur={async (e) => {
+                  await trigger('contact');
+                  field.onBlur();
+                }}
+              />
+            </FormControl>
+            {errors && <FormMessage>{errors.contact?.message}</FormMessage>}
           </FormItem>
         )}
       />
