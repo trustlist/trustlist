@@ -373,6 +373,14 @@ const NewListingPage = () => {
     return { currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
   }
 
+const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
+  return Object.entries(scoresRevealed).reduce((acc, [key, value]) => {
+    if(value){
+      return { ...acc, [key as TrustScoreKey]: trustScoresFromData[key as TrustScoreKey].score }
+    }
+    return acc;
+  }, {})
+}
   const publishPost = async (data: ListingFormValues) => {
     try {
       const epochAndKey = await getEpochAndKey();
@@ -380,11 +388,7 @@ const NewListingPage = () => {
         throw new Error("Failed to get epoch and key");
       }
       const { currentEpoch, userEpochKey, nonce } = epochAndKey;
-      for (let i=0; i<4; i++) {
-        if (trustScoresFromData[trustScoreKeys[i]].isRevealed) {
-          data.scores[trustScoreKeys[i]] = trustScoresFromData[trustScoreKeys[i]].score
-        }
-      }
+      const currentScores = generateScores(data.revealTrustScores);
       try {
         const newData = {
           ...data,
@@ -394,7 +398,7 @@ const NewListingPage = () => {
           posterId: userEpochKey,
           amount: String(data.price),
           amountType: data.frequency,
-          scoreString: JSON.stringify(data.scores)
+          scoreString: JSON.stringify(currentScores)
         }
         console.log({ newData });
         //  TODO: Send form to DB
