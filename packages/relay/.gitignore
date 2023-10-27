@@ -2,4 +2,4 @@ build/
 keys
 .env
 db.sqlite
-.SQLite
+SQLite

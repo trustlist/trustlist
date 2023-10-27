@@ -391,8 +391,8 @@ const NewListingPage = () => {
   }
 
   const transitionAlert = () => toast.promise(autoTransition, {
-    pending: "Please wait a moment while you are tranistioned to the current epoch.",
-    success: "Transition successful!  Please confirm whether you would like your updated scores to be shown and click publish ro complete your listing.",
+    pending: "Please wait a moment while you are tranistioned to the current epoch...",
+    success: "Transition successful!  Please confirm whether you would like your updated scores to be shown and click publish to complete your listing.",
     error: "Failed to transition to the current epoch, please try again in a moment."
   });
 
@@ -441,7 +441,7 @@ const NewListingPage = () => {
   }
 
   const publishingAlert = (newData: any) => toast.promise(sendData(newData), {
-    pending: "Please wait a moment while your listing is being published.",
+    pending: "Please wait a moment while your listing is being published...",
     success: { render: 
                 <div className="flex space-around gap-3">
                   <div>
