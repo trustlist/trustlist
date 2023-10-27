@@ -1,5 +1,13 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
+
+import { Input } from "@/components/ui/input"
+import { Switch } from '@/components/ui/switch'
+import { z } from 'zod'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import ScoreReveal from './ScoreReveal'
 import ScoreHide from './ScoreHide'
 import Button from '../components/Button'
@@ -7,6 +15,45 @@ import './makeOfferModal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
+
+const NewOfferResponseSchema = z.object({
+  _id: z.string(),
+  amount: z.number().min(1, 'Please add the amount'), //TODO: usd now , include crypto (?)
+  responderId: z.string(),
+  revealTrustScores: z.record(z.boolean()),
+  scores: z.record(z.string().optional())
+})
+
+export type NewOfferResponse = z.infer<typeof NewOfferResponseSchema>
+
+type FormState = {
+  fields: NewOfferResponse
+  // step: FormStep
+  isLoading: boolean
+  error?: string
+}
+
+const initialFormState: FormState = {
+  fields: {
+    _id: '',
+    amount: 0,
+    responderId: '',
+    revealTrustScores: {
+      [TrustScoreKeyEnum.LP]: true,
+      [TrustScoreKeyEnum.LO]: true,
+      [TrustScoreKeyEnum.CB]: true,
+      [TrustScoreKeyEnum.GV]: true,
+    },
+    scores: {
+      [TrustScoreKeyEnum.LP]: '',
+      [TrustScoreKeyEnum.LO]: '',
+      [TrustScoreKeyEnum.CB]: '',
+      [TrustScoreKeyEnum.GV]: '',
+    }
+  },
+  // step: FormSteps[0],
+  isLoading: true,
+}
 
 type Props = {
     listingId: string
@@ -160,11 +207,11 @@ export default observer(
                                     {user.epochKey(reqInfo.nonce ?? 0)}
                                 </p>
                                 <div style={{ display: 'flex' }}>
-                                    {repProof.proof.length ? (
+                                    {/* {repProof.proof.length ? (
                                         <div className="proof">
                                             {repProof.valid ? '✅' : '❌'}
                                         </div>
-                                    ) : null}
+                                    ) : null} */}
                                     <Button
                                         onClick={async () => {
                                             if (!offerAmount) {
@@ -189,7 +236,7 @@ export default observer(
                                     </Button>
                                 </div>
                                 {/* only allow offer submit after valid proof */}
-                                {repProof.valid ? (
+                                {/* {repProof.valid ? ( */}
                                     <input
                                         style={{ marginTop: '0.5rem' }}
                                         type="submit"
@@ -216,14 +263,14 @@ export default observer(
                                             window.location.reload()
                                         }}
                                     />
-                                ) : (
+                                {/* ) : ( */}
                                     <button
                                         style={{ marginTop: '0.5rem' }}
                                         className="blocked"
                                     >
                                         SUBMIT OFFER
                                     </button>
-                                )}
+                                {/* )} */}
                             </div>
                         </div>
                         <button

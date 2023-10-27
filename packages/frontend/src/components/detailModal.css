@@ -3,16 +3,6 @@
     color: black;
 }
 
-.action-bar {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 17rem 2rem 0;
-}
-
-.action-item {
-    font-size: 0.8rem;
-}
-
 .detail-container {
     display: flex;
     flex-direction: row;
@@ -20,7 +10,7 @@
 
 .listing-detail {
     font-family: 'Times New Roman', Times, serif;
-    width: 75%;
+    width: 70%;
     margin-right: 2rem;
 }
 
@@ -31,12 +21,13 @@
 }
 
 .detail-description {
-    max-height: 6rem;
+    max-height: 7rem;
     overflow: scroll;
 }
 
 .detail-score {
     display: flex;
+    width: 100%;
 }
 
 .detail-tooltip {
@@ -49,7 +40,7 @@
     background-color: rgb(233, 231, 231);
     border-radius: 0.3rem;
     border: 1px solid rgb(191, 190, 190);
-    width: 120px;
+    width: 100%;
     text-align: center;
     margin: 0.2rem 0;
     padding: 0.3rem 0.8rem;
