@@ -45,7 +45,8 @@ export default observer(() => {
 
   const date = new Date()
   date.setSeconds(date.getSeconds() + remainingTime)
-  const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${date.getMinutes()}`
+  const minutes = date.getMinutes()
+  const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${minutes < 10 ? 0 : ''}${minutes}`
 
   const notify = () => toast.warning("You're not a member yet. Please click JOIN to participate.");
 
@@ -112,7 +113,7 @@ export default observer(() => {
         </div>
       </div>
 
-      <ToastContainer position='top-right' autoClose={4000} />
+      {!user.hasSignedUp && <ToastContainer className='header-toast' toastClassName='toast' position='top-right' autoClose={4000} />}
       <Outlet />
     </>
   )

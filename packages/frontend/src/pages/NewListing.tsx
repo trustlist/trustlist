@@ -20,8 +20,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormReturn, UseFormTrigger, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Tooltip from "@/components/Tooltip"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -383,48 +385,96 @@ const NewListingPage = () => {
     updateScores();
   }, [])
 
+  const autoTransition = async () => {
+    await user.transitionToCurrentEpoch()
+    updateScores()
+  }
+
+  const transitionAlert = () => toast.promise(autoTransition, {
+    pending: "Please wait a moment while you are tranistioned to the current epoch.",
+    success: "Transition successful!  Please confirm whether you would like your updated scores to be shown and click publish ro complete your listing.",
+    error: "Failed to transition to the current epoch, please try again in a moment."
+  });
+
   const getEpochAndKey = async () => {
     const { userState } = user
     if (!userState) throw new Error('Please join as a member and try again');
+    let userStateUpdated = false
     const currentEpoch = userState.sync.calcCurrentEpoch()
     if (currentEpoch !== (await userState.latestTransitionedEpoch())) {
       // transition user to the current epoch if they're not on it
-      // TODO: Set loading state
       try {
-        console.log('transitioning...') // TODO: Add loading state on UI
-        await user.transitionToCurrentEpoch()
-        updateScores();
+        transitionAlert()
+        console.log('transitioning...') 
+        // await user.transitionToCurrentEpoch()
+        // updateScores()
       } catch (error) {
         throw new Error("Failed to transition to the new epoch");
       }
+      userStateUpdated = true
     }
 
     const epkNonce = Math.floor(Math.random() * 3)// randomly choose between 2 and 0
     const posterId = user.epochKey(epkNonce) 
 
-    return { currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
+    return { userUpdated: userStateUpdated, currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
   }
 
-const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
-  return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
-    if(isRevealed){
-      return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
-    }
-    return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
-    // return newScores;
-  }, {})
-}
+  const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
+    return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
+      if(isRevealed){
+        return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
+      }
+      return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
+      // return newScores;
+    }, {})
+  }
+
+  const sendData = async (listingData: any) => {
+    await createNewListing(listingData)
+    // +1 to current member's expected LP score
+    await user.requestData(
+      { [0]: 1 << 23 },
+      listingData.nonce,
+      ''
+    )
+  }
+
+  const publishingAlert = (newData: any) => toast.promise(sendData(newData), {
+    pending: "Please wait a moment while your listing is being published.",
+    success: { render: 
+                <div className="flex space-around gap-3">
+                  <div>
+                    <div>Listing published! One "listed" point has been added to your Legitimate Posting score.</div>
+                    <div>Please complete your deal during this epoch to build your LP reputation.</div>
+                  </div>
+                  <button className="text-white font-lg border-1 border-white px-4 py-2"
+                          onClick={() => {
+                            listForm.reset();
+                            changeStep(FormSteps[0])
+                            navigate('/')
+                          }}>
+                    Home
+                  </button>
+                </div>,
+              closeButton: false },
+    error: "There was a problem publishing your listing, please try again"
+  });
+
   const publishPost = async (data: ListingFormValues) => {
     try {
       const epochAndKey = await getEpochAndKey();
       if (!epochAndKey) {
         throw new Error("Failed to get epoch and key");
       }
-      const { currentEpoch, userEpochKey, nonce } = epochAndKey;
+      const { userUpdated, currentEpoch, userEpochKey, nonce } = epochAndKey;
+      if (userUpdated) return
+
       const currentScores = generateScores(data.revealTrustScores);
       try {
         const newData = {
           ...data,
+          nonce: nonce,
           epoch: currentEpoch,
           category: Object.values(data.categories)[0],
           section: Object.keys(data.categories)[0],
@@ -435,20 +485,16 @@ const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
         }
         console.log({ newData });
         //  TODO: Send form to DB
-        await createNewListing(newData)
+        publishingAlert(newData)
+        // await createNewListing(newData)
       } catch (publishingError) {
         console.error("Error while publishing post: ", publishingError);
       }
-      // +1 to current member's expected LP score
-      await user.requestData(
-        { [0]: 1 << 23 },
-        nonce,
-        ''
-      )
-      listForm.reset();
-      changeStep(FormSteps[0])
-      //  TODO: Reroute to home page
-      // navigate('/')
+      //   listForm.reset();
+      //   changeStep(FormSteps[0])
+      //   //  TODO: Reroute to home page
+      //   navigate('/')
+      
     } catch (epochError) {
       console.error("Error while getting epoch and key: ", epochError);
     }
@@ -475,6 +521,8 @@ const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
         {content}
         <FormFooter currentStep={currentStepNumber} changeStep={changeStep} trigger={listForm.trigger} />
       </form>
+      {/* TODO: show toast when transition starts, progress*/}
+      <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
     </Form>
   );
 }
