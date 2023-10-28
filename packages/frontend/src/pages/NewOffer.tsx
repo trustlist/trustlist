@@ -229,7 +229,7 @@ const NewOfferPage = () => {
                 <div className="flex space-around gap-3">
                   <div>
                     <div>Offer submitted! One "offered" point will be added to your LO score if your offer is accepted by the lister.</div>
-                    <div>Please complete your deal during this epoch to build your Legitimate Offer reputation.</div>
+                    <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
                   </div>
                   <button className="text-white font-lg border-1 border-white px-4 py-2"
                           onClick={() => {
