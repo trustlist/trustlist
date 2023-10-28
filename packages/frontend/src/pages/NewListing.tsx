@@ -521,7 +521,6 @@ const NewListingPage = () => {
         {content}
         <FormFooter currentStep={currentStepNumber} changeStep={changeStep} trigger={listForm.trigger} />
       </form>
-      {/* TODO: show toast when transition starts, progress*/}
       <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
     </Form>
   );

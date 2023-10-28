@@ -27,7 +27,7 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const makeOffer = async (newOffer: any
+    const makeOffer = async (offerData: any
         // epoch: any,
         // listingId: string,
         // listingTitle: string, // Why do we need this for the offer?
@@ -36,14 +36,13 @@ const useTrustlist = () => {
         // scoreString: string
     ) => {
         // TODO: /api/{listingId}/offers/new
-        console.log(newOffer)
         const data = await fetch(`${SERVER}/api/submitOffer`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-              ...newOffer
+              ...offerData
                 // epoch,
                 // listingId,
                 // listingTitle,

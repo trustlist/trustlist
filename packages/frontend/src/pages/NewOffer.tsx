@@ -1,54 +1,186 @@
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form"
 import { useContext, useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { observer } from 'mobx-react-lite'
-import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
+import { TrustScoreKeyEnum, trustScores } from '@/data'
+import { TrustScoreInfo, TrustScoreKey } from "@/types/local"
 import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch'
 import { ToastContainer, toast } from 'react-toastify';
+import { z } from 'zod'
+import { cn } from '@/utils/cn'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-form'
 import 'react-toastify/dist/ReactToastify.css';
 import useTrustlist from "@/hooks/useTrustlist"
-
-import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 
-export default observer(() => {
+const NewOfferResponseSchema = z.object({
+  epoch: z.number(),
+  offerAmount: z.number().min(1, 'Please input the amount of your offer'),
+  responderId: z.string(),
+  revealTrustScores: z.record(z.boolean()),
+  scores: z.record(z.string().optional())
+})
+
+export type NewOfferResponse = z.infer<typeof NewOfferResponseSchema>
+
+type FormState = {
+  fields: NewOfferResponse
+  isLoading: boolean
+  error?: string
+}
+
+type OfferFormValues = FieldValues & NewOfferResponse
+
+type StepSectionProps = UseFormReturn<OfferFormValues>
+
+const initialFormState: FormState = {
+  fields: {
+    epoch: 0,
+    offerAmount: 0,
+    responderId: '',
+    revealTrustScores: {
+      [TrustScoreKeyEnum.LP]: true,
+      [TrustScoreKeyEnum.LO]: true,
+      [TrustScoreKeyEnum.CB]: true,
+      [TrustScoreKeyEnum.GV]: true,
+    },
+    scores: {
+      [TrustScoreKeyEnum.LP]: '',
+      [TrustScoreKeyEnum.LO]: '',
+      [TrustScoreKeyEnum.CB]: '',
+      [TrustScoreKeyEnum.GV]: '',
+    }
+  },
+  isLoading: true,
+}
+
+const InputOfferAmount = ({ watch, control, formState: { errors }, setValue, trigger }: StepSectionProps) => {
+  const amount = watch('offerAmount')
+  const [displayAmount, setDisplayAmount] = useState('');
+
+  useEffect(() => {
+    if (amount)
+      setDisplayAmount(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount));
+  }, [])
+
+  return (
+    <section className='flex flex-col space-y-4'>
+      <FormField
+        control={control}
+        name="offerAmount"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel className='text-base'>Enter the amount you're offering</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type='text'
+                  value={displayAmount}
+                  className='w-[180px] text-base'
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value.replace(/[^\d\.]/g, ''));
+                    if (!isNaN(value)) {
+                      setValue('offerAmount', value);
+                      setDisplayAmount(e.target.value)
+                    }
+                  }}
+                  onBlur={async () => {
+                    await trigger('price');
+                    field.onBlur();
+                    setDisplayAmount(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount));
+                  }}
+                />
+              </FormControl>
+              {errors && <FormMessage>{errors.offerAmount?.message}</FormMessage>}
+            </FormItem>
+          )
+        }}
+      />
+    </section>
+  )
+}
+
+type TrustScoreFormStepProps = StepSectionProps & { trustScores: Record<TrustScoreKey, TrustScoreInfo> }
+
+const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: TrustScoreFormStepProps) => {
+  return (
+    <section className='flex flex-col space-y-4'>
+      {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
+        <FormField
+          key={key}
+          control={control}
+          name={`revealTrustScores.${key}`}
+          render={({ field }) => (
+            <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
+              <div>
+                <FormLabel className="text-foreground text-lg" htmlFor={key}>
+                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scoreInfo.score}{scoreInfo.score === 'n/a' ? null : '%'}</span>
+                </FormLabel>
+                <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
+              </div>
+              <FormControl>
+                <div className="flex space-x-2">
+                  <Switch
+                    id={key}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
+                  />
+                  <p className='text-muted-foreground'>{field.value ? 'Show' : 'Hide'}</p>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      ))}
+    </section>
+  )
+}
+
+const NewOfferPage = () => {
   const { listingId, listingTitle }: any = useParams()
   const { calcScoreFromUserData, makeOffer } = useTrustlist()
-  const app = useContext(Trustlist)
   const user = useContext(User)
   const navigate = useNavigate()
+  const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores })
 
-  const [offerAmount, setOfferAmount] = useState('')
-  const [rScores, setRScores] = useState<string[]>([])
-  const [isRevealed, setIsRevealed] = useState([true, true, true, true])
-  // const [rScores, setRScores] = useState<{
-  //   [key: string]: string
-  // }>({ "LP": '',"LO": '', "CB": '', "GV": '' })
-  // const [isRevealed, setIsRevealed] = useState<{
-  //   [key: string]: boolean
-  // }>({ "LP": true, 'LO': true, "CB": true, "GV": true })
+  const listForm = useForm({
+    resolver: zodResolver(NewOfferResponseSchema),
+    defaultValues: initialFormState.fields,
+  });
+  const onFormError = (errors: FieldErrors) => console.error({ errors })
+
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const updateScores = useCallback(() => {
-    let scores: string[] = []
     if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
       let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
-      if (isRevealed[i]) {
-        scores.push(String(cumulativeScore))
-      } else {
-        scores.push('X')
-      }
+      setTrustScoresFromData((prevData) => {
+        return {
+          ...prevData,
+          [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
+            ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
+            score: String(cumulativeScore)
+          }
+        }
+      })
     }
-    setRScores(scores)
   }, [user.provableData]);
 
   useEffect(() => {
     updateScores();
   }, [])
-
-  const toggleReveal = (index: number) => {
-    // setIsRevealed()
-  }
 
   const autoTransition = async () => {
     await user.transitionToCurrentEpoch()
@@ -69,7 +201,7 @@ export default observer(() => {
     if (currentEpoch !== (await userState.latestTransitionedEpoch())) {
       try {
         transitionAlert()
-        console.log('transitioning...') 
+        console.log('transitioning...')
       } catch (error) {
         throw new Error("Failed to transition to the new epoch");
       }
@@ -82,7 +214,16 @@ export default observer(() => {
     return { userUpdated: userStateUpdated, currentEpoch: currentEpoch, userEpochKey: responderId, nonce: epkNonce }
   }
 
-  const submitOfferAlert = (newData: any) => toast.promise(async () => makeOffer(newData), {
+  const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
+    return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
+      if(isRevealed){
+        return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
+      }
+      return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
+    }, {})
+  }
+
+  const submitOfferAlert = (newData: any) => toast.promise(makeOffer(newData), {
     pending: "Please wait a moment while your offer is being submitted...",
     success: { render: 
                 <div className="flex space-around gap-3">
@@ -92,16 +233,17 @@ export default observer(() => {
                   </div>
                   <button className="text-white font-lg border-1 border-white px-4 py-2"
                           onClick={() => {
+                            listForm.reset();
                             navigate('/')
                           }}>
                     Home
                   </button>
                 </div>,
               closeButton: false },
-    error: "There was a problem submitting your offer, please try again."
+    error: "There was a problem submitting you offer, please try again"
   });
 
-  const submitOffer = async () => {
+  const submitOffer = async (data: OfferFormValues) => {
     try {
       const epochAndKey = await getEpochAndKey();
       if (!epochAndKey) {
@@ -110,19 +252,21 @@ export default observer(() => {
       const { userUpdated, currentEpoch, userEpochKey, nonce } = epochAndKey;
       if (userUpdated) return
 
+      const currentScores = generateScores(data.revealTrustScores);
       try {
         const newData = {
+          ...data,
           epoch: currentEpoch,
           listingId: listingId,
-          listingTitle: listingTitle, 
+          listingTitle: listingTitle,
           responderId: userEpochKey,
-          amount: offerAmount,
-          scoreString: JSON.stringify(rScores)
+          offerAmount: String(data.offerAmount),
+          scoreString: JSON.stringify(currentScores)
         }
         console.log({ newData });
         submitOfferAlert(newData)
-      } catch (publishingError) {
-        console.error("Error while submitting offer: ", publishingError);
+      } catch (offerError) {
+        console.error("Error while publishing post: ", offerError);
       }
       
     } catch (epochError) {
@@ -131,62 +275,16 @@ export default observer(() => {
   }
 
   return (
-    <div className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-      <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
-      
-      <section className='flex flex-col space-y-4'>
-        <label htmlFor="offerAmount" className="">Enter the amount you're offering:</label>
-        <Input
-          className='text-base'
-          type="text"
-          id="offerAmount"
-          name="offerAmount"
-          onChange={(e) => setOfferAmount(e.target.value)}
-        />
-      </section>
-      
-      <section className='flex flex-col space-y-4 pt-4'>
-        <div>Choose which trust scores to show:</div>
-        {app.scoreNames.map((name, i) => (
-          <div
-            key={name}
-            className='flex justify-between items-start space-x-6 border border-muted-foreground p-3'
-          >
-            <div className='w-4/5'>
-              <div className='text-foreground text-lg'>
-                {app.scoreNames[i]}:{' '}
-                <span className='text-blue-700 font-extrabold'>{rScores[i]}{rScores[i] === 'n/a' ? null : '%'}</span>
-              </div>
-              <div className='text-sm font-light'>{app.scoreDescriptions[i]}</div>
-            </div>
-
-            <div className='w-1/5 flex flex-wrap items-center justify-center gap-3'>
-              <Switch
-                id={name}
-                checked={isRevealed[i]}
-                onCheckedChange={() => toggleReveal(i)}
-                className={isRevealed[i] ? 'data-[state=checked]:bg-blue-700' : ''}
-              />
-                <p className='text-muted-foreground'>{isRevealed[i] ? 'Show' : 'Hide'}</p>
-            </div>
-                  
-          </div>
-        ))}
-      </section>
-
-      <div className='flex justify-end'>
-        <button 
-          className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background w-fit' 
-          onClick={async () => {
-            submitOffer()
-          }}
-        >
-          Submit offer
-        </button>
-      </div>
-
+    <Form {...listForm} >
+      <form onSubmit={listForm.handleSubmit(submitOffer, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
+        <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
+        <InputOfferAmount {...listForm} />
+        <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />
+        <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Submit offer</button>
+      </form>
       <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
+    </Form>
+  );
+}
 
-    </div>
-  )
-})
+export default NewOfferPage
