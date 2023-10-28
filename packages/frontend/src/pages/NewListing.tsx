@@ -56,7 +56,7 @@ type FormStep = {
 const FormSteps: FormStep[] = [
   { id: 'select-category', description: 'Choose the categories for your listing', fields: ['categories'] },
   { id: 'general-info', description: 'Enter general information', fields: ['title', 'description', 'price'] },
-  { id: 'trust-scores', description: 'Choose what trust scores to show', fields: ['revealTrustScores'] },
+  { id: 'trust-scores', description: 'Choose which trust scores to show', fields: ['revealTrustScores'] },
 ]
 
 type FormState = {

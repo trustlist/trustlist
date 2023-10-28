@@ -1,6 +1,6 @@
 .detail-centered {
     position: fixed;
-    top: 52%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -16,19 +16,19 @@
 }
 
 .offer-content {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-items: center;
-    grid-template-columns: 60% 40%;
-    color: blue;
+    padding: 3rem;
 }
 
 .offer-container {
-    width: 80%;
-    background-color: rgb(212, 210, 210);
-    border-radius: 0.4rem;
-    margin: 1rem 0 1rem;
-    padding: 1.2rem 1.5rem 0;
+    width: 100%;
+    /* background-color: rgb(212, 210, 210); */
+    /* border-radius: 0.4rem; */
+    /* margin: 1rem 0 1rem; */
+    /* padding: 1.2rem 1.5rem 0; */
 }
 
 .offer-amount {

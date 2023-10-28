@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import {  trustScores } from '@/data'
 import { EyeOff } from 'lucide-react'
-import MakeOfferModal from './MakeOfferModal'
+// import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
 import Button from './Button'
 import './detailModal.css'
@@ -73,11 +73,14 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <>
                 <button 
                   className='font-extrabold text-base text-blue-700 border-1 border-blue px-3 py-2 mb-4'
-                  onClick={() => setShowMakeOffer(true)}
+                  onClick={() => {
+                    setShowDetail(false)
+                    navigate(`/offers/${listing._id}/${listing.title}`)
+                  }}
                 >
                   MAKE OFFER
                 </button>
-                {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>}
+                {/* {showMakeOffer && <MakeOfferModal listingId={listing._id} listingTitle={listing.title} setShowMakeOffer={setShowMakeOffer}/>} */}
               </>
             ) : null}
             {memberKeys.includes(listing.posterId) ? 

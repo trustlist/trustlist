@@ -27,27 +27,29 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const makeOffer = async (
-        epoch: any,
-        listingId: string,
-        listingTitle: string, // Why do we need this for the offer?
-        responderId: string,
-        offerAmount: string,
-        scoreString: string
+    const makeOffer = async (newOffer: any
+        // epoch: any,
+        // listingId: string,
+        // listingTitle: string, // Why do we need this for the offer?
+        // responderId: string,
+        // offerAmount: string,
+        // scoreString: string
     ) => {
         // TODO: /api/{listingId}/offers/new
+        console.log(newOffer)
         const data = await fetch(`${SERVER}/api/submitOffer`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                epoch,
-                listingId,
-                listingTitle,
-                responderId,
-                offerAmount,
-                scoreString,
+              ...newOffer
+                // epoch,
+                // listingId,
+                // listingTitle,
+                // responderId,
+                // offerAmount,
+                // scoreString,
             }),
         }).then((r) => r.json())
         return data.message

@@ -8,6 +8,7 @@ import Deal from './pages/Deal'
 // import Dashboard from './pages/Dashboard'
 import './index.css'
 import NewListingPage from './pages/NewListing'
+import NewOffer from './pages/NewOffer'
 
 export default function App() {
     return (
@@ -16,6 +17,7 @@ export default function App() {
                 < Route path="/" element={<Header />}>
                     <Route index element={<Home />} />
                     <Route path="listings/new" element={<NewListingPage />} />
+                    <Route path="offers/:listingId/:listingTitle" element={<NewOffer />} />
                     <Route path="list/:section/:category" element={<List />} />
                     <Route path="deal/:id" element={<Deal />} />
                     {/* <Route path="dashboard" element={<Dashboard />} /> */}
