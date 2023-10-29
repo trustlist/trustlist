@@ -54,7 +54,7 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const openDeal = async (id: string, offerAmount: string, responderId: string) => {
+    const openDeal = async (dealData: any) => {
         // TODO: /api/{listingId}/offers/{offerId}/accept
         const data = await fetch(`${SERVER}/api/dealOpen`, {
             method: 'POST',
@@ -62,9 +62,10 @@ const useTrustlist = () => {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                id,
-                offerAmount,
-                responderId,
+              ...dealData
+                // id,
+                // offerAmount,
+                // responderId,
             }),
         }).then((r) => r.json())
         return data.message

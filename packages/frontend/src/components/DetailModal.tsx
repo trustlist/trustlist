@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import {  trustScores } from '@/data'
 import { EyeOff } from 'lucide-react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
 import Button from './Button'
 import './detailModal.css'
-
+import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
@@ -41,10 +43,11 @@ type Offer = {
 
 export default observer(({ listing, setShowDetail }: Props) => {
   const app = useContext(Trustlist)
+  const { openDeal } = useTrustlist()
   const user = useContext(User)
   const ui = useContext(Interface)
   const navigate = useNavigate()
-  const [showMakeOffer, setShowMakeOffer] = useState<boolean>(false)
+  // const [showMakeOffer, setShowMakeOffer] = useState<boolean>(false)
   const trustScoreInfo = { ...trustScores }; 
 
   useEffect(() => {
@@ -57,6 +60,26 @@ export default observer(({ listing, setShowDetail }: Props) => {
   const memberKeys = [user.epochKey(0), user.epochKey(1)]
   const posterScores = JSON.parse(listing.scoreString)
 
+  const acceptOfferAlert = (newData: any) => toast.promise(async () => {
+      await openDeal(newData)
+      await user.requestData({[1]: 1 << 23}, memberKeys.indexOf(listing.posterId), newData.responderId)
+    }, {
+    pending: "Please wait a moment while your deal is created...",
+    success: { render: 
+                <div className="flex space-around gap-3">
+                  <div>
+                    <div>Offer accepted! Your contact info will be shown to this member to enable your offline transaction.</div>
+                    <div>Please complete your deal during this epoch to build your reputation.</div>
+                  </div>
+                  <button className="text-white font-lg border-1 border-white px-4 py-2"
+                          onClick={() => navigate(`/deal/${listing._id}`)}>
+                    Deal
+                  </button>
+                </div>,
+              closeButton: false },
+    error: "There was a problem creating your deal, please try again"
+  });
+
   return (
     <div className="dark-bg">
       <div className="centered">
@@ -66,13 +89,14 @@ export default observer(({ listing, setShowDetail }: Props) => {
             // prevent user from making an offer on their own post
             // !memberKeys.includes(listing.posterId) &&
             // prevent new offers if one has already been accepted
-            !listing.dealOpened  ? (
+            !listing.dealOpened &&
             // prevent new offers if listing epoch is expired
-            // listing.epoch ===
-            //     user.userState?.sync.calcCurrentEpoch() ? (
+            listing.epoch ===
+                user.userState?.sync.calcCurrentEpoch() ? (
               <>
                 <button 
-                  className='font-extrabold text-base text-blue-700 border-1 border-blue px-3 py-2 mb-4'
+                  className='font-extrabold text-base border-1 border-blue px-3 py-2 mb-4'
+                  style={{color: 'blue'}}
                   onClick={() => {
                     setShowDetail(false)
                     navigate(`/offers/${listing._id}/${listing.title}`)
@@ -84,10 +108,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
               </>
             ) : null}
             {memberKeys.includes(listing.posterId) ? 
-                <button className='font-extrabold text-base text-red-500 border-1 border-red-500 px-3 py-2 mb-4'>MY LISTING</button>
+              <button className='font-extrabold text-base text-red-500 border-1 border-red-500 px-3 py-2 mb-4'>MY LISTING</button>
             : null}
             {listing.epoch != user.userState?.sync.calcCurrentEpoch() ?
-                <button className='font-extrabold text-base text-red-500 border-1 border-red-500 px-3 py-2 mb-4'>EXPIRED</button>
+              <button className='font-extrabold text-base text-red-500 border-1 border-red-500 px-3 py-2 mb-4'>EXPIRED</button>
             : null}
 
             <div className="detail-container">
@@ -119,10 +143,10 @@ export default observer(({ listing, setShowDetail }: Props) => {
                       </div>
                       <div style={{ fontWeight: '600' }}>
                         {posterScores[key] === 'X' ?
-                          <EyeOff/>
+                          <EyeOff size={22} strokeWidth={2}/>
                         : 
-                          <div>{posterScores[key]}{posterScores[key]==='n/a' ? null : '%'}
-                        </div>}
+                          <div>{posterScores[key]}{posterScores[key]==='n/a' ? null : '%'}</div>
+                        }
                       </div>
                     </div>
                   </div>
@@ -149,40 +173,54 @@ export default observer(({ listing, setShowDetail }: Props) => {
               <div className="offer-scroll">
                 {offers && offers.length > 0
                   ? offers.map((offer: Offer) => {
-                    const rScores = JSON.parse( offer.scoreString)
-                    const responderScores = app.calcScoresFromDB(rScores)
+                    const responderScores = JSON.parse( offer.scoreString)
+                    // const responderScores = app.calcScoresFromDB(rScores)
                     return (
                       <div key={offer._id} className="offer">
-                        <div>
-                          <span style={{ color: 'blue' }}>${offer.offerAmount}{' '}</span>{' '}
+                        <div className='flex'>
+                          <div className='offer-amount'>${offer.offerAmount}{' '}</div>
                           {!ui.isMobile ? 
-                            <span> ---- offering member's scores:{' '}</span>
+                            <div>offering member's scores:{' '}</div>
                           : null}
                         </div>
-                        {responderScores.map((score, i) => (
-                          <div className="offer-score">
-                            <span style={{ fontWeight: '300' }}>{app.scoreNames[i]}:{' '}</span>
-                            {score === 9999999 ? 
-                              <EyeOff/>
-                            : score === 0 ? '...' : (String(score))}
+                        {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
+                          <div key={key} className="offer-score">
+                            <div style={{ fontWeight: '300' }}>{key}:{' '}</div>
+                              {responderScores[key] === 'X' ?
+                                <EyeOff size={12} strokeWidth={3}/>
+                              : 
+                                <div>{responderScores[key]}</div>
+                              }
                           </div>
                         ))}
-
+              
                         {listing.responderId === offer.responderId ? 
                           <button className="offer-accepted">accepted</button>
                         : memberKeys.includes(listing.posterId) && !listing.dealOpened
                           ? <Button
-                              style={{ backgroundColor: 'blue', color: 'white', fontSize: '0.65rem', padding: '0.25rem 0.5rem', marginLeft: '0.5rem' }}
+                              style={{ backgroundColor: 'blue', color: 'white', fontSize: '0.65rem', padding: '0.25rem 0.5rem', marginLeft: '1.5rem' }}
                               onClick={async () => {
+                                try {
+                                  const newData = {
+                                    id: listing._id,
+                                    // posterId: listing.posterId, 
+                                    responderId: offer.responderId,
+                                    offerAmount: offer.offerAmount,
+                                  }
+                                console.log(newData)
+                                acceptOfferAlert(newData)
+                                } catch {
+                                  console.error("Error while updating deal: ");
+                                }
+
+                                // }
                                 // +1 to offering member's expected LO score
-                                await user.requestData(
-                                  {[1]: 1 << 23},
-                                  memberKeys.indexOf(listing.posterId) ?? 0,
-                                  offer.responderId
-                                )
-                                const message = await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
-                                window.alert(message)
-                                navigate(`/deal/${listing._id}`)
+                                // await user.requestData(
+                                //   {[1]: 1 << 23},
+                                //   memberKeys.indexOf(listing.posterId) ?? 0,
+                                //   offer.responderId
+                                // )
+                                // const message = await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
                               }}
                             >
                               accept deal
@@ -195,7 +233,9 @@ export default observer(({ listing, setShowDetail }: Props) => {
               </div>
             </div>
 
+            <ToastContainer className='dash-toast' toastClassName='toast' bodyClassName='toast-body' position='top-center' autoClose={false} />
             <button className="close-btn" onClick={() => setShowDetail(false)}>X</button>
+
           </div>
         </div>
       </div>

@@ -48,7 +48,7 @@
 
 .offers-container {
     margin: 2rem 4rem;
-    width: 80%;
+    width: 85%;
 }
 
 .offer-scroll {
@@ -67,7 +67,17 @@
     align-items: center;
 }
 
+.offer-amount {
+  color: blue;
+  font-weight: 700;
+  width: 3rem;
+}
+
 .offer-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     background-color: white;
     border-radius: 0.3rem;
     border: 1px solid rgb(218, 217, 217);
@@ -76,7 +86,7 @@
     margin: 0.1rem;
     padding: 0.3rem 0;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .offer-accepted {
