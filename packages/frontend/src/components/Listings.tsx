@@ -139,14 +139,6 @@ export default observer(({ section, category }: Props) => {
                         </div>
                       )  
                     })}
-                    {/* {Object.entries(scores).map(([key, value]) => (
-                      <div className="score-item"key={key}>
-                        <Tooltip
-                          text={key}
-                          content={value === 'X' ? <EyeOff color='blue' size={20} strokeWidth={2.3}/> : value}
-                        />
-                      </div>
-                    ))} */}
                   </div>
                 </div>
 

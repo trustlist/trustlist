@@ -126,66 +126,38 @@ export default observer(({ listing, setShowDetail }: Props) => {
               </div>
 
               <div className='pt-6'>
-              {trustScoreKeys.map((key) => {
-                const matchingEntry = Object.entries(posterScores).filter(([scoreName]) => scoreName === key)[0]
-                const revealed = matchingEntry !== undefined;
-                const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
-                const value = revealed 
-                  ? initiated === 0 
-                    ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
-                  : <EyeOff size={22} strokeWidth={2}/>
-                return (
-                  <div className="detail-score">
-                    <div className="detail-tooltip">
-                      <Tooltip
-                        text={`${trustScoreInfo[key].title} : ${trustScoreInfo[key].description}`}
-                        content={
-                          <img
-                            src={require('../../public/info_icon.svg')}
-                            alt="info icon"
-                          />
-                        }
-                      />
-                    </div>
-                    <div className="trust-item">
-                      <div>
-                        {key} score:{' '}
+                {trustScoreKeys.map((key) => {
+                  const matchingEntry = Object.entries(posterScores).filter(([scoreName]) => scoreName === key)[0]
+                  const revealed = matchingEntry !== undefined;
+                  const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                  const value = revealed 
+                    ? initiated === 0 
+                      ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                    : <EyeOff size={22} strokeWidth={2}/>
+                  return (
+                    <div className="detail-score">
+                      <div className="detail-tooltip">
+                        <Tooltip
+                          text={`${trustScoreInfo[key].title} : ${trustScoreInfo[key].description}`}
+                          content={
+                            <img
+                              src={require('../../public/info_icon.svg')}
+                              alt="info icon"
+                            />
+                          }
+                        />
                       </div>
-                      <div style={{ fontWeight: '600' }}>
-                        {value}
-                      </div>
-                    </div>
-                  </div>
-                )  
-              })}
-
-                {/* {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
-                  <div className="detail-score">
-                    <div className="detail-tooltip">
-                      <Tooltip
-                        text={`${scoreInfo.title} : ${scoreInfo.description}`}
-                        content={
-                          <img
-                            src={require('../../public/info_icon.svg')}
-                            alt="info icon"
-                          />
-                        }
-                      />
-                    </div>
-                    <div className="trust-item">
-                      <div>
-                        {key} score:{' '}
-                      </div>
-                      <div style={{ fontWeight: '600' }}>
-                        {posterScores[key] === 'X' ?
-                          <EyeOff size={22} strokeWidth={2}/>
-                        : 
-                          <div>{posterScores[key]}{posterScores[key]==='n/a' ? null : '%'}</div>
-                        }
+                      <div className="trust-item">
+                        <div>
+                          {key} score:{' '}
+                        </div>
+                        <div style={{ fontWeight: '600' }}>
+                          {value}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))} */}
+                  )  
+                })}
               </div>
             </div>
 
