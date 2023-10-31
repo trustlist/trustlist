@@ -4,10 +4,11 @@ import { EyeOff } from 'lucide-react'
 import DetailModal from './DetailModal'
 import Tooltip from './Tooltip'
 import './listings.css'
-
+import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
+import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
 
 type Props = {
   section: string
@@ -61,6 +62,8 @@ export default observer(({ section, category }: Props) => {
     listings = app.servicesByCategory.get(category)
   }
 
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
+  console.log(trustScoreKeys)
   return (
     <div className="listings">
       {category === '' ? 
@@ -75,6 +78,7 @@ export default observer(({ section, category }: Props) => {
           .reverse()
           .map((listing: Listing) => {
             const scores = JSON.parse(listing.scoreString)
+            console.log(scores)
             {listing.epoch != user.userState?.sync.calcCurrentEpoch()
               ? (listingClass = 'listing-expired')
               : null
@@ -118,14 +122,27 @@ export default observer(({ section, category }: Props) => {
                     }
                   </div>
                   <div className="score-container">
-                    {Object.entries(scores).map(([key, value]) => (
+                    {trustScoreKeys.map((key) => {
+                      const matchingEntry = Object.entries(scores).filter(([scoreName]) => scoreName === key)[0]
+                      const revealed = matchingEntry !== undefined;
+                      const value = revealed ? matchingEntry[1] : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
+                      return (
+                        <div className="score-item"key={key}>
+                          <Tooltip
+                            text={key}
+                            content={value}
+                          />
+                        </div>
+                      )  
+                    })}
+                    {/* {Object.entries(scores).map(([key, value]) => (
                       <div className="score-item"key={key}>
                         <Tooltip
                           text={key}
                           content={value === 'X' ? <EyeOff color='blue' size={20} strokeWidth={2.3}/> : value}
                         />
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                 </div>
 

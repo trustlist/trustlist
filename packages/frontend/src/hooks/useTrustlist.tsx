@@ -136,47 +136,12 @@ const useTrustlist = () => {
         return { user: userEpochKeys, deals, listings, offers }
     }
 
-    // TODO: Could the two following fns be one? Core score calc is the same, only diff is what's passed to them
-    // For current user related actions (dashboard, createListings)
     const calcScoreFromUserData = (data: number) => {
-        if (data === 0) return 'n/a'
+        if (data === 0) return 0
         const score = Math.floor(((data % 128) / (data >> 23)) * 100)
         return score
     }
 
-    // TODO: Find out a way to transform the data coming from the contract to be more suitable for a database
-
-    // LP: [X, X] - posted x , completed x
-    // CV: [X, X]
-    // GB: [X, X]
-
-    // LP: {
-    //     created: 0,
-    //     completed: 0
-    // }
-
-    // score = created / completed * 100
-
-    // For showing listings
-    const calcScoresFromDB = (data: {}) => {
-        const scores: Number[] = []
-        const dataValues = Object.values(data)
-        for (let i = 0; i < dataValues.length; i++) {
-            if (dataValues[i] === 'X') {
-                scores.push(9999999)
-            } else if (dataValues[i] === 0) {
-                scores.push(0)
-            } else {
-                const score = Math.floor(
-                    ((Number(dataValues[i]) % 128) /
-                        (Number(dataValues[i]) >> 23)) *
-                    100
-                )
-                scores.push(score)
-            }
-        }
-        return scores
-    }
 
     // const loadSelectedCategory = async(section: string, category: string) => {
     //     const listings = await fetch(`${SERVER}/api/loadListings`, {
@@ -205,7 +170,7 @@ const useTrustlist = () => {
     //     }
     // }
 
-    return { createNewListing, makeOffer, openDeal, closeDeal, addReview, getOffers, getDeals, getUserActivity, calcScoreFromUserData, calcScoresFromDB }
+    return { createNewListing, makeOffer, openDeal, closeDeal, addReview, getOffers, getDeals, getUserActivity, calcScoreFromUserData }
 }
 
 export default useTrustlist;

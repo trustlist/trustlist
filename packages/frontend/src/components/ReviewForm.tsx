@@ -99,7 +99,7 @@ export default observer(
                                             )
                                             return
                                         }
-                                        // +1 to current member's completed CB score
+                                        // +1 to current member's assessed CB score
                                         await user.requestData(
                                             { [2]: 1 },
                                             memberKeys.indexOf(
@@ -107,7 +107,7 @@ export default observer(
                                             ) ?? 0,
                                             ''
                                         )
-                                        // +5 to opposite member's expected and +0-5 to completed GV score
+                                        // +5 to opposite member's initiated and +0-5 to assessed GV score
                                         const GVscore = (5 << 23) + sentiment
                                         if (oppositeMemberReview) {
                                             await user.requestData(
