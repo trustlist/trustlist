@@ -4,11 +4,10 @@ COPY . /src
 
 WORKDIR /src
 
-RUN yarn && rm -rf packages/frontend
+RUN rm -rf packages/frontend && yarn && yarn build
 
-RUN sh scripts/loadKeys.sh
-
-RUN rm -r packages/relay/keys/buildOrdered*
+RUN rm -rf /src/node_modules/@unirep/circuits/zksnarkBuild
+RUN rm -rf /src/node_modules/@unirep/circuits/*.ptau
 
 FROM node:16-buster
 
