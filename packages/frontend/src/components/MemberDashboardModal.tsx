@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
 import Tooltip from './Tooltip'
-import Button from '../components/Button'
+import {Button} from './ui/button'
 import DetailModal from './DetailModal'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -100,7 +100,7 @@ export default observer(({ setShowMemberDash }: Props) => {
                         <div className="transition">
                           <div className="line"></div>
                           <Button 
-                            loadingText='transitioning...'
+                            // loadingText='transitioning...'
                             onClick={async () => {
                               try {
                                 await user.transitionToCurrentEpoch()

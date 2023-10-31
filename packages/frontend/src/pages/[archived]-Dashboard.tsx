@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import './dashboard.css'
-import Button from '../components/Button'
+import {Button} from '../components/ui/button'
 import Tooltip from '../components/Tooltip'
 
 import User from '../contexts/User'

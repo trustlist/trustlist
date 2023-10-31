@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import MemberDashboardModal from '../components/MemberDashboardModal'
 // import NewListingModal from '../components/NewListingModal'
-import Button from '../components/Button'
+import {Button} from '../components/ui/button'
 import Tooltip from '../components/Tooltip'
 import './header.css'
 import { User2 } from 'lucide-react'
@@ -83,7 +83,7 @@ export default observer(() => {
         <div className="actions">
           <Button 
             onClick={() => user.hasSignedUp ? null : user.signup()}
-            loadingText='joining...'
+            // loadingText='joining...'
           >
             {user.hasSignedUp ? 'connected' : 'JOIN'}
           </Button>

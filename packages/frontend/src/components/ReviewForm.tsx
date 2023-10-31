@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import Button from './Button'
+import {Button} from './ui/button'
 import Tooltip from './Tooltip'
 
 import Trustlist from '../contexts/Trustlist'
