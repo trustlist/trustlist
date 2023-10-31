@@ -69,6 +69,7 @@
 
 .offer-amount {
   color: blue;
+  font-size: 1rem;
   font-weight: 700;
   width: 3rem;
 }
@@ -93,8 +94,9 @@
     background-color: green;
     border-color: green;
     color: white;
-    padding: 0.25rem 0.7rem;
+    padding: 0.2rem 0.7rem;
     font-size: 0.75rem;
+    margin-left: 1.5rem;
 }
 
 @media only screen and (max-width: 950px) {

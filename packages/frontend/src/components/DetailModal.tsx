@@ -174,10 +174,9 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 {offers && offers.length > 0
                   ? offers.map((offer: Offer) => {
                     const responderScores = JSON.parse( offer.scoreString)
-                    // const responderScores = app.calcScoresFromDB(rScores)
                     return (
                       <div key={offer._id} className="offer">
-                        <div className='flex'>
+                        <div className='flex items-center'>
                           <div className='offer-amount'>${offer.offerAmount}{' '}</div>
                           {!ui.isMobile ? 
                             <div>offering member's scores:{' '}</div>
@@ -203,7 +202,6 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                 try {
                                   const newData = {
                                     id: listing._id,
-                                    // posterId: listing.posterId, 
                                     responderId: offer.responderId,
                                     offerAmount: offer.offerAmount,
                                   }
@@ -212,15 +210,6 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                 } catch {
                                   console.error("Error while updating deal: ");
                                 }
-
-                                // }
-                                // +1 to offering member's expected LO score
-                                // await user.requestData(
-                                //   {[1]: 1 << 23},
-                                //   memberKeys.indexOf(listing.posterId) ?? 0,
-                                //   offer.responderId
-                                // )
-                                // const message = await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
                               }}
                             >
                               accept deal
