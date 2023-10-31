@@ -114,10 +114,12 @@ type TrustScoreFormStepProps = StepSectionProps & { trustScores: Record<TrustSco
 
 const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: TrustScoreFormStepProps) => {
   const user = useContext(User)
+  const { calcScoreFromUserData } = useTrustlist()
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => {
         const initiated = user.data[scoreInfo.index] ? Number(user.data[scoreInfo.index] >> BigInt(23)) : 0
+        const score =  calcScoreFromUserData(Number(scoreInfo.score))
         return (
           <FormField
             key={key}
@@ -127,7 +129,7 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
               <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
                 <div>
                   <FormLabel className="text-foreground text-lg" htmlFor={key}>
-                    {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{initiated == 0 ? 'n/a' : `${scoreInfo.score}%`}</span>
+                    {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{initiated == 0 ? 'n/a' : `${score}%`}</span>
                   </FormLabel>
                   <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
                 </div>
@@ -153,7 +155,7 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
 
 const NewOfferPage = () => {
   const { listingId, listingTitle }: any = useParams()
-  const { calcScoreFromUserData, makeOffer } = useTrustlist()
+  const { makeOffer } = useTrustlist()
   const user = useContext(User)
   const navigate = useNavigate()
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores })
@@ -167,15 +169,16 @@ const NewOfferPage = () => {
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const updateScores = useCallback(() => {
-    if (user.provableData.length === 0) return;
+    // if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
-      let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      let userData = user.provableData[i]
       setTrustScoresFromData((prevData) => {
         return {
           ...prevData,
           [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
             ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
-            score: cumulativeScore
+            score: Number(userData)
           }
         }
       })

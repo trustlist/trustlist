@@ -270,11 +270,9 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => {
-        const scoreData = user.provableData[scoreInfo.index]
         // determine if user has initiated an action for this metric
         const initiated = user.provableData[scoreInfo.index] ? Number(user.provableData[scoreInfo.index] >> BigInt(23)) : 0
-        // const initiated = scoreInfo.score ? scoreInfo.score >> 23 : 0
-        const score =  calcScoreFromUserData(scoreInfo.score)
+        const score =  calcScoreFromUserData(Number(scoreInfo.score))
         return (
           <FormField
             key={key}
@@ -285,8 +283,6 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
                 <div>
                   <FormLabel className="text-foreground text-lg" htmlFor={key}>
                     {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{initiated == 0 ? 'n/a' : `${score}%`}</span>
-                    {/* {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{score}%</span> */}
-
                   </FormLabel>
                   <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
                 </div>
@@ -355,7 +351,7 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
 }
 
 const NewListingPage = () => {
-  const { calcScoreFromUserData, createNewListing } = useTrustlist()
+  const { createNewListing } = useTrustlist()
   const user = useContext(User) // TODO: This should be a hook
   const navigate = useNavigate()
   const [step, changeStep] = useState<FormStep>(FormSteps[0])
@@ -370,16 +366,17 @@ const NewListingPage = () => {
 
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
-  const updateScores = useCallback(() => {
-    if (user.provableData.length === 0) return;
+  const updateScores = useCallback(async () => {
+    // if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
+      let userData = user.provableData[i]
       // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
       setTrustScoresFromData((prevData) => {
         return {
           ...prevData,
           [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
             ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
-            score: Number(user.provableData[i])
+            score: Number(userData)
           }
         }
       })

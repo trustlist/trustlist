@@ -8,7 +8,7 @@ import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
-import { TrustScoreKeyEnum, listingCategories, trustScores } from '@/data'
+import { TrustScoreKeyEnum } from '@/data'
 
 type Props = {
   section: string
@@ -30,11 +30,13 @@ type Listing = {
 }
 
 export default observer(({ section, category }: Props) => {
+  const { calcScoreFromUserData } = useTrustlist()
   const app = useContext(Trustlist)
   const user = useContext(User)
   const ui = useContext(Interface)
   const [showDetail, setShowDetail] = useState<boolean>(false)
   const [detailData, setDetailData] = useState<any>()
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
   let listingClass = 'listing-item'
 
   useEffect(() => {
@@ -61,9 +63,7 @@ export default observer(({ section, category }: Props) => {
   } else {
     listings = app.servicesByCategory.get(category)
   }
-
-  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
-  console.log(trustScoreKeys)
+  
   return (
     <div className="listings">
       {category === '' ? 
@@ -125,7 +125,11 @@ export default observer(({ section, category }: Props) => {
                     {trustScoreKeys.map((key) => {
                       const matchingEntry = Object.entries(scores).filter(([scoreName]) => scoreName === key)[0]
                       const revealed = matchingEntry !== undefined;
-                      const value = revealed ? matchingEntry[1] : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
+                      const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                      const value = revealed 
+                        ? initiated === 0 
+                          ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                        : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
                       return (
                         <div className="score-item"key={key}>
                           <Tooltip
