@@ -6,5 +6,5 @@ export type TrustScoreInfo = {
     index: number
     title: string
     description: string
-    score: number | undefined
+    score: number
 }

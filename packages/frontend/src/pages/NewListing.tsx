@@ -273,7 +273,8 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
         const scoreData = user.provableData[scoreInfo.index]
         // determine if user has initiated an action for this metric
         const initiated = user.provableData[scoreInfo.index] ? Number(user.provableData[scoreInfo.index] >> BigInt(23)) : 0
-        const score =  calcScoreFromUserData(Number(scoreData))
+        // const initiated = scoreInfo.score ? scoreInfo.score >> 23 : 0
+        const score =  calcScoreFromUserData(scoreInfo.score)
         return (
           <FormField
             key={key}
@@ -284,6 +285,8 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
                 <div>
                   <FormLabel className="text-foreground text-lg" htmlFor={key}>
                     {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{initiated == 0 ? 'n/a' : `${score}%`}</span>
+                    {/* {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{score}%</span> */}
+
                   </FormLabel>
                   <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
                 </div>
@@ -370,22 +373,22 @@ const NewListingPage = () => {
   const updateScores = useCallback(() => {
     if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
-      let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
       setTrustScoresFromData((prevData) => {
         return {
           ...prevData,
           [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
             ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
-            score: cumulativeScore
+            score: Number(user.provableData[i])
           }
         }
       })
     }
   }, [user.provableData]);
 
-  // useEffect(() => {
-  //   updateScores();
-  // }, [])
+  useEffect(() => {
+    updateScores();
+  }, [])
 
   const transitionAlert = () => toast.promise(async () => {
     await user.transitionToCurrentEpoch()
