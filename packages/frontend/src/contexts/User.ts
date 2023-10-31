@@ -23,8 +23,8 @@ class User {
     }
 
     async load() {
-        const id = localStorage.getItem('id')
-        const identity = id ? new Identity(id) : new Identity()
+        const id: string = localStorage.getItem('id') ?? ''
+        const identity = new Identity(id)
         if (!id) {
             localStorage.setItem('id', identity.toString())
         }
