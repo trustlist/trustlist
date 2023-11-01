@@ -38,8 +38,8 @@ module.exports = (env) => ({
             constants: false,
         },
         alias: {
-        '@': path.resolve(__dirname, 'src/')
-    }
+            '@': path.resolve(__dirname, 'src/'),
+        },
     },
     module: {
         rules: [
@@ -90,9 +90,9 @@ module.exports = (env) => ({
         ],
     },
     plugins: [
-        // new Dotenv({
-        //     systemvars: true,
-        // }),
+        new Dotenv({
+            systemvars: true,
+        }),
         new HtmlWebpackPlugin({
             template: 'public/index.html',
             filename: 'index.html',
@@ -101,7 +101,6 @@ module.exports = (env) => ({
         new MiniCssExtractPlugin(),
         // new HtmlWebpackInlineSourcePlugin(),
         new webpack.DefinePlugin({
-            'process.env': {},
             'process.argv': [],
             'process.versions': {},
             'process.versions.node': '"12"',
@@ -113,8 +112,8 @@ module.exports = (env) => ({
             },
             ...(env.CYPRESS
                 ? {
-                    ['process.env.CYPRESS']: 'true',
-                }
+                      ['process.env.CYPRESS']: 'true',
+                  }
                 : {}),
         }),
         new webpack.ProvidePlugin({
