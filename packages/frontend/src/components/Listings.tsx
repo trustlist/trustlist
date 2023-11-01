@@ -44,11 +44,6 @@ export default observer(({ section, category }: Props) => {
       await app.loadSelectedCategory(section, category)
     }
     loadData()
-    // if (showDetail) {
-    //     document.body.style.overflow = 'hidden'
-    // } else {
-    //     document.body.style.overflow = 'auto'
-    // }
   }, [section, category, showDetail])
 
   let listings = []
@@ -78,7 +73,6 @@ export default observer(({ section, category }: Props) => {
           .reverse()
           .map((listing: Listing) => {
             const scores = JSON.parse(listing.scoreString)
-            console.log(scores)
             {listing.epoch != user.userState?.sync.calcCurrentEpoch()
               ? (listingClass = 'listing-expired')
               : null
@@ -131,12 +125,7 @@ export default observer(({ section, category }: Props) => {
                           ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
                         : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
                       return (
-                        <div className="score-item"key={key}>
-                          <Tooltip
-                            text={key}
-                            content={value}
-                          />
-                        </div>
+                        <div className="score-item"key={key}>{value}</div>
                       )  
                     })}
                   </div>

@@ -169,9 +169,7 @@ const NewOfferPage = () => {
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const updateScores = useCallback(() => {
-    // if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
-      // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
       let userData = user.provableData[i]
       setTrustScoresFromData((prevData) => {
         return {
@@ -270,7 +268,6 @@ const NewOfferPage = () => {
           offerAmount: String(data.offerAmount),
           scoreString: JSON.stringify(currentScores)
         }
-        console.log({ newData });
         submitOfferAlert(newData)
       } catch (offerError) {
         console.error("Error while publishing post: ", offerError);

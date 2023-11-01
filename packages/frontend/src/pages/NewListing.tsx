@@ -367,10 +367,8 @@ const NewListingPage = () => {
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const updateScores = useCallback(async () => {
-    // if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
       let userData = user.provableData[i]
-      // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
       setTrustScoresFromData((prevData) => {
         return {
           ...prevData,
@@ -423,7 +421,6 @@ const NewListingPage = () => {
       if(isRevealed){
         return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
       }
-      // return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
       return newScores;
     }, {})
   }
@@ -481,7 +478,6 @@ const NewListingPage = () => {
           amountType: data.frequency,
           scoreString: JSON.stringify(currentScores)
         }
-        console.log({ newData });
         publishingAlert(newData)
       } catch (publishingError) {
         console.error("Error while publishing post: ", publishingError);
