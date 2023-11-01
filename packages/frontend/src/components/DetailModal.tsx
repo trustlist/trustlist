@@ -167,7 +167,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
                   <div style={{ textDecoration: 'line-through' }}>pending offers</div>
                   {listing.posterDealClosed && listing.responderDealClosed ?
                     <div style={{ display: 'flex' }}>
-                      <div style={{ color: 'red', paddingLeft: '1rem' }}>deal initiated</div>
+                      <div style={{ color: 'red', paddingLeft: '1rem' }}>deal completed</div>
                     </div>
                   :
                     <div style={{ color: 'green', paddingLeft: '1rem' }} >deal pending </div>

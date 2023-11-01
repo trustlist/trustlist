@@ -79,7 +79,7 @@ export default observer(() => {
                                                         if (
                                                             deal.responderDealClosed
                                                         ) {
-                                                            // +1 to responder's assessed LO score
+                                                            // +1 to responder's completed LO score
                                                             // +1 to responder's initiated CB score
                                                             await user.requestData(
                                                                 {
@@ -92,7 +92,7 @@ export default observer(() => {
                                                                 ) ?? 0,
                                                                 deal.responderId
                                                             )
-                                                            // +1 to poster's assessed LP score
+                                                            // +1 to poster's completed LP score
                                                             // +1 to poster's initiated CB score
                                                             await user.requestData(
                                                                 {
@@ -173,7 +173,7 @@ export default observer(() => {
                                                         if (
                                                             deal.posterDealClosed
                                                         ) {
-                                                            // +1 to responder's assessed LO score
+                                                            // +1 to responder's completed LO score
                                                             // +1 to responder's initiated CB score
                                                             await user.requestData(
                                                                 {
@@ -186,7 +186,7 @@ export default observer(() => {
                                                                 ) ?? 0,
                                                                 ''
                                                             )
-                                                            // +1 to poster's assessed LP score
+                                                            // +1 to poster's completed LP score
                                                             // +1 to poster's initiated CB score
                                                             await user.requestData(
                                                                 {

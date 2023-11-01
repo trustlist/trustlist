@@ -27,7 +27,7 @@ class Trustlist {
     async load() {
         this.scoreNames = ['LP', 'LO', 'CB', 'GV']
         this.scoreDescriptions = [
-            "Percentage of member's listings that have resulted in initiated deals.",
+            "Percentage of member's listings that have resulted in completed deals.",
             "Member's record for completing deals after their offer has been accepted.",
             "Member's record for submitting reviews of the deals they have been involved in.",
             'Percentage of all possible points others have awarded this member for being friendly, communicative, and respectful.',
