@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 export default observer(() => {
     const app = useContext(Trustlist)
     const ui = useContext(Interface)
-    const [selectedSection, setSelectedSection] = useState('DevConnect!')
+    const [selectedSection, setSelectedSection] = useState('DevConnect')
     const [selectedCategory, setSelectedCategory] = useState('')
 
     return (

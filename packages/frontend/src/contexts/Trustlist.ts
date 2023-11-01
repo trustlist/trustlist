@@ -9,6 +9,7 @@ class Trustlist {
     sections: string[] = []
     categoriesBySection = new Map()
     listingsById = new Map()
+    DevConnectByCategory = new Map()
     forSaleByCategory = new Map()
     jobsByCategory = new Map()
     servicesByCategory = new Map()
@@ -26,12 +27,12 @@ class Trustlist {
     async load() {
         this.scoreNames = ['LP', 'LO', 'CB', 'GV']
         this.scoreDescriptions = [
-            "Legit Posting score: percentage of member's listings that have resulted in completed deals.",
-            "Legit Offer score: member's record for completing deals after their offer has been accepted.",
-            "Community Building score: member's record for submitting reviews of the deals they have been involved in.",
-            'Good Vibes score : percentage of all possible points others have awarded this member for being friendly, communicative, and respectful.',
+            "Percentage of member's listings that have resulted in completed deals.",
+            "Member's record for completing deals after their offer has been accepted.",
+            "Member's record for submitting reviews of the deals they have been involved in.",
+            'Percentage of all possible points others have awarded this member for being friendly, communicative, and respectful.',
         ]
-        this.categoriesBySection.set('DevConnect!', ['available', 'wanted'])
+        this.categoriesBySection.set('DevConnect', ['for sale', 'wanted'])
         this.categoriesBySection.set('for sale', [
             'antiques',
             'appliances',
@@ -232,7 +233,9 @@ class Trustlist {
 
     async ingestListings(_listings: string, section: string, category: string) {
         const listings = [_listings].flat()
-        if (section === 'for sale') {
+        if (section === 'DevConnect') {
+            this.DevConnectByCategory.set(category, listings)
+        } else if (section === 'for sale') {
             this.forSaleByCategory.set(category, listings)
         } else if (section === 'housing') {
             this.housingByCategory.set(category, listings)

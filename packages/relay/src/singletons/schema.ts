@@ -31,6 +31,7 @@ const _schema = [
             ['amount', 'String'],
             ['amountType', 'String'],
             ['description', 'String'],
+            ['contact', 'String'],
             ['posterId', 'String'],
             ['scoreString', 'String'],
             ['responderId', 'String'],

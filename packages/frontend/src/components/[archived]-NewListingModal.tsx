@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import ScoreReveal from './ScoreReveal'
 import ScoreHide from './ScoreHide'
 import Button from './Button'
-import './newListingModal.css'
+// import './newListingModal.css'
 
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
@@ -358,7 +358,7 @@ export default observer(({ setShowNewListing }: Props) => {
                                                     'please transition to the current epoch before posting'
                                                 )
                                             }
-                                            // +1 to current member's expected LP score
+                                            // +1 to current member's initiated LP score
                                             await user.requestData(
                                                 { [0]: 1 << 23 },
                                                 reqInfo.nonce ?? 0,

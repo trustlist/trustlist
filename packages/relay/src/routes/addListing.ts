@@ -18,6 +18,7 @@ export default (
             amount,
             amountType,
             description,
+            contact,
             posterId,
             scoreString,
         } = req.body
@@ -29,6 +30,7 @@ export default (
             amount,
             amountType,
             description,
+            contact,
             posterId,
             scoreString
         )
@@ -41,6 +43,7 @@ export default (
                 amount,
                 amountType,
                 description,
+                contact,
                 posterId,
                 scoreString,
             } = req.body
@@ -53,6 +56,7 @@ export default (
                 amount,
                 amountType,
                 description,
+                contact,
                 posterId,
                 scoreString,
                 responderId: '',

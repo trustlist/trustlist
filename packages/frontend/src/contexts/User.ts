@@ -23,8 +23,8 @@ class User {
     }
 
     async load() {
-        const id: string = localStorage.getItem('id') ?? ''
-        const identity = new Identity(id)
+        const id = localStorage.getItem('id')
+        const identity = id ? new Identity(id) : new Identity()
         if (!id) {
             localStorage.setItem('id', identity.toString())
         }
@@ -142,7 +142,7 @@ class User {
         await this.loadData()
     }
 
-    async stateTransition() {
+    async transitionToCurrentEpoch() {
         if (!this.userState) throw new Error('user state not initialized')
 
         await this.userState.waitForSync()

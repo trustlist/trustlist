@@ -25,7 +25,7 @@ module.exports = (env) => ({
         publicPath: '/',
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx', '.json', '.scss', '.ts', '.tsx'],
+        extensions: ['.*', '.js', '.jsx', '.json', '.scss', '.ts', '.tsx'],
         fallback: {
             path: require.resolve('path-browserify'),
             crypto: require.resolve('crypto-browserify'),
@@ -36,6 +36,9 @@ module.exports = (env) => ({
             fs: false,
             readline: false,
             constants: false,
+        },
+        alias: {
+            '@': path.resolve(__dirname, 'src/'),
         },
     },
     module: {
@@ -75,17 +78,21 @@ module.exports = (env) => ({
                     },
                 ],
             },
+            // {
+            //     test: /\.(css)$/,
+            //     // exclude: /node_modules/,
+            //     use: [MiniCssExtractPlugin.loader, 'css-loader'],
+            // },
             {
-                test: /\.(css)$/,
-                // exclude: /node_modules/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
             },
         ],
     },
     plugins: [
-        // new Dotenv({
-        //     systemvars: true,
-        // }),
+        new Dotenv({
+            systemvars: true,
+        }),
         new HtmlWebpackPlugin({
             template: 'public/index.html',
             filename: 'index.html',
@@ -94,7 +101,6 @@ module.exports = (env) => ({
         new MiniCssExtractPlugin(),
         // new HtmlWebpackInlineSourcePlugin(),
         new webpack.DefinePlugin({
-            'process.env': {},
             'process.argv': [],
             'process.versions': {},
             'process.versions.node': '"12"',

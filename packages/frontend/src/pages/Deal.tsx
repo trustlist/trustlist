@@ -40,6 +40,7 @@ export default observer(() => {
                     <div style={{ textAlign: 'center' }}>
                         <h3>{deal.title.slice(0, 25)}</h3>
                         <h3>${deal.offerAmount}</h3>
+                        <h3>{deal.contact}</h3>
                     </div>
                 ) : null}
                 {deal ? (
@@ -79,7 +80,7 @@ export default observer(() => {
                                                             deal.responderDealClosed
                                                         ) {
                                                             // +1 to responder's completed LO score
-                                                            // +1 to responder's expected CB score
+                                                            // +1 to responder's initiated CB score
                                                             await user.requestData(
                                                                 {
                                                                     [1]: 1,
@@ -92,7 +93,7 @@ export default observer(() => {
                                                                 deal.responderId
                                                             )
                                                             // +1 to poster's completed LP score
-                                                            // +1 to poster's expected CB score
+                                                            // +1 to poster's initiated CB score
                                                             await user.requestData(
                                                                 {
                                                                     [0]: 1,
@@ -135,6 +136,7 @@ export default observer(() => {
                                 <div>
                                     <h3>{deal.title.slice(0, 25)}</h3>
                                     <h3>${deal.offerAmount}</h3>
+                                    <h3>{deal.contact}</h3>
                                 </div>
                             ) : null}
 
@@ -172,7 +174,7 @@ export default observer(() => {
                                                             deal.posterDealClosed
                                                         ) {
                                                             // +1 to responder's completed LO score
-                                                            // +1 to responder's expected CB score
+                                                            // +1 to responder's initiated CB score
                                                             await user.requestData(
                                                                 {
                                                                     [1]: 1,
@@ -185,7 +187,7 @@ export default observer(() => {
                                                                 ''
                                                             )
                                                             // +1 to poster's completed LP score
-                                                            // +1 to poster's expected CB score
+                                                            // +1 to poster's initiated CB score
                                                             await user.requestData(
                                                                 {
                                                                     [0]: 1,
