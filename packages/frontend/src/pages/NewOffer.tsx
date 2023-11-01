@@ -118,7 +118,7 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
   return (
     <section className='flex flex-col space-y-4'>
       {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => {
-        const initiated = user.data[scoreInfo.index] ? Number(user.data[scoreInfo.index] >> BigInt(23)) : 0
+        const initiated = user.provableData[scoreInfo.index] ? Number(user.provableData[scoreInfo.index] >> BigInt(23)) : 0
         const score =  calcScoreFromUserData(Number(scoreInfo.score))
         return (
           <FormField
