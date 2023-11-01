@@ -4,10 +4,11 @@ import { EyeOff } from 'lucide-react'
 import DetailModal from './DetailModal'
 import Tooltip from './Tooltip'
 import './listings.css'
-
+import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
+import { TrustScoreKeyEnum } from '@/data'
 
 type Props = {
   section: string
@@ -29,11 +30,13 @@ type Listing = {
 }
 
 export default observer(({ section, category }: Props) => {
+  const { calcScoreFromUserData } = useTrustlist()
   const app = useContext(Trustlist)
   const user = useContext(User)
   const ui = useContext(Interface)
   const [showDetail, setShowDetail] = useState<boolean>(false)
   const [detailData, setDetailData] = useState<any>()
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
   let listingClass = 'listing-item'
 
   useEffect(() => {
@@ -60,7 +63,7 @@ export default observer(({ section, category }: Props) => {
   } else {
     listings = app.servicesByCategory.get(category)
   }
-
+  
   return (
     <div className="listings">
       {category === '' ? 
@@ -75,6 +78,7 @@ export default observer(({ section, category }: Props) => {
           .reverse()
           .map((listing: Listing) => {
             const scores = JSON.parse(listing.scoreString)
+            console.log(scores)
             {listing.epoch != user.userState?.sync.calcCurrentEpoch()
               ? (listingClass = 'listing-expired')
               : null
@@ -118,11 +122,23 @@ export default observer(({ section, category }: Props) => {
                     }
                   </div>
                   <div className="score-container">
-                    {Object.entries(scores).map(([key, value]) => (
-                      <div className="score-item"key={key}>
-                        {value === 'X' ? <EyeOff color='blue' size={20} strokeWidth={2.3}/> : value as React.ReactNode}
-                      </div>
-                    ))}
+                    {trustScoreKeys.map((key) => {
+                      const matchingEntry = Object.entries(scores).filter(([scoreName]) => scoreName === key)[0]
+                      const revealed = matchingEntry !== undefined;
+                      const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                      const value = revealed 
+                        ? initiated === 0 
+                          ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                        : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
+                      return (
+                        <div className="score-item"key={key}>
+                          <Tooltip
+                            text={key}
+                            content={value}
+                          />
+                        </div>
+                      )  
+                    })}
                   </div>
                 </div>
 

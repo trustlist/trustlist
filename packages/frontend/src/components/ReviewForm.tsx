@@ -107,7 +107,7 @@ export default observer(
                                             ) ?? 0,
                                             ''
                                         )
-                                        // +5 to opposite member's expected and +0-5 to completed GV score
+                                        // +5 to opposite member's initiated and +0-5 to completed GV score
                                         const GVscore = (5 << 23) + sentiment
                                         if (oppositeMemberReview) {
                                             await user.requestData(

@@ -27,7 +27,7 @@ const NewOfferResponseSchema = z.object({
   offerAmount: z.number().min(1, 'Please input the amount of your offer'),
   responderId: z.string(),
   revealTrustScores: z.record(z.boolean()),
-  scores: z.record(z.string().optional())
+  scores: z.record(z.number().optional())
 })
 
 export type NewOfferResponse = z.infer<typeof NewOfferResponseSchema>
@@ -54,10 +54,10 @@ const initialFormState: FormState = {
       [TrustScoreKeyEnum.GV]: true,
     },
     scores: {
-      [TrustScoreKeyEnum.LP]: '',
-      [TrustScoreKeyEnum.LO]: '',
-      [TrustScoreKeyEnum.CB]: '',
-      [TrustScoreKeyEnum.GV]: '',
+      [TrustScoreKeyEnum.LP]: undefined,
+      [TrustScoreKeyEnum.LO]: undefined,
+      [TrustScoreKeyEnum.CB]: undefined,
+      [TrustScoreKeyEnum.GV]: undefined,
     }
   },
   isLoading: true,
@@ -113,43 +113,49 @@ const InputOfferAmount = ({ watch, control, formState: { errors }, setValue, tri
 type TrustScoreFormStepProps = StepSectionProps & { trustScores: Record<TrustScoreKey, TrustScoreInfo> }
 
 const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: TrustScoreFormStepProps) => {
+  const user = useContext(User)
+  const { calcScoreFromUserData } = useTrustlist()
   return (
     <section className='flex flex-col space-y-4'>
-      {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => (
-        <FormField
-          key={key}
-          control={control}
-          name={`revealTrustScores.${key}`}
-          render={({ field }) => (
-            <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
-              <div>
-                <FormLabel className="text-foreground text-lg" htmlFor={key}>
-                  {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{scoreInfo.score}{scoreInfo.score === 'n/a' ? null : '%'}</span>
-                </FormLabel>
-                <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
-              </div>
-              <FormControl>
-                <div className="flex space-x-2">
-                  <Switch
-                    id={key}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
-                  />
-                  <p className='text-muted-foreground'>{field.value ? 'Show' : 'Hide'}</p>
+      {Object.entries(trustScoresFromData).map(([key, scoreInfo]) => {
+        const initiated = user.data[scoreInfo.index] ? Number(user.data[scoreInfo.index] >> BigInt(23)) : 0
+        const score =  calcScoreFromUserData(Number(scoreInfo.score))
+        return (
+          <FormField
+            key={key}
+            control={control}
+            name={`revealTrustScores.${key}`}
+            render={({ field }) => (
+              <FormItem className='flex justify-between items-start space-x-6 border border-muted-foreground p-3' key={key}>
+                <div>
+                  <FormLabel className="text-foreground text-lg" htmlFor={key}>
+                    {scoreInfo.title}:{' '}<span className="text-blue-700 font-extrabold">{initiated == 0 ? 'n/a' : `${score}%`}</span>
+                  </FormLabel>
+                  <FormDescription className='text-foreground/80'>{scoreInfo.description}</FormDescription>
                 </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-      ))}
+                <FormControl>
+                  <div className="flex space-x-2">
+                    <Switch
+                      id={key}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className={cn(field.value ? 'data-[state=checked]:bg-blue-700' : '')}
+                    />
+                    <p className='text-muted-foreground'>{field.value ? 'Show' : 'Hide'}</p>
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )
+      })}
     </section>
   )
 }
 
 const NewOfferPage = () => {
   const { listingId, listingTitle }: any = useParams()
-  const { calcScoreFromUserData, makeOffer } = useTrustlist()
+  const { makeOffer } = useTrustlist()
   const user = useContext(User)
   const navigate = useNavigate()
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores })
@@ -163,15 +169,16 @@ const NewOfferPage = () => {
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const updateScores = useCallback(() => {
-    if (user.provableData.length === 0) return;
+    // if (user.provableData.length === 0) return;
     for (let i = 0; i < 4; i++) {
-      let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      // let cumulativeScore = calcScoreFromUserData(Number(user.provableData[i]))
+      let userData = user.provableData[i]
       setTrustScoresFromData((prevData) => {
         return {
           ...prevData,
           [TrustScoreKeyEnum[trustScoreKeys[i]]]: {
             ...prevData[TrustScoreKeyEnum[trustScoreKeys[i]]],
-            score: String(cumulativeScore)
+            score: Number(userData)
           }
         }
       })
@@ -182,12 +189,10 @@ const NewOfferPage = () => {
     updateScores();
   }, [])
 
-  const autoTransition = async () => {
+  const transitionAlert = () => toast.promise(async () => {
     await user.transitionToCurrentEpoch()
-    updateScores()
-  }
-
-  const transitionAlert = () => toast.promise(autoTransition, {
+    updateScores()  
+  }, {
     pending: "Please wait a moment while you are tranistioned to the current epoch...",
     success: "Transition successful!  Please confirm whether you would like your updated scores to be shown and re-submit your offer.",
     error: "Failed to transition to the current epoch, please try again in a moment."
@@ -219,7 +224,7 @@ const NewOfferPage = () => {
       if(isRevealed){
         return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
       }
-      return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
+      return newScores;
     }, {})
   }
 
@@ -228,19 +233,21 @@ const NewOfferPage = () => {
     success: { render: 
                 <div className="flex space-around gap-3">
                   <div>
-                    <div>Offer submitted! One "offered" point will be added to your LO score if your offer is accepted by the lister.</div>
+                    <div>Offer submitted! One "initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
                     <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
                   </div>
-                  <button className="text-white font-lg border-1 border-white px-4 py-2"
-                          onClick={() => {
-                            listForm.reset();
-                            navigate('/')
-                          }}>
+                  <button 
+                    className="text-white font-lg border-1 border-white px-4 py-2"
+                    onClick={() => {
+                      listForm.reset();
+                      navigate('/')
+                    }}
+                  >
                     Home
                   </button>
                 </div>,
               closeButton: false },
-    error: "There was a problem submitting you offer, please try again"
+    error: "There was a problem submitting your offer, please try again"
   });
 
   const submitOffer = async (data: OfferFormValues) => {
