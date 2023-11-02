@@ -25,7 +25,7 @@ export default (
             }
             const currentEpoch = synchronizer.calcCurrentEpoch()
             if (currentEpoch !== Number(signupProof.epoch)) {
-                res.status(400).json({ error: 'Wrong epoch' })
+                res.status(400).json({ error: `Wrong epoch: (${currentEpoch}) != (${Number(signupProof.epoch)})` })
                 return
             }
             // make a transaction lil bish
