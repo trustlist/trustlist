@@ -1,39 +1,41 @@
-import React from 'react'
-import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
+import { useContext, useEffect, useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import MemberDashboardModal from '../components/MemberDashboardModal'
 // import NewListingModal from '../components/NewListingModal'
-import {Button} from '../components/ui/button'
 import Tooltip from '../components/Tooltip'
-import './header.css'
-import { User2 } from 'lucide-react'
-import { Pencil } from 'lucide-react'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Button } from '../components/ui/button'
+// import './header.css'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
+import { cn } from '@/utils/cn'
+import { formatTime } from '@/utils/time'
+import { InfoIcon, Pencil, User2 } from 'lucide-react'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
 
 export default observer(() => {
-  const user = React.useContext(User)
-  const ui = React.useContext(Interface)
+  const user = useContext(User)
+  const ui = useContext(Interface)
   const navigate = useNavigate()
 
-  const [remainingTime, setRemainingTime] = React.useState<number>(0)
+  const [remainingTime, setRemainingTime] = useState<string>('')
   // const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
-  const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
+  const [showMemberDash, setShowMemberDash] = useState<boolean>(false)
 
   const updateTimer = () => {
-    if (!user.userState) {
-      setRemainingTime(0)
+    if (!user.userState) { // why is this attached to user state?
+      setRemainingTime('')
       return
     }
     const time = user.userState.sync.calcEpochRemainingTime()
-    setRemainingTime(time)
+    const formattedTime = formatTime(time)
+    setRemainingTime(formattedTime)
   }
 
-  React.useEffect(() => {
-    setInterval(() => {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
       updateTimer()
     }, 1000)
     if (showMemberDash) {
@@ -41,77 +43,70 @@ export default observer(() => {
     } else {
       document.body.style.overflow = 'auto'
     }
+
+    return () => clearInterval(intervalId)
   }, [showMemberDash])
 
-  const date = new Date()
-  date.setSeconds(date.getSeconds() + remainingTime)
-  const minutes = date.getMinutes()
-  const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${minutes < 10 ? 0 : ''}${minutes}`
+  // const date = new Date()
+  // date.setSeconds(date.getSeconds() + remainingTime)
+  // const minutes = date.getMinutes()
+  // const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${minutes < 10 ? 0 : ''}${minutes}`
 
   const notify = () => toast.warning("You're not a member yet. Please click JOIN to participate.");
 
   return (
     <>
-      <div className="header">
+      <header className='p-4 flex justify-between border-b-2 border-b-muted'>
         <div className={`${ui.isMobile ? null : 'flex'}`}>
-          <div className="app-title">
-            <Link to="/">trustlist</Link>
-          </div>
-
-          <div className="epoch-info">
-            <div className='flex items-center gap-2'>
-              <div>
-                epoch: {user.userState?.sync.calcCurrentEpoch()}
+          <div className="md:flex md:gap-x-3">
+            <Link to="/" className="text-4xl md:text-5xl tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
+              trustlist
+            </Link>
+            <div className="bg-secondary p-2 rounded-sm border border-foreground/[.33]">
+              <div className='flex items-center gap-2'>
+                <p>
+                  epoch #{user.userState?.sync.calcCurrentEpoch()}
+                </p>
+                <Tooltip
+                  text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
+                  content={
+                    <InfoIcon size={16} className='text-primary' />
+                  }
+                />
               </div>
-              <Tooltip
-                text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
-                content={
-                  <img
-                      src={require('../../public/info_icon.svg')}
-                      alt="info icon"
-                  />
-                }
-              />
-            </div>
-            <div className={`${ui.isMobile ? null : 'flex'}`}>
-              <div>ending:{' '}</div>
-              <div>{dateString}</div>
+              <p>— ends in {remainingTime}</p>
             </div>
           </div>
         </div>
 
-        <div className="actions">
-          <Button 
-            onClick={() => user.hasSignedUp ? null : user.signup()}
-            // loadingText='joining...'
+        <div className="flex flex-col-reverse md:flex-row gap-2">
+          <Button
+            onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
+            variant={'outline'}
           >
-            {user.hasSignedUp ? 'connected' : 'JOIN'}
+            <User2 className='text-primary' size={16} />
+            Dashboard
+          </Button>
+          {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash} />}
+
+          <Button
+            onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}
+            variant={'outline'}
+          >
+            <Pencil className='text-primary' size={16} />
+            Add a listing
           </Button>
 
-          <button
-            onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
-            className='px-3 py-1 font-semibold flex justify-center items-center gap-1 text-sm'
+          <Button
+            onClick={() => user.hasSignedUp ? null : user.signup()}
+            className={cn('uppercase text-xs bg-blue-50 text-indigo-700 font-semibold border-2 border-indigo-600 hover:bg-indigo-700 hover:text-indigo-50', user.hasSignedUp && 'rounded-full border border-indigo-300 disabled:opacity-90 disabled:cursor-not-allowed')}
+            disabled={user.hasSignedUp}
           >
-            <User2 color='blue'/>
-            <div>
-              <div>member</div>
-              <div>dashboard</div>
-            </div>
-          </button>
-          {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>}
-            
-          <button 
-            onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}
-            className='px-3 py-1 font-semibold flex justify-center items-center gap-2 text-sm'
-          >
-            <Pencil color='blue'/>
-            <div>
-              <div>create</div>
-              <div>listing</div>
-            </div>
-          </button> 
+            {user.hasSignedUp && (<div className="h-2 w-2 rounded-full bg-green-600 mr-2"></div>)}
+            {user.hasSignedUp ? 'connected' : 'JOIN'}
+          </Button>
         </div>
-      </div>
+      </header>
 
       {!user.hasSignedUp && <ToastContainer className='header-toast' toastClassName='toast' position='top-right' autoClose={4000} />}
       <Outlet />
