@@ -307,8 +307,8 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
 
 const FormHeader = ({ currentStep }: FormFooterAndHeaderProps) => (
   <section>
-    <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Listing</h6>
-    <h2 className='text-2xl'>
+    <h6 className='text-sm font-semibold tracking-widest uppercase text-indigo-700'>New Listing</h6>
+    <h2 className='text-3xl py-2'>
       {/* Create the header text from the step id */}
       {FormSteps[currentStep - 1].id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
     </h2>
