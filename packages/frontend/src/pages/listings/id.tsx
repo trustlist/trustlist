@@ -11,6 +11,8 @@ interface ListingProps {
   description: string;
   amount: string;
   amountType: string;
+  epoch: number;
+  posterId: string;
   offers: {
     id: string,
     status: string,
@@ -74,14 +76,16 @@ const ListingDetails: React.FC = () => {
       </article>
 
       <section className="md:container md:max-w-3xl">
-        <section className='flex flex-col gap-2 container px-4 py-6 col-span-1 bg-primary text-secondary rounded-sm'>
+        <section className='flex flex-col gap-3 container px-4 py-6 col-span-1 bg-primary text-secondary rounded-sm'>
+          <p className="text-xs tracking-wider py-1 px-2 border border-secondary uppercase rounded-md self-start">EXPIRED</p>
           <h1 className="text-4xl font-medium break-words">{title}</h1>
-          <p className="text-secondary text-lg">${parseFloat(amount).toFixed(2)} — {listingDetails.amountType}</p>
+          <p className="text-secondary text-lg">${parseFloat(amount).toFixed(2)}</p>
+          <p className='text-sm text-secondary/70 w-36 overflow-hidden text-ellipsis rounded-md bg-secondary/10 px-1'>~{listingDetails.posterId}</p>
           <p className="text-base text-secondary/70">{description}</p>
         </section>
 
         <section className='flex flex-col gap-3 col-span-1 p-4'>
-          <h2 className='text-lg font-semibold'>📃Listing Offers</h2>
+          <h2 className='text-xl font-semibold'>📃Listing Offers</h2>
           {offers.length > 0 ? (
             <Table>
               <TableHeader>
