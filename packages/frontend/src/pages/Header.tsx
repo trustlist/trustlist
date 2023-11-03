@@ -83,6 +83,7 @@ export default observer(() => {
           <Button
             onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
             variant={'outline'}
+            className='border border-primary'
           >
             <User2 className='text-primary' size={16} />
             Dashboard
@@ -92,6 +93,7 @@ export default observer(() => {
           <Button
             onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}
             variant={'outline'}
+            className='border border-primary'
           >
             <Pencil className='text-primary' size={16} />
             Add a listing
