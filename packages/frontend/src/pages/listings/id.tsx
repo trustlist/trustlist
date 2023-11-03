@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 interface ListingProps {
+  _id: string;
   title: string;
   description: string;
   amount: string;
@@ -44,11 +45,12 @@ const ListingDetails: React.FC = () => {
       const listingResponse = await getDeals(id as string);
       if (listingResponse.data) {
         const offersResponse = await getOffers(id as string)
-        const listings = {
+        const listingDetails = {
           ...listingResponse.data,
           offers: offersResponse.data
         }
-        setListingDetails(listings as any);
+        // console.log({listingDetails})
+        setListingDetails(listingDetails as any);
       }
       setLoading(false);
     };
@@ -113,7 +115,9 @@ const ListingDetails: React.FC = () => {
           ) : (
             <div className='flex flex-col gap-2'>
               <p className='text-muted-foreground'>No offers available yet. You can be the first!</p>
-              <Button variant={'secondary'} className='self-start'>Make an offer</Button>
+              <Link to={`/listings/${listingDetails._id}/offers/new`}>
+                <Button variant={'secondary'} className='self-start'>Make an offer</Button>
+              </Link>
             </div>
           )}
         </section>

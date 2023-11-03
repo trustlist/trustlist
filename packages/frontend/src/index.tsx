@@ -19,7 +19,7 @@ export default function App() {
                     <Route index element={<Home />} />
                     <Route path="listings/new" element={<NewListingPage />} />
                      <Route path="listings/:id" element={<ListingDetails/>} />
-                    <Route path="offers/:listingId/:listingTitle" element={<NewOfferPage />} />
+                    <Route path="listings/:id/offers/new" element={<NewOfferPage />} />
                     <Route path="list/:section/:category" element={<List />} />
                     <Route path="deal/:id" element={<Deal />} />
                     {/* <Route path="dashboard" element={<Dashboard />} /> */}
