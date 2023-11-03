@@ -74,8 +74,8 @@ const ListingDetails: React.FC = () => {
       </article>
 
       <section className="md:container md:max-w-3xl">
-        <section className='flex flex-col gap-2 container px-4 py-6 col-span-1 bg-primary text-secondary'>
-          <h1 className="text-4xl font-medium break-words" style={{ fontFamily: 'Times New Roman' }}>{title}</h1>
+        <section className='flex flex-col gap-2 container px-4 py-6 col-span-1 bg-primary text-secondary rounded-sm'>
+          <h1 className="text-4xl font-medium break-words">{title}</h1>
           <p className="text-secondary text-lg">${parseFloat(amount).toFixed(2)} — {listingDetails.amountType}</p>
           <p className="text-base text-secondary/70">{description}</p>
         </section>

@@ -8,6 +8,7 @@ import './listings.css'
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
+import { Link } from 'react-router-dom'
 
 type Props = {
   section: string
@@ -80,14 +81,14 @@ export default observer(({ section, category }: Props) => {
               : null
             }
             return (
-              <>
+              <Link to={`/listings/${listing._id}`}>
                 <div
                   className={listingClass}
                   key={listing._id}
-                  onClick={() => {
-                    setDetailData(listing)
-                    setShowDetail(true)
-                  }}
+                  // onClick={() => {
+                  //   setDetailData(listing)
+                  //   setShowDetail(true)
+                  // }}
                 >
                   {!ui.isMobile ? <div className="thumbnail">TL</div> : null}
                   <div>
@@ -130,7 +131,7 @@ export default observer(({ section, category }: Props) => {
                 </div>
 
                 {showDetail && <DetailModal listing={detailData} key={detailData._id} setShowDetail={setShowDetail}/>}
-              </>
+              </Link>
             )
           })
         : null}
