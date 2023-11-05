@@ -8,7 +8,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { useContext, useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { TrustScoreKeyEnum, trustScores } from '@/data'
 import { TrustScoreInfo, TrustScoreKey } from "@/types/local"
 import { Input } from "@/components/ui/input"
@@ -148,10 +148,13 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
 }
 
 const NewOfferPage = () => {
-  const { listingId, listingTitle }: any = useParams()
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const [searchParams] = useSearchParams();
+  const title = searchParams.get('title');
+
   const { calcScoreFromUserData, makeOffer } = useTrustlist()
   const user = useContext(User)
-  const navigate = useNavigate()
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores })
 
   const listForm = useForm({
@@ -209,14 +212,14 @@ const NewOfferPage = () => {
     }
 
     const epkNonce = Math.floor(Math.random() * 3)
-    const responderId = user.epochKey(epkNonce) 
+    const responderId = user.epochKey(epkNonce)
 
     return { userUpdated: userStateUpdated, currentEpoch: currentEpoch, userEpochKey: responderId, nonce: epkNonce }
   }
 
   const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
     return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
-      if(isRevealed){
+      if (isRevealed) {
         return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
       }
       return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
@@ -225,21 +228,23 @@ const NewOfferPage = () => {
 
   const submitOfferAlert = (newData: any) => toast.promise(makeOffer(newData), {
     pending: "Please wait a moment while your offer is being submitted...",
-    success: { render: 
-                <div className="flex space-around gap-3">
-                  <div>
-                    <div>Offer submitted! One "offered" point will be added to your LO score if your offer is accepted by the lister.</div>
-                    <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
-                  </div>
-                  <button className="text-white font-lg border-1 border-white px-4 py-2"
-                          onClick={() => {
-                            listForm.reset();
-                            navigate('/')
-                          }}>
-                    Home
-                  </button>
-                </div>,
-              closeButton: false },
+    success: {
+      render:
+        <div className="flex space-around gap-3">
+          <div>
+            <div>Offer submitted! One "offered" point will be added to your LO score if your offer is accepted by the lister.</div>
+            <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
+          </div>
+          <button className="text-white font-lg border-1 border-white px-4 py-2"
+            onClick={() => {
+              listForm.reset();
+              navigate('/')
+            }}>
+            Home
+          </button>
+        </div>,
+      closeButton: false
+    },
     error: "There was a problem submitting you offer, please try again"
   });
 
@@ -257,8 +262,8 @@ const NewOfferPage = () => {
         const newData = {
           ...data,
           epoch: currentEpoch,
-          listingId: listingId,
-          listingTitle: listingTitle,
+          listingId: id,
+          listingTitle: title,
           responderId: userEpochKey,
           offerAmount: String(data.offerAmount),
           scoreString: JSON.stringify(currentScores)
@@ -268,7 +273,7 @@ const NewOfferPage = () => {
       } catch (offerError) {
         console.error("Error while publishing post: ", offerError);
       }
-      
+
     } catch (epochError) {
       console.error("Error while getting epoch and key: ", epochError);
     }
