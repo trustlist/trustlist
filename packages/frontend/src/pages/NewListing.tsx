@@ -24,6 +24,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Tooltip from "@/components/Tooltip"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button } from "@/components/ui/button"
 
 //TODO: ✅ Add field validation
 //TODO: Hook up to Trustlist hook (maybe?) (if it needs to exist)
@@ -325,12 +326,17 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
     <section className='py-3'>
       <section className={cn('flex space-x-3', currentStep > 1 ? 'justify-between' : 'justify-end')}>
         {currentStep > 1 &&
-          <button type="button" className="px-2 py-1 border-muted-foreground text-muted-foreground" onClick={() => changeStep(FormSteps[currentStep - 2])}>Previous step</button>
+          <Button
+            type="button"
+            variant={'secondary'}
+            onClick={() => changeStep(FormSteps[currentStep - 2])}
+          >Previous step
+          </Button>
         }
         {currentStep < FormSteps.length &&
-          <button
+          <Button
             type="button"
-            className='px-2 py-1 justify-self-end'
+            variant={'default'}
             onClick={async () => {
               const isValid = await trigger(FormSteps[currentStep - 1].fields);
               if (isValid) {
@@ -339,10 +345,10 @@ const FormFooter = ({ currentStep, changeStep, trigger }: FormFooterAndHeaderPro
             }}
           >
             Next step
-          </button>
+          </Button>
         }
         {currentStep === FormSteps.length &&
-          <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Publish</button>
+          <Button size={'lg'} className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Publish</Button>
         }
       </section>
     </section>
@@ -405,7 +411,7 @@ const NewListingPage = () => {
       // transition user to the current epoch if they're not on it
       try {
         transitionAlert()
-        console.log('transitioning...') 
+        console.log('transitioning...')
         // await user.transitionToCurrentEpoch()
         // updateScores()
       } catch (error) {
@@ -415,14 +421,14 @@ const NewListingPage = () => {
     }
 
     const epkNonce = Math.floor(Math.random() * 3)// randomly choose between 2 and 0
-    const posterId = user.epochKey(epkNonce) 
+    const posterId = user.epochKey(epkNonce)
 
     return { userUpdated: userStateUpdated, currentEpoch: currentEpoch, userEpochKey: posterId, nonce: epkNonce }
   }
 
   const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
     return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
-      if(isRevealed){
+      if (isRevealed) {
         return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
       }
       return { ...newScores, [scoreKey as TrustScoreKey]: 'X' }
@@ -442,22 +448,24 @@ const NewListingPage = () => {
 
   const publishingAlert = (newData: any) => toast.promise(sendData(newData), {
     pending: "Please wait a moment while your listing is being published...",
-    success: { render: 
-                <div className="flex space-around gap-3">
-                  <div>
-                    <div>Listing published! One "listed" point has been added to your Legitimate Posting score.</div>
-                    <div>Please complete your deal during this epoch to build your LP reputation.</div>
-                  </div>
-                  <button className="text-white font-lg border-1 border-white px-4 py-2"
-                          onClick={() => {
-                            listForm.reset();
-                            changeStep(FormSteps[0])
-                            navigate('/')
-                          }}>
-                    Home
-                  </button>
-                </div>,
-              closeButton: false },
+    success: {
+      render:
+        <div className="flex space-around gap-3">
+          <div>
+            <div>Listing published! One "listed" point has been added to your Legitimate Posting score.</div>
+            <div>Please complete your deal during this epoch to build your LP reputation.</div>
+          </div>
+          <button className="text-white font-lg border-1 border-white px-4 py-2"
+            onClick={() => {
+              listForm.reset();
+              changeStep(FormSteps[0])
+              navigate('/')
+            }}>
+            Home
+          </button>
+        </div>,
+      closeButton: false
+    },
     error: "There was a problem publishing your listing, please try again"
   });
 
@@ -494,7 +502,7 @@ const NewListingPage = () => {
       //   changeStep(FormSteps[0])
       //   //  TODO: Reroute to home page
       //   navigate('/')
-      
+
     } catch (epochError) {
       console.error("Error while getting epoch and key: ", epochError);
     }
