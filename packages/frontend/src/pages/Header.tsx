@@ -2,16 +2,14 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import MemberDashboardModal from '../components/MemberDashboardModal'
-// import NewListingModal from '../components/NewListingModal'
 import Tooltip from '../components/Tooltip'
 import { Button } from '../components/ui/button'
-// import './header.css'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { cn } from '@/utils/cn'
 import { formatTime } from '@/utils/time'
-import { InfoIcon, Pencil, User2 } from 'lucide-react'
+import { InfoIcon, Loader2, Pencil, User2 } from 'lucide-react'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
 
@@ -21,8 +19,14 @@ export default observer(() => {
   const navigate = useNavigate()
 
   const [remainingTime, setRemainingTime] = useState<string>('')
-  // const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
   const [showMemberDash, setShowMemberDash] = useState<boolean>(false)
+  const [isSigningUp, setIsSigningUp] = useState(false);
+
+  const handleSignup = async () => {
+    setIsSigningUp(true);
+    await user.signup();
+    setIsSigningUp(false);
+  }
 
   const updateTimer = () => {
     if (!user.userState) { // why is this attached to user state?
@@ -47,10 +51,6 @@ export default observer(() => {
     return () => clearInterval(intervalId)
   }, [showMemberDash])
 
-  // const date = new Date()
-  // date.setSeconds(date.getSeconds() + remainingTime)
-  // const minutes = date.getMinutes()
-  // const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${minutes < 10 ? 0 : ''}${minutes}`
 
   const notify = () => toast.warning("You're not a member yet. Please click JOIN to participate.");
 
@@ -100,12 +100,13 @@ export default observer(() => {
           </Button>
 
           <Button
-            onClick={() => user.hasSignedUp ? null : user.signup()}
+            onClick={() => user.hasSignedUp ? null : handleSignup()}
             className={cn('uppercase text-xs bg-blue-50 text-indigo-700 font-semibold border-2 border-indigo-600 hover:bg-indigo-700 hover:text-indigo-50', user.hasSignedUp && 'rounded-full border border-indigo-300 disabled:opacity-90 disabled:cursor-not-allowed')}
             disabled={user.hasSignedUp}
           >
+            {isSigningUp ? (<span className='animate-spin mr-2'><Loader2 size={16} /></span>) : null}
             {user.hasSignedUp && (<div className="h-2 w-2 rounded-full bg-green-600 mr-2"></div>)}
-            {user.hasSignedUp ? 'connected' : 'JOIN'}
+            {user.hasSignedUp ? 'connected' : isSigningUp ? 'Joining...' : 'JOIN'}
           </Button>
         </div>
       </header>
