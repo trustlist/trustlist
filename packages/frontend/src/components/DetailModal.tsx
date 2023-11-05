@@ -89,7 +89,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
           <div className="detail-content">
             {user.hasSignedUp &&
             // prevent user from making an offer on their own post
-            // !memberKeys.includes(listing.posterId) &&
+            !memberKeys.includes(listing.posterId) &&
             // prevent new offers if one has already been accepted
             !listing.dealOpened &&
             // prevent new offers if listing epoch is expired

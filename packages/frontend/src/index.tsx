@@ -2,6 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './pages/Header'
+import MemberDashboardPage from './pages/MemberDashboard'
 import Home from './pages/Home'
 import List from './pages/List'
 import Deal from './pages/Deal'
@@ -16,6 +17,7 @@ export default function App() {
             <Routes>
                 < Route path="/" element={<Header />}>
                     <Route index element={<Home />} />
+                    <Route path="dashboard" element={<MemberDashboardPage />} />
                     <Route path="listings/new" element={<NewListingPage />} />
                     <Route path="offers/:listingId/:listingTitle" element={<NewOfferPage />} />
                     <Route path="list/:section/:category" element={<List />} />

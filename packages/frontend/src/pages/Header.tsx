@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import MemberDashboardModal from '../components/MemberDashboardModal'
+// import MemberDashboardModal from '../components/MemberDashboardModal'
 // import NewListingModal from '../components/NewListingModal'
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip'
@@ -21,7 +21,7 @@ export default observer(() => {
 
   const [remainingTime, setRemainingTime] = React.useState<number>(0)
   // const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
-  const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
+  // const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
 
   const updateTimer = () => {
     if (!user.userState) {
@@ -36,12 +36,13 @@ export default observer(() => {
     setInterval(() => {
       updateTimer()
     }, 1000)
-    if (showMemberDash) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-  }, [showMemberDash])
+  //   if (showMemberDash) {
+  //     document.body.style.overflow = 'hidden'
+  //   } else {
+  //     document.body.style.overflow = 'auto'
+  //   }
+  // }, [showMemberDash])
+  }, [])
 
   const date = new Date()
   date.setSeconds(date.getSeconds() + remainingTime)
@@ -64,7 +65,7 @@ export default observer(() => {
                 epoch: {user.userState?.sync.calcCurrentEpoch()}
               </div>
               <Tooltip
-                text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
+                text='Trustlist epochs are 3 weeks long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                 content={
                   <img
                       src={require('../../public/info_icon.svg')}
@@ -89,7 +90,8 @@ export default observer(() => {
           </Button>
 
           <button
-            onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
+            // onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
+            onClick={() => user.hasSignedUp ? navigate('/dashboard') : notify()}
             className='px-3 py-1 font-semibold flex justify-center items-center gap-1 text-sm'
           >
             <User2 color='blue'/>
@@ -98,7 +100,7 @@ export default observer(() => {
               <div>dashboard</div>
             </div>
           </button>
-          {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>}
+          {/* {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>} */}
             
           <button 
             onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}
