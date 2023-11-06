@@ -1,6 +1,6 @@
-import { TrustScoreKeyEnum } from "@/data";
+import { TrustScoreKeyEnum } from '@/data'
 
-export type TrustScoreKey = keyof typeof TrustScoreKeyEnum;
+export type TrustScoreKey = keyof typeof TrustScoreKeyEnum
 
 export type TrustScoreInfo = {
     index: number

@@ -45,7 +45,7 @@ class User {
             attesterId: BigInt(APP_ADDRESS),
             id: identity,
         })
-        await userState.sync.start()
+        await userState.start()
         this.userState = userState
         await userState.waitForSync()
         this.hasSignedUp = await userState.hasSignedUp()
@@ -181,11 +181,12 @@ class User {
         const attesterId = this.userState.sync.attesterId
         const circuitInputs = stringifyBigInts({
             identity_secret: this.userState.id.secret,
-            state_tree_indexes: stateTreeProof.pathIndices,
+            state_tree_indices: stateTreeProof.pathIndices,
             state_tree_elements: stateTreeProof.siblings,
             data: provableData,
             epoch: epoch,
             attester_id: attesterId,
+            chain_id: this.userState.chainId,
             value: values,
         })
         const { publicSignals, proof } = await prover.genProofAndPublicSignals(

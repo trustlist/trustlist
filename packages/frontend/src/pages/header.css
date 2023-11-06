@@ -39,28 +39,28 @@ button {
 }
 
 .Toastify__close-button {
-  opacity: 1;
+    opacity: 1;
 }
 
 .Toastify__close-button > svg {
-  color: white;
-  opacity: 1;
+    color: white;
+    opacity: 1;
 }
 
 .toast {
-  background-color: blue;
-  color: white;
+    background-color: blue;
+    color: white;
 }
 
 .header-toast {
-  position: fixed;
-  top: 5%;
+    position: fixed;
+    top: 5%;
 }
 
 .listing-toast {
-  width: 100%;
-  position: fixed;
-  bottom: 0;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
 }
 
 @media only screen and (max-width: 950px) {
@@ -92,6 +92,6 @@ button {
     }
 
     .header-toast {
-      top: 15%;
+        top: 15%;
     }
 }

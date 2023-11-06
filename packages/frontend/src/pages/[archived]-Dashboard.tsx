@@ -225,7 +225,11 @@ export default observer(() => {
                                 text={`The user state transition allows a user to insert a state tree leaf into the latest epoch. The user sums all the reputation they've received in the past and proves it in ZK.`}
                             /> */}
                         </div>
-                        <Button onClick={() => userContext.transitionToCurrentEpoch()}>
+                        <Button
+                            onClick={() =>
+                                userContext.transitionToCurrentEpoch()
+                            }
+                        >
                             Transition
                         </Button>
                     </div>
