@@ -92,7 +92,7 @@ export default observer(() => {
           <Button
             onClick={() => user.hasSignedUp ? null : handleSignup()}
             className={cn('uppercase text-xs bg-blue-50 text-indigo-700 font-semibold border-2 border-indigo-600 hover:bg-indigo-700 hover:text-indigo-50', user.hasSignedUp && 'rounded-full border border-indigo-300 disabled:opacity-90 disabled:cursor-not-allowed')}
-            disabled={user.hasSignedUp}
+            disabled={user.hasSignedUp || isSigningUp}
           >
             {isSigningUp ? (<span className='animate-spin mr-2'><Loader2 size={16} /></span>) : null}
             {user.hasSignedUp && (<div className="h-2 w-2 rounded-full bg-green-600 mr-2"></div>)}
