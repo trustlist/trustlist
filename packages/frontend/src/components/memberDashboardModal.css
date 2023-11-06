@@ -94,9 +94,9 @@ li:hover {
 }
 
 .dash-toast {
-  width: 100%;
-  position: fixed;
-  top: 30%;
+    width: 100%;
+    position: fixed;
+    top: 30%;
 }
 
 @media only screen and (max-width: 950px) {

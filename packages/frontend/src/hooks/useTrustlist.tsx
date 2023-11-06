@@ -2,9 +2,7 @@ import { NewListingResponse } from '@/pages/NewListing'
 import { SERVER } from '../config'
 
 const useTrustlist = () => {
-    const createNewListing = async (
-        newListing: NewListingResponse
-    ) => {
+    const createNewListing = async (newListing: NewListingResponse) => {
         // TODO: /api/listings/new
         const data = await fetch(`${SERVER}/api/addListing`, {
             method: 'POST',
@@ -12,7 +10,7 @@ const useTrustlist = () => {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                ...newListing
+                ...newListing,
                 // epoch,
                 // section,
                 // category,
@@ -27,7 +25,8 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const makeOffer = async (offerData: any
+    const makeOffer = async (
+        offerData: any
         // epoch: any,
         // listingId: string,
         // listingTitle: string, // Why do we need this for the offer?
@@ -42,7 +41,7 @@ const useTrustlist = () => {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-              ...offerData
+                ...offerData,
                 // epoch,
                 // listingId,
                 // listingTitle,
@@ -62,7 +61,7 @@ const useTrustlist = () => {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-              ...dealData
+                ...dealData,
                 // id,
                 // offerAmount,
                 // responderId,
@@ -70,7 +69,6 @@ const useTrustlist = () => {
         }).then((r) => r.json())
         return data.message
     }
-
 
     const closeDeal = async (listingId: string, member: string) => {
         // Is this the dealId or the listingId?
@@ -88,7 +86,11 @@ const useTrustlist = () => {
         return data.message
     }
 
-    const addReview = async (listingId: string, member: string, review: string) => {
+    const addReview = async (
+        listingId: string,
+        member: string,
+        review: string
+    ) => {
         // TODO: /api/listings/{listingId}/reviews/new
         const data = await fetch(`${SERVER}/api/submitReview`, {
             method: 'POST',
@@ -106,16 +108,16 @@ const useTrustlist = () => {
 
     const getOffers = async (listingId: string) => {
         // TODO: Should be /api/{listingId}/offers
-        const data = await fetch(`${SERVER}/api/loadOffers/${listingId}`).then((r) =>
-            r.json()
+        const data = await fetch(`${SERVER}/api/loadOffers/${listingId}`).then(
+            (r) => r.json()
         )
-        return { listingId, data };
+        return { listingId, data }
     }
 
     const getDeals = async (listingId: string) => {
         // TODO: Should be /api/{listingId}/deals
-        const data = await fetch(`${SERVER}/api/loadDeal/${listingId}`).then((r) =>
-            r.json()
+        const data = await fetch(`${SERVER}/api/loadDeal/${listingId}`).then(
+            (r) => r.json()
         )
         return { listingId, data }
     }
@@ -141,7 +143,6 @@ const useTrustlist = () => {
         const score = Math.floor(((data % 128) / (data >> 23)) * 100)
         return score
     }
-
 
     // const loadSelectedCategory = async(section: string, category: string) => {
     //     const listings = await fetch(`${SERVER}/api/loadListings`, {
@@ -170,7 +171,17 @@ const useTrustlist = () => {
     //     }
     // }
 
-    return { createNewListing, makeOffer, openDeal, closeDeal, addReview, getOffers, getDeals, getUserActivity, calcScoreFromUserData }
+    return {
+        createNewListing,
+        makeOffer,
+        openDeal,
+        closeDeal,
+        addReview,
+        getOffers,
+        getDeals,
+        getUserActivity,
+        calcScoreFromUserData,
+    }
 }
 
-export default useTrustlist;
+export default useTrustlist

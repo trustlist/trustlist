@@ -14,10 +14,13 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                < Route path="/" element={<Header />}>
+                <Route path="/" element={<Header />}>
                     <Route index element={<Home />} />
                     <Route path="listings/new" element={<NewListingPage />} />
-                    <Route path="offers/:listingId/:listingTitle" element={<NewOfferPage />} />
+                    <Route
+                        path="offers/:listingId/:listingTitle"
+                        element={<NewOfferPage />}
+                    />
                     <Route path="list/:section/:category" element={<List />} />
                     <Route path="deal/:id" element={<Deal />} />
                     {/* <Route path="dashboard" element={<Dashboard />} /> */}
