@@ -25,7 +25,7 @@ async function genUserState(id, app) {
         attesterId,
         id,
     })
-    await userState.sync.start()
+    await userState.start()
     await userState.waitForSync()
     return userState
 }
@@ -107,7 +107,7 @@ describe('Unirep App', function () {
         const value = Array(SUM_FIELD_COUNT).fill(0)
         const circuitInputs = stringifyBigInts({
             identity_secret: id.secret,
-            state_tree_indexes: stateTreeProof.pathIndices,
+            state_tree_indices: stateTreeProof.pathIndices,
             state_tree_elements: stateTreeProof.siblings,
             data: data,
             epoch: epoch,
