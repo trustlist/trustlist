@@ -6,7 +6,8 @@ import {  TrustScoreKeyEnum, trustScores } from '@/data';
 import { cn } from '@/utils/cn';
 import { getRandomEmoji } from '@/utils/emoji';
 import Tooltip from '@/components/Tooltip';
-import { InfoIcon, EyeOff, ChevronRight, Slash } from 'lucide-react';
+import ReviewForm from '@/components/ReviewForm';
+import { ArrowBigRight, InfoIcon, EyeOff, ChevronRight, Slash } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,6 +21,7 @@ interface ListingProps {
   amountType: string;
   epoch: number;
   posterId: string;
+  contact: string;
   scoreString: string;
   offerAmount: string;
   responderId: string;
@@ -50,7 +52,7 @@ interface ListingProps {
 
 const ListingDetails: React.FC = () => {
   const { id } = useParams();
-  const { calcScoreFromUserData, getDeals, getOffers, openDeal } = useTrustlist();
+  const { calcScoreFromUserData, getDeals, getOffers, openDeal, closeDeal } = useTrustlist();
   const user = useContext(User)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
@@ -108,7 +110,7 @@ const ListingDetails: React.FC = () => {
     return <p className='p-6'>No listing details available.</p>;
   }
 
-  const { _id, title, description, amount, posterId, responderId, offers } = listingDetails;
+  const { _id, title, description, amount, offerAmount, posterId, contact, responderId, dealOpened, posterDealClosed, responderDealClosed, offers } = listingDetails;
   console.log({ ...listingDetails });
 
   const isListingExpired = listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch();
@@ -148,7 +150,114 @@ const ListingDetails: React.FC = () => {
         <header className='flex flex-col gap-3 container px-4 py-6 col-span-1 text-card-foreground'>
           {isListingExpired && <p className="text-xs text-orange-600 tracking-wider py-1 px-2 border border-orange-500 uppercase rounded-md self-start font-semibold">EXPIRED</p>}
           <h1 className="text-4xl font-medium break-words">{title}</h1>
-          <p className="text-card-foreground text-lg">${parseFloat(amount).toFixed(2)}</p>
+          {dealOpened && !posterDealClosed 
+            ? <div className='text-lg'>
+                <p>deal pending...</p>
+                {memberKeys.includes(responderId) ? <p>contact: {contact}</p> : null }
+              </div>
+            : null }
+          {posterDealClosed && responderDealClosed 
+            ? <p className='text-lg text-orange-600'>deal completed!</p>
+            : null }
+        
+          {dealOpened
+            ? <>
+              <div className='flex gap-3'>
+                <p className="text-card-foreground text-lg">${parseFloat(amount).toFixed(2)}</p>
+                <ArrowBigRight />
+                <p className='text-green-700 text-lg'>${parseFloat(offerAmount).toFixed(2)}</p>
+              </div>
+
+              <div className='flex gap-20'>
+                <div>
+                  {posterDealClosed ?
+                    <div className="">✅</div>
+                  :
+                    <div className="">
+                      {memberKeys.includes(posterId) ? 
+                        <Button
+                          style={{ backgroundColor: 'white', border: 'none', padding: '0 0', fontSize: '2rem' }}
+                          onClick={async () => {
+                            const message = await closeDeal(_id, 'poster')
+                            if (responderDealClosed) {
+                              // +1 to responder's completed LO score, +1 to responder's initiated CB score
+                              await user.requestData(
+                                {[1]: 1, [2]: 1 << 23},
+                                memberKeys.indexOf(posterId) ?? 0,
+                                responderId
+                              )
+                              // +1 to poster's completed LP score, +1 to poster's initiated CB score
+                              await user.requestData(
+                                {[0]: 1, [2]: 1 << 23},
+                                memberKeys.indexOf(posterId) ?? 0,
+                                ''
+                              )
+                            }
+                            window.alert(message)
+                            window.location.reload()
+                          }}
+                        >
+                          ☑️
+                        </Button>
+                      :
+                        <Button style={{ cursor: 'not-allowed', backgroundColor: 'white', border: 'none', padding: '0 0', fontSize: '2rem' }}>
+                          ☑️
+                        </Button>
+                      }
+                    </div>
+                  }
+                  <div>poster</div>
+                </div>
+
+                <div>
+                  {responderDealClosed ? 
+                    <div className="">✅</div>
+                  :
+                    <div className="">
+                      {memberKeys.includes(responderId) 
+                      ? <Button
+                        style={{ backgroundColor: 'white', border: 'none', padding: '0 0', fontSize: '2rem' }}
+                        onClick={async () => {
+                          const message = await closeDeal(_id, 'responder')
+                          if (posterDealClosed) {
+                            // +1 to responder's completed LO score, +1 to responder's initiated CB score
+                            await user.requestData(
+                              {[1]: 1, [2]: 1 << 23},
+                              memberKeys.indexOf(responderId) ?? 0,
+                              ''
+                            )
+                            // +1 to poster's completed LP score, +1 to poster's initiated CB score
+                            await user.requestData(
+                              {[0]: 1, [2]: 1 << 23},
+                              memberKeys.indexOf(responderId) ?? 0,
+                              posterId
+                            )
+                          }
+                          window.alert(message)
+                          window.location.reload()
+                          }}
+                        >
+                            ☑️
+                        </Button>
+                      :
+                        <Button
+                          style={{ cursor: 'not-allowed', backgroundColor: 'white', border: 'none', padding: '0 0', fontSize: '2rem' }}
+                        >
+                          ☑️
+                        </Button>
+                      }
+                    </div>                 
+                  }
+                  <div>responder</div>
+                </div>
+              </div>
+              </>
+              
+            : <p className="text-card-foreground text-lg">${parseFloat(amount).toFixed(2)}</p>}
+
+          
+          
+          {dealOpened ? <div className={cn('mt-1 mb-8 border-b-2 border-b-primary', isListingExpired ? 'border-b-orange-600' : '')}></div> : null }
           <div className="flex gap-1 text-muted-foreground">
             <p>by</p>
             <p className='text-sm text-foreground text-ellipsis rounded-md bg-muted-foreground/10 px-1'>~{listingDetails.posterId.substring(0, 6)}...{listingDetails.posterId.slice(-6)}</p>
@@ -162,7 +271,7 @@ const ListingDetails: React.FC = () => {
               const value = revealed 
                 ? initiated === 0 
                   ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
-                : <EyeOff size={18} strokeWidth={2}/>
+                : <EyeOff size={16} strokeWidth={3}/>
               return (
                 <div className="flex">
                   <Tooltip
@@ -172,9 +281,9 @@ const ListingDetails: React.FC = () => {
                     }
                   />
                   <div key={key} className={cn('flex gap-1 items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
-                              `${setBorderColor(key as TrustScoreKey)}`, )} title={key + ' trust score'}>
+                    `${setBorderColor(key as TrustScoreKey)}`, )} title={key + ' trust score'}>
                     <div>{key}:</div>
-                    <div style={{ fontWeight: '600' }}>{value}</div>
+                    <div className='font-bold uppercase'>{value}</div>
                   </div>
                 </div>
               )  
@@ -230,9 +339,9 @@ const ListingDetails: React.FC = () => {
                               <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
                                 `${setBorderColor(key as TrustScoreKey)}`, )} title={key + ' trust score'}>
                                 {/* // value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}> */}
-                                <div className='flex items-center gap-1.5 font-bold text-sm'>
+                                <div className='flex items-center gap-1.5 text-sm'>
                                   <div>{key}:</div>
-                                  <div>{value}</div>
+                                  <div className='font-bold uppercase'>{value}</div>
                                 </div>
                                 {/* {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value} */}
                               </div>
