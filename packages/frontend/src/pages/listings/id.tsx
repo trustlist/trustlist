@@ -28,6 +28,8 @@ interface ListingProps {
   dealOpened: boolean;
   posterDealClosed: boolean;
   responderDealClosed: boolean;
+  posterReview: string;
+  responderReview: string;
   offers: {
     _id: string,
     responderId: string,
@@ -110,7 +112,7 @@ const ListingDetails: React.FC = () => {
     return <p className='p-6'>No listing details available.</p>;
   }
 
-  const { _id, title, description, amount, offerAmount, posterId, contact, responderId, dealOpened, posterDealClosed, responderDealClosed, offers } = listingDetails;
+  const { _id, title, description, amount, offerAmount, posterId, contact, responderId, dealOpened, posterDealClosed, responderDealClosed, posterReview, responderReview, offers } = listingDetails;
   console.log({ ...listingDetails });
 
   const isListingExpired = listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch();
@@ -128,7 +130,7 @@ const ListingDetails: React.FC = () => {
                   <div>Please complete your deal during this epoch to build your reputation.</div>
                 </div>
                 <button className="text-black font-lg border-1 border-white px-4 py-2"
-                        onClick={() => navigate(`/deal/${_id}`)}>
+                        onClick={() => window.location.reload()}>
                   Deal
                 </button>
               </div>,
@@ -255,7 +257,34 @@ const ListingDetails: React.FC = () => {
               
             : <p className="text-card-foreground text-lg">${parseFloat(amount).toFixed(2)}</p>}
 
-          
+          {posterDealClosed && responderDealClosed ? 
+            <div className="attestation-container">
+              <ReviewForm
+                key={posterId}
+                dealId={_id}
+                member="poster"
+                memberKeys={memberKeys}
+                currentMemberId={posterId}
+                oppositeMemberId={responderId}
+                currentMemberReview={posterReview}
+                oppositeMemberReview={responderReview}
+              />
+              <ReviewForm
+                key={responderId}
+                dealId={_id}
+                member="responder"
+                memberKeys={memberKeys}
+                currentMemberId={responderId}
+                oppositeMemberId={posterId}
+                currentMemberReview={responderReview}
+                oppositeMemberReview={posterReview}
+              />
+            </div>
+          : null
+            // <div style={{ color: 'black', textAlign: 'center', padding: '2rem 4rem' }}>
+            //   both members must mark deal complete to enable reviews
+            // </div>
+          }
           
           {dealOpened ? <div className={cn('mt-1 mb-8 border-b-2 border-b-primary', isListingExpired ? 'border-b-orange-600' : '')}></div> : null }
           <div className="flex gap-1 text-muted-foreground">
