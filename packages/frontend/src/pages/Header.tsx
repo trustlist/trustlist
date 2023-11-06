@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import MemberDashboardModal from '../components/MemberDashboardModal'
 import Tooltip from '../components/Tooltip'
 import { Button } from '../components/ui/button'
 import { ToastContainer, toast } from 'react-toastify'
@@ -19,7 +18,6 @@ export default observer(() => {
   const navigate = useNavigate()
 
   const [remainingTime, setRemainingTime] = useState<string>('')
-  const [showMemberDash, setShowMemberDash] = useState<boolean>(false)
   const [isSigningUp, setIsSigningUp] = useState(false);
 
   const handleSignup = async () => {
@@ -42,15 +40,8 @@ export default observer(() => {
     const intervalId = setInterval(() => {
       updateTimer()
     }, 1000)
-    if (showMemberDash) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-
     return () => clearInterval(intervalId)
-  }, [showMemberDash])
-
+  }, [])
 
   const notify = () => toast.warning("You're not a member yet. Please click JOIN to participate.");
 
@@ -68,7 +59,7 @@ export default observer(() => {
                   epoch #{user.userState?.sync.calcCurrentEpoch()}
                 </p>
                 <Tooltip
-                  text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
+                  text='Trustlist epochs are 3 weeks long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                   content={
                     <InfoIcon size={16} className='text-primary' />
                   }
@@ -81,14 +72,13 @@ export default observer(() => {
 
         <div className="flex flex-col-reverse md:flex-row gap-2">
           <Button
-            onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
+            onClick={() => user.hasSignedUp ? navigate('/dashboard') : notify()}
             variant={'outline'}
             className='border border-primary'
           >
             <User2 className='text-primary' size={16} />
             Dashboard
           </Button>
-          {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash} />}
 
           <Button
             onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}

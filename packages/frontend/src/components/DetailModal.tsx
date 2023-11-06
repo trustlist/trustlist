@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import {  trustScores } from '@/data'
+import {  TrustScoreKeyEnum, trustScores } from '@/data'
 import { EyeOff } from 'lucide-react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,7 +43,7 @@ type Offer = {
 
 export default observer(({ listing, setShowDetail }: Props) => {
   const app = useContext(Trustlist)
-  const { openDeal } = useTrustlist()
+  const { calcScoreFromUserData, openDeal } = useTrustlist()
   const user = useContext(User)
   const ui = useContext(Interface)
   const navigate = useNavigate()
@@ -59,9 +59,11 @@ export default observer(({ listing, setShowDetail }: Props) => {
   const offers = app.offersByListingId.get(listing._id)
   const memberKeys = [user.epochKey(0), user.epochKey(1)]
   const posterScores = JSON.parse(listing.scoreString)
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const acceptOfferAlert = (newData: any) => toast.promise(async () => {
       await openDeal(newData)
+      // + 1 to responder's initiated LO score
       await user.requestData({[1]: 1 << 23}, memberKeys.indexOf(listing.posterId), newData.responderId)
     }, {
     pending: "Please wait a moment while your deal is created...",
@@ -87,7 +89,7 @@ export default observer(({ listing, setShowDetail }: Props) => {
           <div className="detail-content">
             {user.hasSignedUp &&
             // prevent user from making an offer on their own post
-            // !memberKeys.includes(listing.posterId) &&
+            !memberKeys.includes(listing.posterId) &&
             // prevent new offers if one has already been accepted
             !listing.dealOpened &&
             // prevent new offers if listing epoch is expired
@@ -124,33 +126,38 @@ export default observer(({ listing, setShowDetail }: Props) => {
               </div>
 
               <div className='pt-6'>
-                {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
-                  <div className="detail-score">
-                    <div className="detail-tooltip">
-                      <Tooltip
-                        text={`${scoreInfo.title} : ${scoreInfo.description}`}
-                        content={
-                          <img
-                            src={require('../../public/info_icon.svg')}
-                            alt="info icon"
-                          />
-                        }
-                      />
-                    </div>
-                    <div className="trust-item">
-                      <div>
-                        {key} score:{' '}
+                {trustScoreKeys.map((key) => {
+                  const matchingEntry = Object.entries(posterScores).filter(([scoreName]) => scoreName === key)[0]
+                  const revealed = matchingEntry !== undefined;
+                  const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                  const value = revealed 
+                    ? initiated === 0 
+                      ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                    : <EyeOff size={22} strokeWidth={2}/>
+                  return (
+                    <div className="detail-score">
+                      <div className="detail-tooltip">
+                        <Tooltip
+                          text={`${trustScoreInfo[key].title} : ${trustScoreInfo[key].description}`}
+                          content={
+                            <img
+                              src={require('../../public/info_icon.svg')}
+                              alt="info icon"
+                            />
+                          }
+                        />
                       </div>
-                      <div style={{ fontWeight: '600' }}>
-                        {posterScores[key] === 'X' ?
-                          <EyeOff size={22} strokeWidth={2}/>
-                        : 
-                          <div>{posterScores[key]}{posterScores[key]==='n/a' ? null : '%'}</div>
-                        }
+                      <div className="trust-item">
+                        <div>
+                          {key} score:{' '}
+                        </div>
+                        <div style={{ fontWeight: '600' }}>
+                          {value}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )  
+                })}
               </div>
             </div>
 
@@ -174,25 +181,29 @@ export default observer(({ listing, setShowDetail }: Props) => {
                 {offers && offers.length > 0
                   ? offers.map((offer: Offer) => {
                     const responderScores = JSON.parse( offer.scoreString)
-                    // const responderScores = app.calcScoresFromDB(rScores)
                     return (
                       <div key={offer._id} className="offer">
-                        <div className='flex'>
+                        <div className='flex items-center'>
                           <div className='offer-amount'>${offer.offerAmount}{' '}</div>
                           {!ui.isMobile ? 
                             <div>offering member's scores:{' '}</div>
                           : null}
                         </div>
-                        {Object.entries(trustScoreInfo).map(([key, scoreInfo]) => (
-                          <div key={key} className="offer-score">
-                            <div style={{ fontWeight: '300' }}>{key}:{' '}</div>
-                              {responderScores[key] === 'X' ?
-                                <EyeOff size={12} strokeWidth={3}/>
-                              : 
-                                <div>{responderScores[key]}</div>
-                              }
-                          </div>
-                        ))}
+                        {trustScoreKeys.map((key) => {
+                          const matchingEntry = Object.entries(responderScores).filter(([scoreName]) => scoreName === key)[0]
+                          const revealed = matchingEntry !== undefined;
+                          const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                          const value = revealed 
+                            ? initiated === 0 
+                              ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                            : <EyeOff size={12} strokeWidth={3}/>
+                          return (
+                            <div key={key} className="offer-score">
+                              <div style={{ fontWeight: '300' }}>{key}:{' '}</div>
+                                {value}
+                            </div>
+                          )
+                        })}
               
                         {listing.responderId === offer.responderId ? 
                           <button className="offer-accepted">accepted</button>
@@ -203,24 +214,13 @@ export default observer(({ listing, setShowDetail }: Props) => {
                                 try {
                                   const newData = {
                                     id: listing._id,
-                                    // posterId: listing.posterId, 
                                     responderId: offer.responderId,
                                     offerAmount: offer.offerAmount,
                                   }
-                                console.log(newData)
                                 acceptOfferAlert(newData)
                                 } catch {
                                   console.error("Error while updating deal: ");
                                 }
-
-                                // }
-                                // +1 to offering member's expected LO score
-                                // await user.requestData(
-                                //   {[1]: 1 << 23},
-                                //   memberKeys.indexOf(listing.posterId) ?? 0,
-                                //   offer.responderId
-                                // )
-                                // const message = await app.dealOpen(listing._id, offer.offerAmount, offer.responderId)
                               }}
                             >
                               accept deal

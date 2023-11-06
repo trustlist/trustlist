@@ -1,14 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { EyeOff } from 'lucide-react'
-import DetailModal from './DetailModal'
-import Tooltip from './Tooltip'
 import './listings.css'
-
+import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
 import { Link } from 'react-router-dom'
+import { TrustScoreKeyEnum } from '@/data'
 
 type Props = {
   section: string
@@ -30,11 +29,11 @@ type Listing = {
 }
 
 export default observer(({ section, category }: Props) => {
+  const { calcScoreFromUserData } = useTrustlist()
   const app = useContext(Trustlist)
   const user = useContext(User)
   const ui = useContext(Interface)
-  const [showDetail, setShowDetail] = useState<boolean>(false)
-  const [detailData, setDetailData] = useState<any>()
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
   let listingClass = 'listing-item'
 
   useEffect(() => {
@@ -42,12 +41,7 @@ export default observer(({ section, category }: Props) => {
       await app.loadSelectedCategory(section, category)
     }
     loadData()
-    // if (showDetail) {
-    //     document.body.style.overflow = 'hidden'
-    // } else {
-    //     document.body.style.overflow = 'auto'
-    // }
-  }, [section, category, showDetail])
+  }, [section, category])
 
   let listings = []
   if (section === 'for sale') {
@@ -61,7 +55,7 @@ export default observer(({ section, category }: Props) => {
   } else {
     listings = app.servicesByCategory.get(category)
   }
-
+  
   return (
     <div className="listings">
       {category === '' ? 
@@ -85,10 +79,6 @@ export default observer(({ section, category }: Props) => {
                 <div
                   className={listingClass}
                   key={listing._id}
-                  // onClick={() => {
-                  //   setDetailData(listing)
-                  //   setShowDetail(true)
-                  // }}
                 >
                   {!ui.isMobile ? <div className="thumbnail">TL</div> : null}
                   <div>
@@ -119,18 +109,20 @@ export default observer(({ section, category }: Props) => {
                     }
                   </div>
                   <div className="score-container">
-                    {Object.entries(scores).map(([key, value]) => (
-                      <div className="score-item"key={key}>
-                        <Tooltip
-                          text={key}
-                          content={value === 'X' ? <EyeOff color='blue' size={20} strokeWidth={2.3}/> : value}
-                        />
-                      </div>
-                    ))}
+                    {trustScoreKeys.map((key) => {
+                      const matchingEntry = Object.entries(scores).filter(([scoreName]) => scoreName === key)[0]
+                      const revealed = matchingEntry !== undefined;
+                      const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                      const value = revealed 
+                        ? initiated === 0 
+                          ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                        : <EyeOff color='blue' size={20} strokeWidth={2.3}/>
+                      return (
+                        <div className="score-item"key={key}>{value}</div>
+                      )  
+                    })}
                   </div>
                 </div>
-
-                {showDetail && <DetailModal listing={detailData} key={detailData._id} setShowDetail={setShowDetail}/>}
               </Link>
             )
           })

@@ -1,13 +1,16 @@
-
 import { Button } from '@/components/ui/button';
 import User from '@/contexts/User';
 import useTrustlist from '@/hooks/useTrustlist';
 import { TrustScoreKey } from '@/types/local';
+import {  TrustScoreKeyEnum, trustScores } from '@/data';
 import { cn } from '@/utils/cn';
 import { getRandomEmoji } from '@/utils/emoji';
-import { ChevronRight, Slash } from 'lucide-react';
+import Tooltip from '@/components/Tooltip';
+import { InfoIcon, EyeOff, ChevronRight, Slash } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ListingProps {
   _id: string;
@@ -17,6 +20,12 @@ interface ListingProps {
   amountType: string;
   epoch: number;
   posterId: string;
+  scoreString: string;
+  offerAmount: string;
+  responderId: string;
+  dealOpened: boolean;
+  posterDealClosed: boolean;
+  responderDealClosed: boolean;
   offers: {
     _id: string,
     responderId: string,
@@ -41,10 +50,15 @@ interface ListingProps {
 
 const ListingDetails: React.FC = () => {
   const { id } = useParams();
-  const { getDeals, getOffers } = useTrustlist();
+  const { calcScoreFromUserData, getDeals, getOffers, openDeal } = useTrustlist();
   const user = useContext(User)
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [listingDetails, setListingDetails] = useState<ListingProps | null>(null);
+  const trustScoreInfo = { ...trustScores };
+  const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
+  const posterScores = listingDetails ? JSON.parse(listingDetails.scoreString) : null
+  const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
   const setBorderColor = (trustScoreKey: TrustScoreKey) => {
     switch (trustScoreKey) {
@@ -94,10 +108,31 @@ const ListingDetails: React.FC = () => {
     return <p className='p-6'>No listing details available.</p>;
   }
 
-  const { title, description, amount, offers } = listingDetails;
+  const { _id, title, description, amount, posterId, responderId, offers } = listingDetails;
   console.log({ ...listingDetails });
 
   const isListingExpired = listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch();
+
+  const acceptOfferAlert = (newData: any) => toast.promise(async () => {
+    await openDeal(newData)
+    // + 1 to responder's initiated LO score
+    await user.requestData({[1]: 1 << 23}, memberKeys.indexOf(posterId), newData.responderId)
+  }, {
+  pending: "Please wait a moment while your deal is created...",
+  success: { render: 
+              <div className="flex space-around gap-3">
+                <div>
+                  <div>Offer accepted! Your contact info will be shown to this member to enable your offline transaction.</div>
+                  <div>Please complete your deal during this epoch to build your reputation.</div>
+                </div>
+                <button className="text-black font-lg border-1 border-white px-4 py-2"
+                        onClick={() => navigate(`/deal/${_id}`)}>
+                  Deal
+                </button>
+              </div>,
+            closeButton: false },
+  error: "There was a problem creating your deal, please try again"
+});
 
   return (
     <main className="flex flex-col pb-10">
@@ -119,13 +154,44 @@ const ListingDetails: React.FC = () => {
             <p className='text-sm text-foreground text-ellipsis rounded-md bg-muted-foreground/10 px-1'>~{listingDetails.posterId.substring(0, 6)}...{listingDetails.posterId.slice(-6)}</p>
             <p>@ epoch #{listingDetails.epoch}</p>
           </div>
+          <div className='flex gap-3 pb-2'>
+            {trustScoreKeys.map((key) => {
+              const matchingEntry = Object.entries(posterScores).filter(([scoreName]) => scoreName === key)[0]
+              const revealed = matchingEntry !== undefined;
+              const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+              const value = revealed 
+                ? initiated === 0 
+                  ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                : <EyeOff size={18} strokeWidth={2}/>
+              return (
+                <div className="flex">
+                  <Tooltip
+                    text={`${trustScoreInfo[key].title} : ${trustScoreInfo[key].description}`}
+                    content={
+                      <InfoIcon size={16} className='text-primary' />
+                    }
+                  />
+                  <div key={key} className={cn('flex gap-1 items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
+                              `${setBorderColor(key as TrustScoreKey)}`, )} title={key + ' trust score'}>
+                    <div>{key}:</div>
+                    <div style={{ fontWeight: '600' }}>{value}</div>
+                  </div>
+                </div>
+              )  
+            })}
+          </div>
           <p className="text-base text-card-foreground/90">{description}</p>
+          
         </header>
 
         <section className='flex flex-col gap-3 col-span-1 p-4'>
           <section className='flex justify-between py-4'>
             <h2 className='text-xl font-semibold'>📃Offers</h2>
-            {!isListingExpired &&
+            {user.hasSignedUp && !isListingExpired && 
+            // prevent user from making an offer on their own post
+            // !memberKeys.includes(posterId) &&
+            // prevent new offers if one has already been accepted
+            !listingDetails.dealOpened &&
               <Link to={`/listings/${listingDetails._id}/offers/new?title=${encodeURIComponent(listingDetails.title)}`}>
                 <Button variant={'default'} size={'sm'} className='self-start'>
                   Make an offer
@@ -134,34 +200,83 @@ const ListingDetails: React.FC = () => {
           </section>
           {offers.length > 0 ? (
             <section className='flex flex-col space-y-4'>
-              {offers.map((offer) => (
-                <article key={offer._id} className={cn('border p-3 border-muted-foreground flex gap-2 items-start rounded-sm', offer.status === 'accepted' ? 'text-green-600' : '')}>
-                  <p className='h-12 w-12 p-1 rounded-sm border border-foreground/30 bg-primary/5 mr-2 text-4xl flex justify-center items-center'>{getRandomEmoji()}</p>
-                  <div className="flex flex-col gap-2 flex-1">
-                    <header className="flex justify-between items-center">
-                      <div>
-                        <p className='text-foreground overflow-hidden text-ellipsis rounded-md bg-muted-foreground/10 px-1'>
-                          ~{offer.responderId.substring(0, 6)}...{offer.responderId.slice(-6)}
-                        </p>
-                        <p className='text-base text-muted-foreground'>— epoch #{offer.epoch}</p>
-                      </div>
-                      <h5 className='font-semibold text-2xl text-primary'>${parseFloat(offer.offerAmount).toFixed(2)}</h5>
-                    </header>
-                    <section>
-                      <div className='flex gap-1 items-baseline'>
-                        {Object.entries(offer.trustScores).map(([key, value]) => (
-                          <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
-                            `${setBorderColor(key as TrustScoreKey)}`,
-                            value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}>
-                            <span className='font-bold text-sm'>{key}:{' '}</span>
-                            {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value}
+              {offers.map((offer) => {
+                const responderScores = JSON.parse( offer.scoreString)
+                return (
+                  <article>
+                    <div key={offer._id} className={cn('border p-3 border-muted-foreground flex gap-2 items-start rounded-sm', offer.status === 'accepted' ? 'text-green-600' : '')}>
+                      <p className='h-12 w-12 p-1 rounded-sm border border-foreground/30 bg-primary/5 mr-2 text-4xl flex justify-center items-center'>{getRandomEmoji()}</p>
+                      <div className="flex flex-col gap-2 flex-1">
+                        <header className="flex justify-between items-center">
+                          <div>
+                            <p className='text-foreground overflow-hidden text-ellipsis rounded-md bg-muted-foreground/10 px-1'>
+                              ~{offer.responderId.substring(0, 6)}...{offer.responderId.slice(-6)}
+                            </p>
+                            {/* <p className='text-base text-muted-foreground'>— epoch #{offer.epoch}</p> */}
                           </div>
-                        ))}
+                          <h5 className='font-semibold text-2xl text-primary'>${parseFloat(offer.offerAmount).toFixed(2)}</h5>
+                        </header>
+                        <section>
+                          <div className='flex gap-1 items-baseline'>
+                          {trustScoreKeys.map((key) => {
+                            const matchingEntry = Object.entries(responderScores).filter(([scoreName]) => scoreName === key)[0]
+                            const revealed = matchingEntry !== undefined;
+                            const initiated = matchingEntry ? Number(matchingEntry[1]) >> 23 : 0
+                            const value = revealed 
+                              ? initiated === 0 
+                                ? 'n/a' : calcScoreFromUserData(Number(matchingEntry[1]))
+                              : <EyeOff size={12} strokeWidth={3}/>
+                            return (
+                              <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
+                                `${setBorderColor(key as TrustScoreKey)}`, )} title={key + ' trust score'}>
+                                {/* // value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}> */}
+                                <div className='flex items-center gap-1.5 font-bold text-sm'>
+                                  <div>{key}:</div>
+                                  <div>{value}</div>
+                                </div>
+                                {/* {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value} */}
+                              </div>
+                            )
+                            })}
+
+                            {/* {Object.entries(offer.trustScores).map(([key, value]) => (
+                              <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
+                                `${setBorderColor(key as TrustScoreKey)}`,
+                                value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}>
+                                <span className='font-bold text-sm'>{key}:{' '}</span>
+                                {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value}
+                              </div>
+                            ))} */}
+                          </div>
+                        </section>
                       </div>
-                    </section>
-                  </div>
-                </article>
-              ))}
+                    </div>
+                          
+                    {responderId === offer.responderId ? 
+                      <p className='uppercase font-semibold text-right'>offer accepted ✅</p>
+                    : memberKeys.includes(posterId) && !listingDetails.dealOpened
+                      ? <p
+                          className='uppercase text-indigo-700 font-semibold underline text-right cursor-pointer'
+                          // style={{ backgroundColor: 'blue', color: 'white', fontSize: '0.65rem', padding: '0.25rem 0.5rem', marginLeft: '1.5rem' }}
+                          onClick={async () => {
+                            try {
+                              const newData = {
+                                id: _id,
+                                responderId: offer.responderId,
+                                offerAmount: offer.offerAmount,
+                              }
+                            acceptOfferAlert(newData)
+                            } catch {
+                              console.error("Error while updating deal: ");
+                            }
+                          }}
+                        >
+                          accept offer
+                        </p>
+                      : null}
+                  </article>
+                )
+              })}
             </section>
           ) : (
             <p className='text-muted-foreground'>No offers available yet. You can be the first!</p>
@@ -169,6 +284,9 @@ const ListingDetails: React.FC = () => {
 
         </section>
       </article>
+
+      <ToastContainer className='dash-toast' toastClassName='toast' bodyClassName='toast-body' position='top-center' autoClose={false} />
+
     </main>
   );
 };
