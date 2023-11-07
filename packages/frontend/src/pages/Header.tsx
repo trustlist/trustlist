@@ -47,7 +47,7 @@ export default observer(() => {
 
   return (
     <>
-      <header className={`${ui.isMobile ? 'm-1' : 'mx-14 mt-6'} p-4 flex justify-between items-end`}>
+      <header className='p-4 md:p-6 flex justify-between items-end'>
         <div className={`${ui.isMobile ? null : 'flex'}`}>
           <div className="md:flex md:gap-x-6 items-end">
             <Link to="/" className="text-5xl md:text-5xl tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
