@@ -21,6 +21,7 @@ import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-for
 import 'react-toastify/dist/ReactToastify.css';
 import useTrustlist from "@/hooks/useTrustlist"
 import User from '../contexts/User'
+import { Button } from "@/components/ui/button"
 
 const NewOfferResponseSchema = z.object({
   epoch: z.number(),
@@ -232,18 +233,18 @@ const NewOfferPage = () => {
     pending: "Please wait a moment while your offer is being submitted...",
     success: {
       render:
-        <div className="flex space-around gap-3">
+        <div className="container w-full">
           <div>
             <div>Offer submitted! One "initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
             <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
           </div>
-          <button className="text-white font-lg border-1 border-white px-4 py-2"
+          <Button
             onClick={() => {
               listForm.reset();
-              navigate('/')
+              navigate(`/listings/${id}`)
             }}>
-            Home
-          </button>
+            Back to the listing
+          </Button>
         </div>,
       closeButton: false
     },
