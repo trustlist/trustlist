@@ -8,7 +8,8 @@ import { TrustScoreKey } from '@/types/local';
 import { cn } from '@/utils/cn';
 import { getRandomEmoji } from '@/utils/emoji';
 import { ChevronRight, EyeOff, InfoIcon } from 'lucide-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -54,16 +55,14 @@ export interface ListingProps {
   };
 }
 
-const ListingDetails: React.FC = () => {
+export default observer(() => {
   const { id } = useParams();
   const { calcScoreFromUserData, getDeals, getOffers, openDeal } = useTrustlist();
   const user = useContext(User)
   const [loading, setLoading] = useState(true);
   const [listingDetails, setListingDetails] = useState<ListingProps | null>(null);
-  const [isListingExpired, setIsListingExpired] = useState<boolean>(false)
   const trustScoreInfo = { ...trustScores };
   const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
-  const currentEpoch = user.userState?.sync.calcCurrentEpoch();
   const posterScores = listingDetails ? JSON.parse(listingDetails.scoreString) : null
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
 
@@ -82,8 +81,13 @@ const ListingDetails: React.FC = () => {
     }
   }
 
-  const addTrustScoresToOffers = (offers: any[]) => {
-    return offers.map(offer => {
+  const addTrustScoresToOffers = (listings: ListingProps, offers: any[]) => {
+    const sortedOffers = offers.sort((a, b) => {
+      if (a.responderId === listings.responderId && a.offerAmount === listings.offerAmount) return -1;
+      if (b.responderId === listings.responderId && b.offerAmount === listings.offerAmount) return 1;
+      return 0;
+    });
+    return sortedOffers.map(offer => {
       const trustScores = JSON.parse(offer.scoreString);
       return { ...offer, trustScores };
     });
@@ -94,7 +98,7 @@ const ListingDetails: React.FC = () => {
       const listingResponse = await getDeals(id as string);
       if (listingResponse.data) {
         const offersResponse = await getOffers(id as string)
-        const offersWithTrustScores = addTrustScoresToOffers(offersResponse.data)
+        const offersWithTrustScores = addTrustScoresToOffers(listingResponse.data, offersResponse.data)
         const listingDetails = {
           ...listingResponse.data,
           offers: offersWithTrustScores
@@ -104,23 +108,7 @@ const ListingDetails: React.FC = () => {
       setLoading(false);
     };
 
-    fetchListingDetails().then(() => {
-      if (listingDetails) {
-        setIsListingExpired(listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch())
-      }
-      if (user) {
-        console.log('got to user');
-        // const userIds = [0, 1, 2].map((nonce) => user.epochKey(nonce))
-        // const userId1 = user.epochKey(0)
-        // const userId2 = user.epochKey(1)
-        // const userId3 = user.epochKey(2)
-        // const userIds = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
-        // setMemberKeys([userId1, userId2, userId3])
-        console.log({ user, isListingExpired, memberKeys, state: user?.userState, currentEpoch })
-      }
-      console.log('calc:', user.userState?.sync.calcCurrentEpoch())
-    });
-
+    fetchListingDetails()
   }, [id, user]);
 
   if (loading) {
@@ -132,7 +120,7 @@ const ListingDetails: React.FC = () => {
   }
 
   const { _id, title, description, posterId, responderId, offerAmount, offers } = listingDetails;
-  console.log({ ...listingDetails });
+  // console.log({ ...listingDetails });
 
 
   const acceptOfferAlert = (newData: any) => toast.promise(async () => {
@@ -160,7 +148,8 @@ const ListingDetails: React.FC = () => {
 
   return (
     <main className="flex flex-col pb-10">
-      <section className={cn('flex flex-wrap place-items-center md:justify-center border-b-4 border-b-primary', listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch() ? 'border-b-orange-600' : '')}>
+      {/* Breadcrumbs */}
+      <section className={cn('flex flex-wrap place-items-center md:justify-center border-b-4 border-b-primary', user.userState && listingDetails?.epoch < user.userState?.sync.calcCurrentEpoch() ? 'border-b-orange-600' : '')}>
         <Link to='/' className='text-card-foreground m-0'>
           <Button variant={'link'} size={'sm'}>Home</Button>
         </Link>
@@ -174,7 +163,8 @@ const ListingDetails: React.FC = () => {
 
       <article className="md:container md:max-w-3xl">
         <header className='flex flex-col gap-3 container px-4 py-6 col-span-1 text-card-foreground'>
-          {listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch() && <p className="text-xs text-orange-600 tracking-wider py-1 px-2 border border-orange-500 uppercase rounded-md self-start font-semibold">EXPIRED</p>}
+          {user.userState && listingDetails?.epoch < user?.userState?.sync.calcCurrentEpoch() &&
+            <p className="text-xs text-orange-600 tracking-wider py-1 px-2 border border-orange-500 uppercase rounded-md self-start font-semibold">EXPIRED</p>}
           <h1 className="text-4xl font-medium break-words">{title}</h1>
           <div className="flex gap-1 text-muted-foreground">
             <p>by</p>
@@ -242,14 +232,14 @@ const ListingDetails: React.FC = () => {
                 const responderScores = JSON.parse(offer.scoreString)
                 return (
                   <article key={offer._id}>
-                    <div className={cn('border p-3 border-muted-foreground flex gap-2 items-start rounded-sm', responderId === offer.responderId ? 'border-green-600 border-2' : '')}>
+                    <div className={cn('border p-3 border-muted-foreground flex gap-2 items-start rounded-sm', responderId === offer.responderId && offerAmount === offer.offerAmount ? 'border-green-600 border-2' : '')}>
                       <p className='h-8 w-8 md:h-12 md:w-12 p-1 rounded-sm border border-foreground/30 bg-primary/5 mr-2 text-2xl md:text-4xl flex justify-center items-center'>{responderId === offer.responderId ? '🎉' : getRandomEmoji()}</p>
                       <div className="flex flex-col gap-2 flex-1">
                         <header className="flex flex-col md:flex-row md:justify-between md:items-center">
                           <p className='text-foreground overflow-hidden text-ellipsis rounded-md bg-muted-foreground/10 px-1 self-start'>
                             ~{offer.responderId.substring(0, 6)}...{offer.responderId.slice(-6)}
                           </p>
-                          <h5 className='font-semibold text-2xl text-primary'>${parseFloat(offer.offerAmount).toFixed(2)}</h5>
+                          <h5 className='text-2xl'>${parseFloat(offer.offerAmount).toFixed(2)}</h5>
                         </header>
 
                         <section className='flex flex-col md:flex-row md:justify-between gap-2'>
@@ -265,32 +255,20 @@ const ListingDetails: React.FC = () => {
                               return (
                                 <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
                                   `${setBorderColor(key as TrustScoreKey)}`,)} title={key + ' trust score'}>
-                                  {/* // value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}> */}
                                   <div className='flex items-center gap-1.5 text-sm'>
                                     <div>{key}:</div>
                                     <div className='font-bold uppercase'>{value}</div>
                                   </div>
-                                  {/* {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value} */}
                                 </div>
                               )
                             })}
-
-                            {/* {Object.entries(offer.trustScores).map(([key, value]) => (
-                              <div key={key} className={cn('flex items-center justify-center border-[1.5px] border-opacity-60 py-[2px] px-1 rounded',
-                                `${setBorderColor(key as TrustScoreKey)}`,
-                                value === 'X' ? 'bg-muted text-muted-foreground border-muted' : '')} title={key + ' trust score'}>
-                                <span className='font-bold text-sm'>{key}:{' '}</span>
-                                {value === 'X' ? <Slash className='text-muted-foreground' size={16} /> : value.toLowerCase() === 'n/a' ? <p className='text-sm'> N/A</p> : value}
-                              </div>
-                            ))} */}
                           </div>
 
                           {responderId === offer.responderId && offerAmount === offer.offerAmount ?
-                            <p className='uppercase font-semibold'>offer accepted ✅</p>
+                            <p className='uppercase font-semibold text-green-700'>ACCEPTED OFFER ✅</p>
                             : memberKeys.includes(posterId) && !listingDetails.dealOpened && listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch()
                               ? <p
                                 className='uppercase text-indigo-700 font-semibold underline text-right cursor-pointer'
-                                // style={{ backgroundColor: 'blue', color: 'white', fontSize: '0.65rem', padding: '0.25rem 0.5rem', marginLeft: '1.5rem' }}
                                 onClick={async () => {
                                   try {
                                     const newData = {
@@ -327,7 +305,6 @@ const ListingDetails: React.FC = () => {
 
     </main>
   );
-};
+});
 
-export default ListingDetails;
 
