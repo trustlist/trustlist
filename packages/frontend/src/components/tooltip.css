@@ -4,7 +4,7 @@
 }
 
 .tooltip-popup {
-    padding: 0.5rem 0.3rem;
+    padding: 1rem;
     background: blue;
     z-index: 10;
     position: absolute;

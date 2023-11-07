@@ -55,161 +55,163 @@ const MemberDashboardPage = observer(() => {
   });
 
   return (
-    <div className="dash-content">
-      <div className="stats-container">
-        <div>
+    <div className='md:mt-3 md:border-t-2 md:border-t-muted'>
+      <div className="dash-content">
+        <div className="stats-container">
           <div>
-          <h3 className='py-3 text-lg font-semibold'>my latest trust scores:</h3>
-          </div>
-          {app.scoreDescriptions.map((desc, i) => {
-            const initiated = user.data[i] ? Number(user.data[i] >> BigInt(23)) : 0
-            const completed = user.data[i] ? Number(user.data[i] % BigInt(128)) : 0
-            return (
-              <div key={i}>
-                <div className="score-detail">
-                  <div style={{ display: 'flex', justifyContent: 'space-between',}}>
-                    <Tooltip
-                      text={desc}
-                      content={
-                        <img
-                          src={require('../../public/info_icon.svg')}
-                          alt="info icon"
-                        />
-                      }
-                    />
-                    <div style={{ paddingLeft: '0.3rem' }}>
-                      {app.scoreNames[i]}{' '}score:
+            <div>
+            <h3 className='py-3 text-lg font-semibold'>my latest trust scores:</h3>
+            </div>
+            {app.scoreDescriptions.map((desc, i) => {
+              const initiated = user.data[i] ? Number(user.data[i] >> BigInt(23)) : 0
+              const completed = user.data[i] ? Number(user.data[i] % BigInt(128)) : 0
+              return (
+                <div key={i}>
+                  <div className="score-detail">
+                    <div style={{ display: 'flex', justifyContent: 'space-between',}}>
+                      <Tooltip
+                        text={desc}
+                        content={
+                          <img
+                            src={require('../../public/info_icon.svg')}
+                            alt="info icon"
+                          />
+                        }
+                      />
+                      <div style={{ paddingLeft: '0.3rem', color: 'black'}}>
+                        {app.scoreNames[i]}{' '}score:
+                      </div>
                     </div>
+                    <div className="stat">
+                      {completed}/{initiated}
+                    </div>
+                    {initiated === 0 ? 
+                      <div className="stat">n/a</div>
+                    :
+                      <div className="stat">{Math.floor((completed / initiated) * 100)}%</div>
+                    }
                   </div>
-                  <div className="stat">
-                    {completed}/{initiated}
-                  </div>
-                  {initiated === 0 ? 
-                    <div className="stat">n/a</div>
-                  :
-                    <div className="stat">{Math.floor((completed / initiated) * 100)}%</div>
-                  }
                 </div>
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
 
-        <div className="transition">
-          <div className="line"></div>
-          <Button 
-            onClick={async () => {
-              try {
-                transitionAlert()
-              } catch (error) {
-                throw new Error("Failed to transition to the new epoch")
-              }
-            }}
-          >
-            TRANSITION
-          </Button>
-          <div className="line"></div>
-          <ToastContainer className='dash-toast' toastClassName='toast' position='top-center' autoClose={4000} />
-        </div>
+          <div className="transition">
+            <div className="line"></div>
+            <Button 
+              onClick={async () => {
+                try {
+                  transitionAlert()
+                } catch (error) {
+                  throw new Error("Failed to transition to the new epoch")
+                }
+              }}
+            >
+              TRANSITION
+            </Button>
+            <div className="line"></div>
+            <ToastContainer className='dash-toast' toastClassName='toast' position='top-center' autoClose={4000} />
+          </div>
 
-        <div>
           <div>
-            <h3 className='pt-8 pb-3 text-lg font-semibold'>my provable trust scores:</h3>
-          </div>
-          {app.scoreDescriptions.map((desc, i) => {
-            const initiated = user.provableData[i] ? Number( user.provableData[i] >> BigInt(23)) : 0
-            const completed = user.provableData[i] ? Number(user.provableData[i] % BigInt(128)) : 0
-            return (
-              <div key={i}>
-                <div className="score-detail">
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Tooltip
-                      text={desc}
-                      content={
-                        <img
-                          src={require('../../public/info_icon.svg')}
-                          alt="info icon"
-                        />
-                      }
-                    />
-                    <div style={{ paddingLeft:'0.3rem' }}>{app.scoreNames[i]}{' '}score:</div>
-                  </div>
-                  <div className="stat">
-                    {completed}/{initiated}
-                  </div>
-                  {initiated === 0 ?
-                    <div className="stat">
-                      n/a
+            <div>
+              <h3 className='pt-8 pb-3 text-lg font-semibold'>my provable trust scores:</h3>
+            </div>
+            {app.scoreDescriptions.map((desc, i) => {
+              const initiated = user.provableData[i] ? Number( user.provableData[i] >> BigInt(23)) : 0
+              const completed = user.provableData[i] ? Number(user.provableData[i] % BigInt(128)) : 0
+              return (
+                <div key={i}>
+                  <div className="score-detail">
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Tooltip
+                        text={desc}
+                        content={
+                          <img
+                            src={require('../../public/info_icon.svg')}
+                            alt="info icon"
+                          />
+                        }
+                      />
+                      <div style={{ paddingLeft:'0.3rem', color: 'black' }}>{app.scoreNames[i]}{' '}score:</div>
                     </div>
-                  : 
                     <div className="stat">
-                      {Math.floor((completed / initiated) * 100)}%
+                      {completed}/{initiated}
                     </div>
-                  }
+                    {initiated === 0 ?
+                      <div className="stat">
+                        n/a
+                      </div>
+                    : 
+                      <div className="stat">
+                        {Math.floor((completed / initiated) * 100)}%
+                      </div>
+                    }
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
+
+        <div className="activity-container">
+          <h4>my deals</h4>
+          <div className="scroll-container">
+            {deals && deals.length > 0 ? 
+              deals.map((deal: CurrentListing) => (
+                <Link to={`deal/${deal._id}`}>
+                  <li key={deal._id}>
+                    {deal.posterDealClosed && deal.responderDealClosed ? 
+                      <span style={{ color: 'red' }}>CLOSED -{' '}</span>
+                    : 
+                      <span style={{ color: 'green' }} >OPEN -{' '}</span>
+                    }
+                    {deal.title} / ${deal.offerAmount}
+                  </li>
+                </Link>
+              ))
+            :
+              <h5>no open deals in this epoch</h5>
+            }
+          </div>
+
+          <h4>my listings</h4>
+          <div className="scroll-container">
+            {listings && listings.length > 0 ? 
+              listings.map((listing: CurrentListing) => (
+                <Link to={`/listings/${listing._id}`}>
+                  <div key={listing._id}>{listing.title} / ${listing.amount}</div>
+                </Link>
+              ))
+            : 
+              <h5>no listings in this epoch</h5>
+            }
+          </div>
+
+          <h4>my offers</h4>
+          <div className="scroll-container">
+            {offers && offers.length > 0 ? 
+              offers.map((offer: CurrentOffer) => (
+                <div
+                  key={offer._id}
+                  className='cursor-pointer'
+                  onClick={async () => {
+                    await app.loadDealById(offer.listingId)
+                    navigate(`/listings/${offer.listingId}`)
+                  }}
+                >
+                  {offer.listingTitle} / ${offer.offerAmount}
+                </div>
+              ))
+            : 
+              <h5>no offers in this epoch</h5>
+            }        
+          </div>
+        </div>
+
+        <ToastContainer className='dash-toast' toastClassName='toast' position='top-center' autoClose={4000} />
+
       </div>
-
-      <div className="activity-container">
-        <h4>my deals</h4>
-        <div className="scroll-container">
-          {deals && deals.length > 0 ? 
-            deals.map((deal: CurrentListing) => (
-              <Link to={`deal/${deal._id}`}>
-                <li key={deal._id}>
-                  {deal.posterDealClosed && deal.responderDealClosed ? 
-                    <span style={{ color: 'red' }}>CLOSED -{' '}</span>
-                  : 
-                    <span style={{ color: 'green' }} >OPEN -{' '}</span>
-                  }
-                  {deal.title} / ${deal.offerAmount}
-                </li>
-              </Link>
-            ))
-          :
-            <h5>no open deals in this epoch</h5>
-          }
-        </div>
-
-        <h4>my listings</h4>
-        <div className="scroll-container">
-          {listings && listings.length > 0 ? 
-            listings.map((listing: CurrentListing) => (
-              <Link to={`/listings/${listing._id}`}>
-                <div key={listing._id}>{listing.title} / ${listing.amount}</div>
-              </Link>
-            ))
-          : 
-            <h5>no listings in this epoch</h5>
-          }
-        </div>
-
-        <h4>my offers</h4>
-        <div className="scroll-container">
-          {offers && offers.length > 0 ? 
-            offers.map((offer: CurrentOffer) => (
-              <div
-                key={offer._id}
-                className='cursor-pointer'
-                onClick={async () => {
-                  await app.loadDealById(offer.listingId)
-                  navigate(`/listings/${offer.listingId}`)
-                }}
-              >
-                {offer.listingTitle} / ${offer.offerAmount}
-              </div>
-            ))
-          : 
-            <h5>no offers in this epoch</h5>
-          }        
-        </div>
-      </div>
-
-      <ToastContainer className='dash-toast' toastClassName='toast' position='top-center' autoClose={4000} />
-
     </div>
   );
 })
