@@ -282,15 +282,17 @@ const NewOfferPage = () => {
   }
 
   return (
-    <Form {...listForm} >
-      <form onSubmit={listForm.handleSubmit(submitOffer, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-        <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
-        <InputOfferAmount {...listForm} />
-        <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />
-        <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Submit offer</button>
-      </form>
-      <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
-    </Form>
+    <div className='mt-3 border-t-2 border-t-muted'>
+      <Form {...listForm} >
+        <form onSubmit={listForm.handleSubmit(submitOffer, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
+          <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
+          <InputOfferAmount {...listForm} />
+          <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />
+          <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Submit offer</button>
+        </form>
+        <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
+      </Form>
+    </div>
   );
 }
 

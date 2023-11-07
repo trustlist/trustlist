@@ -47,17 +47,16 @@ export default observer(() => {
 
   return (
     <>
-      <header className='p-4 flex justify-between border-b-2 border-b-muted'>
+      <header className={`${ui.isMobile ? 'm-1' : 'mx-14 mt-6'} p-4 flex justify-between items-end`}>
         <div className={`${ui.isMobile ? null : 'flex'}`}>
-          <div className="md:flex md:gap-x-3">
-            <Link to="/" className="text-4xl md:text-5xl tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
+          <div className="md:flex md:gap-x-6 items-end">
+            <Link to="/" className="text-5xl md:text-5xl tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
               trustlist
             </Link>
-            <div className="bg-secondary p-2 rounded-sm border border-foreground/[.33]">
+            <div className="bg-secondary p-2 rounded-sm border border-foreground/[.33] mt-3 md-mt-0">
+              <p>epoch #{user.userState?.sync.calcCurrentEpoch()}</p>
               <div className='flex items-center gap-2'>
-                <p>
-                  epoch #{user.userState?.sync.calcCurrentEpoch()}
-                </p>
+                <p>ends in {remainingTime}</p>
                 <Tooltip
                   text='Trustlist epochs are 3 weeks long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                   content={
@@ -65,7 +64,6 @@ export default observer(() => {
                   }
                 />
               </div>
-              <p>— ends in {remainingTime}</p>
             </div>
           </div>
         </div>

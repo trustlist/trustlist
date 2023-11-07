@@ -106,10 +106,10 @@ const ListingDetails: React.FC = () => {
 
     fetchListingDetails().then(() => {
       if (listingDetails) {
-        setIsListingExpired(listingDetails?.epoch !== currentEpoch)
+        setIsListingExpired(listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch())
       }
       if (user) {
-        // console.log('got to user');
+        console.log('got to user');
         // const userIds = [0, 1, 2].map((nonce) => user.epochKey(nonce))
         // const userId1 = user.epochKey(0)
         // const userId2 = user.epochKey(1)
@@ -118,6 +118,7 @@ const ListingDetails: React.FC = () => {
         // setMemberKeys([userId1, userId2, userId3])
         console.log({ user, isListingExpired, memberKeys, state: user?.userState, currentEpoch })
       }
+      console.log('calc:', user.userState?.sync.calcCurrentEpoch())
     });
 
   }, [id, user]);
@@ -130,7 +131,7 @@ const ListingDetails: React.FC = () => {
     return <p className='p-6'>No listing details available.</p>;
   }
 
-  const { _id, title, description, posterId, responderId, offers } = listingDetails;
+  const { _id, title, description, posterId, responderId, offerAmount, offers } = listingDetails;
   console.log({ ...listingDetails });
 
 
@@ -159,7 +160,7 @@ const ListingDetails: React.FC = () => {
 
   return (
     <main className="flex flex-col pb-10">
-      <section className={cn('flex flex-wrap place-items-center md:justify-center border-b-4 border-b-primary', isListingExpired ? 'border-b-orange-600' : '')}>
+      <section className={cn('flex flex-wrap place-items-center md:justify-center border-b-4 border-b-primary', listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch() ? 'border-b-orange-600' : '')}>
         <Link to='/' className='text-card-foreground m-0'>
           <Button variant={'link'} size={'sm'}>Home</Button>
         </Link>
@@ -173,7 +174,7 @@ const ListingDetails: React.FC = () => {
 
       <article className="md:container md:max-w-3xl">
         <header className='flex flex-col gap-3 container px-4 py-6 col-span-1 text-card-foreground'>
-          {isListingExpired && <p className="text-xs text-orange-600 tracking-wider py-1 px-2 border border-orange-500 uppercase rounded-md self-start font-semibold">EXPIRED</p>}
+          {listingDetails?.epoch !== user.userState?.sync.calcCurrentEpoch() && <p className="text-xs text-orange-600 tracking-wider py-1 px-2 border border-orange-500 uppercase rounded-md self-start font-semibold">EXPIRED</p>}
           <h1 className="text-4xl font-medium break-words">{title}</h1>
           <div className="flex gap-1 text-muted-foreground">
             <p>by</p>
@@ -224,7 +225,7 @@ const ListingDetails: React.FC = () => {
         <section className='flex flex-col gap-3 p-4'>
           <section className='flex justify-between py-4'>
             <h2 className='text-xl font-semibold'>📃Offers</h2>
-            {user.hasSignedUp && !isListingExpired &&
+            {user.hasSignedUp && listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch() &&
               // prevent user from making an offer on their own post
               // !memberKeys.includes(posterId) &&
               // prevent new offers if one has already been accepted
@@ -284,9 +285,9 @@ const ListingDetails: React.FC = () => {
                             ))} */}
                           </div>
 
-                          {responderId === offer.responderId ?
+                          {responderId === offer.responderId && offerAmount === offer.offerAmount ?
                             <p className='uppercase font-semibold'>offer accepted ✅</p>
-                            : memberKeys.includes(posterId) && !listingDetails.dealOpened
+                            : memberKeys.includes(posterId) && !listingDetails.dealOpened && listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch()
                               ? <p
                                 className='uppercase text-indigo-700 font-semibold underline text-right cursor-pointer'
                                 // style={{ backgroundColor: 'blue', color: 'white', fontSize: '0.65rem', padding: '0.25rem 0.5rem', marginLeft: '1.5rem' }}

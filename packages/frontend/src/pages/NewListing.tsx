@@ -49,9 +49,9 @@ type FormStep = {
 }
 
 const FormSteps: FormStep[] = [
-  { id: 'select-category', description: 'Choose the categories for your listing', fields: ['categories'] },
-  { id: 'general-info', description: 'Enter general information', fields: ['title', 'description', 'price'] },
-  { id: 'trust-scores', description: 'Choose which trust scores to show', fields: ['revealTrustScores'] },
+  { id: 'select-category', description: 'Choose the category for your listing', fields: ['categories'] },
+  { id: 'general-info', description: 'Enter information for your listing', fields: ['title', 'description', 'price'] },
+  { id: 'trust-scores', description: 'Choose which of your scores to reveal', fields: ['revealTrustScores'] },
 ]
 
 type FormState = {
@@ -440,7 +440,7 @@ const NewListingPage = () => {
       ''
     )
   }, {
-    pending: "Please wait a moment while your listing is being published...",
+    pending: "Please wait a moment while your listing is published...",
     success: {
       render:
         <div className="flex space-around gap-3">
@@ -508,14 +508,16 @@ const NewListingPage = () => {
       content = <div>Wait! This isn't a step... how did you get here?</div>;
   }
   return (
-    <Form {...listForm} >
-      <form onSubmit={listForm.handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-        <FormHeader changeStep={changeStep} currentStep={currentStepNumber} trigger={listForm.trigger} />
-        {content}
-        <FormFooter currentStep={currentStepNumber} changeStep={changeStep} trigger={listForm.trigger} />
-      </form>
-      <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
-    </Form>
+    <div className='mt-3 border-t-2 border-t-muted'>
+      <Form {...listForm} >
+        <form onSubmit={listForm.handleSubmit(publishPost, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
+          <FormHeader changeStep={changeStep} currentStep={currentStepNumber} trigger={listForm.trigger} />
+          {content}
+          <FormFooter currentStep={currentStepNumber} changeStep={changeStep} trigger={listForm.trigger} />
+        </form>
+        <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
+      </Form>
+    </div>
   );
 }
 

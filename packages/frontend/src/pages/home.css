@@ -125,7 +125,7 @@ input[type='submit'] {
 @media only screen and (max-width: 950px) {
     .content {
         grid-template-columns: 40% 60%;
-        margin: 2rem 1rem 2rem;
+        margin: 1rem 1rem 2rem;
     }
 
     .list-heading {
