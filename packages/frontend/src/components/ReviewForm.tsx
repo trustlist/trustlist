@@ -86,8 +86,8 @@ export default observer(
         render:
           <div className="flex space-around gap-3">
             <div>
-              <div>Review submitted!. One "Completed" point will be added to your LP or LO score once both parties have approved</div>
-              <div>Please submit your review of your transaction during this epoch to build your CB and GV reputation.</div>
+              <div>Review submitted!. One "Completed" point has been added to your CB score.</div>
+              <div>Your GV score will be updated once both members has submitted their review.</div>
             </div>
             <button className="font-lg border-1 border-white px-4 py-2"
               onClick={() => window.location.reload()}>

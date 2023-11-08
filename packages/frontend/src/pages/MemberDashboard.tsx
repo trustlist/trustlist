@@ -160,14 +160,14 @@ const MemberDashboardPage = observer(() => {
             {deals && deals.length > 0 ? 
               deals.map((deal: CurrentListing) => (
                 <Link to={`/listings/${deal._id}`}>
-                  <div key={deal._id} className='hover:text-primary hover:underline'>
+                  <li key={deal._id} className='hover:text-primary hover:underline'>
                     {deal.posterDealClosed && deal.responderDealClosed ? 
-                      <span style={{ color: 'red' }}>CLOSED -{' '}</span>
+                      <span style={{ color: 'red' }}>Complete -{' '}</span>
                     : 
-                      <span style={{ color: 'green' }} >OPEN -{' '}</span>
+                      <span style={{ color: 'green' }} >Pending -{' '}</span>
                     }
                     {deal.title} / ${deal.offerAmount}
-                  </div>
+                  </li>
                 </Link>
               ))
             :
@@ -180,7 +180,7 @@ const MemberDashboardPage = observer(() => {
             {listings && listings.length > 0 ? 
               listings.map((listing: CurrentListing) => (
                 <Link to={`/listings/${listing._id}`}>
-                  <div key={listing._id} className='hover:text-primary hover:underline'>{listing.title} / ${listing.amount}</div>
+                  <li key={listing._id} className='hover:text-primary hover:underline'>{listing.title} / ${listing.amount}</li>
                 </Link>
               ))
             : 
@@ -192,7 +192,7 @@ const MemberDashboardPage = observer(() => {
           <div className="scroll-container">
             {offers && offers.length > 0 ? 
               offers.map((offer: CurrentOffer) => (
-                <div
+                <li
                   key={offer._id}
                   className='hover:text-primary hover:underline cursor-pointer'
                   onClick={async () => {
@@ -201,7 +201,7 @@ const MemberDashboardPage = observer(() => {
                   }}
                 >
                   {offer.listingTitle} / ${offer.offerAmount}
-                </div>
+                </li>
               ))
             : 
               <h5>no offers in this epoch</h5>
