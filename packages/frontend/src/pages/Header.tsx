@@ -62,7 +62,7 @@ export default observer(() => {
                 </DialogTrigger>
                 <DialogContent>
                   <h4 className='text-xl font-semibold'>What is Trustlist?</h4>
-                  <p className='text-[10px]'>
+                  <p className='text-[12px]'>
                     Trustlist operates similarly to the original Craigslist: members list, find, connect, 
                     and execute transactions independently. However, it enhances the model of the peer-to-peer 
                     marketplaces by embedding a dynamic reputation system, aiming to cultivate a community 
@@ -70,19 +70,19 @@ export default observer(() => {
                     When offline transactions are complete, both parties revisit their deal to provide 
                     attestations, which build the member's reputation and infuse confidence in the community.
                   </p>
-                  <p className='text-[10px]'>
+                  <p className='text-[12px]'>
                     New users can sign up by clicking the JOIN button at the top right corner of the screen. 
                     Members of Trustist are given 3 anoymous identifiers (epoch keys) to use while interacting 
                     with the application. Using UniRep Protocol's zero-knowledge technology under the hood, Trustlist 
                     epoch keys insure that users remain anonymous while accumulating reputational data.
                   </p>
-                  <p className='text-[10px]'>
+                  <p className='text-[12px]'>
                     Trustlist begins a new cycle (epoch) every 3 weeks, and current listings will expire with each 
                     epoch. Members must complete their transactions and return to submit their reviews before the epoch 
                     ends in order to have their reputation scores updated with the data associated to that 
                     transaction. Each new epoch provides members with 3 fresh epoch keys to support continued anonymity.
                   </p>
-                  <p className='text-[10px]'>
+                  <p className='text-[12px]'>
                     When creating a listing or an offer, members can choose whether to reveal or hide their scores for each 
                     of 4 reputation metrics. These scores become part of each listing or offer, providing others with information 
                     that allows them to make informed decisions on whom they engage with. More info on Trustscores can be found 
