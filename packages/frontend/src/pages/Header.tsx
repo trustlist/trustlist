@@ -2,13 +2,14 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Tooltip from '../components/Tooltip'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '../components/ui/button'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { cn } from '@/utils/cn'
 import { formatTime } from '@/utils/time'
-import { InfoIcon, Loader2, Pencil, User2 } from 'lucide-react'
+import { InfoIcon, Dot, Loader2, Pencil, User2 } from 'lucide-react'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
 
@@ -49,20 +50,40 @@ export default observer(() => {
     <>
       <header className='p-4 md:p-6 flex justify-between items-end'>
         <div className={`${ui.isMobile ? null : 'flex'}`}>
-          <div className="md:flex md:gap-x-6 items-end">
-            <Link to="/" className="text-5xl md:text-5xl tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
-              trustlist
-            </Link>
-            <div className="bg-secondary p-2 rounded-sm border border-foreground/[.33] mt-3 md-mt-0">
-              <p>epoch #{user.userState?.sync.calcCurrentEpoch()}</p>
+          <div className="md:flex md:gap-x-8 items-end">
+            <div className='flex gap-3'>
+              <Link to="/" className="text-5xl md:text-5xl/10 tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
+                trustlist
+              </Link>
+
+              <Dialog>
+                <DialogTrigger title='Learn how trust scores work'>
+                  <InfoIcon size={28} className='text-primary' />
+                </DialogTrigger>
+                <DialogContent>
+                  <h4 className='text-xl font-semibold'>What is Trustlist?</h4>
+                  {/* <p>Trustscores are the backbone of trustlist. There are 4 metrics that keep track of user actions.</p> */}
+                  {/* {trustScoreKeys.map((key) => (
+                    <div key={key}>
+                      <h3 className='text-left text-lg'>{key} — {trustScoreInfo[key].title}</h3>
+                      <p>{trustScoreInfo[key].description}</p>
+                    </div>
+                  ))} */}
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="bg-[#F6F4F4] p-2 rounded-sm border border-indigo-500 mt-3 md-mt-0 md:flex">
+              <p className='self-center'>epoch #{user.userState?.sync.calcCurrentEpoch()}</p>
+              {!ui.isMobile ? <Dot color='blue'/> : null}
               <div className='flex items-center gap-2'>
                 <p>ends in {remainingTime}</p>
-                <Tooltip
+                {/* <Tooltip
                   text='Trustlist epochs are 3 weeks long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
                   content={
                     <InfoIcon size={16} className='text-primary' />
                   }
-                />
+                /> */}
               </div>
             </div>
           </div>

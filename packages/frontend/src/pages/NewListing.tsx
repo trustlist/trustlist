@@ -237,7 +237,7 @@ const GeneralInfoFormStep = ({ watch, control, formState: { errors }, setValue, 
           <FormItem>
             <FormLabel className='text-base flex gap-2 items-center'>
               Contact
-              <Tooltip text='Please include a Telegram or Discord handle. Your contact information will only be shown to the member whose offer you accept.'
+              <Tooltip text='Please input your Telegram handle. Your contact information will only be shown to the member whose offer you accept.'
                 content={
                   <img
                     src={require('../../public/info_icon.svg')}

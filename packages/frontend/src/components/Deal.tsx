@@ -41,7 +41,7 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
       render:
         <div className="flex space-around gap-3">
           <div>
-            <div>You've confirmed the completion of your deal. One "Completed" point has been added to your LP or LO score once both parties have approved.</div>
+            <div>You've confirmed the completion of your deal. One "Completed" point will be added to your LP or LO score once both parties have approved.</div>
             <div>Please submit a review of your transaction during this epoch to build your CB and GV reputation.</div>
           </div>
           <button className="font-lg border-1 border-white px-4 py-2"
