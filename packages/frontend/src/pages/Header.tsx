@@ -57,11 +57,16 @@ export default observer(() => {
               </Link>
 
               <Dialog>
-                <DialogTrigger title='Learn how trust scores work'>
+                <DialogTrigger title='Learn how trustlist works'>
                   <InfoIcon size={28} className='text-primary' />
                 </DialogTrigger>
                 <DialogContent>
                   <h4 className='text-xl font-semibold'>What is Trustlist?</h4>
+                  <li>short intro, epochs</li>
+                  <li>sign up, identities</li>
+                  <li>listings, offers</li>
+                  <li>deal completion, reviews</li>
+                  <li>building reputation, trust</li>
                   {/* <p>Trustscores are the backbone of trustlist. There are 4 metrics that keep track of user actions.</p> */}
                   {/* {trustScoreKeys.map((key) => (
                     <div key={key}>

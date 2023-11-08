@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../components/memberDashboardModal.css'
 import Tooltip from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { InfoIcon } from 'lucide-react'
 
 import Trustlist from '@/contexts/Trustlist'
 import User from '../contexts/User'
@@ -59,8 +61,27 @@ const MemberDashboardPage = observer(() => {
       <div className="dash-content">
         <div className="stats-container">
           <div>
-            <div>
-            <h3 className='py-3 text-lg font-semibold'>my latest trust scores:</h3>
+            <div className='flex justify-center gap-3'>
+              <Dialog>
+                <DialogTrigger title='Learn about user data and scoring'>
+                  <InfoIcon size={20} className='text-primary' />
+                </DialogTrigger>
+                <DialogContent>
+                  <h4 className='text-xl font-semibold'>How are Trustlist scores used?</h4>
+                  <li>reputation metrics</li>
+                  <li>when data is received</li>
+                  <li>current vs provable scores</li>
+                  <li>transition</li>
+                  {/* <p>Trustscores are the backbone of trustlist. There are 4 metrics that keep track of user actions.</p> */}
+                  {/* {trustScoreKeys.map((key) => (
+                    <div key={key}>
+                      <h3 className='text-left text-lg'>{key} — {trustScoreInfo[key].title}</h3>
+                      <p>{trustScoreInfo[key].description}</p>
+                    </div>
+                  ))} */}
+                </DialogContent>
+              </Dialog>
+              <h3 className='py-3 text-lg font-semibold'>my latest trust scores:</h3>
             </div>
             {app.scoreDescriptions.map((desc, i) => {
               const initiated = user.data[i] ? Number(user.data[i] >> BigInt(23)) : 0
@@ -69,7 +90,7 @@ const MemberDashboardPage = observer(() => {
                 <div key={i}>
                   <div className="score-detail">
                     <div style={{ display: 'flex', justifyContent: 'space-between',}}>
-                      <Tooltip
+                      {/* <Tooltip
                         text={desc}
                         content={
                           <img
@@ -77,7 +98,7 @@ const MemberDashboardPage = observer(() => {
                             alt="info icon"
                           />
                         }
-                      />
+                      /> */}
                       <div style={{ paddingLeft: '0.3rem', color: 'black'}}>
                         {app.scoreNames[i]}{' '}score:
                       </div>
@@ -124,7 +145,7 @@ const MemberDashboardPage = observer(() => {
                 <div key={i}>
                   <div className="score-detail">
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Tooltip
+                      {/* <Tooltip
                         text={desc}
                         content={
                           <img
@@ -132,7 +153,7 @@ const MemberDashboardPage = observer(() => {
                             alt="info icon"
                           />
                         }
-                      />
+                      /> */}
                       <div style={{ paddingLeft:'0.3rem', color: 'black' }}>{app.scoreNames[i]}{' '}score:</div>
                     </div>
                     <div className="stat">

@@ -2,10 +2,11 @@ import User from "@/contexts/User";
 import useTrustlist from "@/hooks/useTrustlist";
 import { ListingProps } from "@/pages/listings/id";
 import { cn } from "@/utils/cn";
-import { MoveHorizontal, MoveVertical } from "lucide-react";
+import { InfoIcon, MoveHorizontal, MoveVertical } from "lucide-react";
 import { useContext } from "react";
 import ReviewForm from "./ReviewForm";
 import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -56,17 +57,31 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
   
   return (
     <section className={cn("border border-primary rounded-sm p-4", posterDealClosed && responderDealClosed ? 'border-green-600 border-[1.5px]' : '')}>
-      {(!posterDealClosed || !responderDealClosed)
-        ? <div className='text-lg pb-4'>
-          <p className="text-xs text-primary tracking-wider py-1 px-2 border border-primary uppercase rounded-md self-start font-semibold">DEAL OPEN</p>
-          {memberKeys.includes(responderId) ? <p>contact: {contact}</p> : null}
-        </div>
-        : null}
-      {posterDealClosed && responderDealClosed
-        ? <p className="text-xs text-green-50 tracking-wider py-1 px-2 border bg-green-500 uppercase rounded-md w-fit font-semibold">
-          DEAL COMPLETED
-        </p>
-        : null}
+      <div className="flex gap-1 items-start">
+        <Dialog>
+          <DialogTrigger title='Learn about aprrovals and reviews'>
+            <InfoIcon size={20} className='text-primary' />
+          </DialogTrigger>
+          <DialogContent>
+            <h4 className='text-xl font-semibold'>How do Trustlist deals work?</h4>
+            <li>deal created by poster</li>
+            <li>members get complete LP, LO scores for on approval</li>
+            <li>members are expected to return to complete CB scores</li>
+            <li>GV scores gives after both submit reviews</li>
+          </DialogContent>
+        </Dialog>
+        {(!posterDealClosed || !responderDealClosed)
+          ? <div className='text-lg pb-4'>
+            <p className="text-xs text-primary tracking-wider py-1 px-2 border border-primary uppercase rounded-md self-start font-semibold">DEAL OPEN</p>
+            {memberKeys.includes(responderId) ? <p>contact: {contact}</p> : null}
+          </div>
+          : null}
+        {posterDealClosed && responderDealClosed
+          ? <p className="text-xs text-green-50 tracking-wider py-1 px-2 border bg-green-500 uppercase rounded-md w-fit font-semibold">
+            DEAL COMPLETED
+          </p>
+          : null}
+      </div>
 
       <article className='flex flex-col md:flex-row gap-4 justify-between py-2'>
         <section>
