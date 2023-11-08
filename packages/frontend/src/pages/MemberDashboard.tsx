@@ -192,7 +192,7 @@ const MemberDashboardPage = observer(() => {
                 </Link>
               ))
             :
-              <h5>no open deals in this epoch</h5>
+              <p>no open deals in this epoch</p>
             }
           </div>
 
@@ -205,7 +205,7 @@ const MemberDashboardPage = observer(() => {
                 </Link>
               ))
             : 
-              <h5>no listings in this epoch</h5>
+              <p>no listings in this epoch</p>
             }
           </div>
 
@@ -225,7 +225,7 @@ const MemberDashboardPage = observer(() => {
                 </li>
               ))
             : 
-              <h5>no offers in this epoch</h5>
+              <p>no offers in this epoch</p>
             }        
           </div>
         </div>

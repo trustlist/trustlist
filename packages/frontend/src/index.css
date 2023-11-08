@@ -62,11 +62,22 @@
 
 .Toastify__close-button {
   opacity: 1;
+  size: 30px
 }
 
 .Toastify__close-button > svg {
   color: white;
   opacity: 1;
+}
+
+.Toastify__toast-body {
+ padding: 1rem;
+ gap: 1rem;
+ justify-content: center;
+}
+
+.Toastify__toast-icon {
+  /* padding: 1rem; */
 }
 
 .toast {

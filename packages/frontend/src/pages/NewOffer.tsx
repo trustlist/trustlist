@@ -233,19 +233,18 @@ const NewOfferPage = () => {
     pending: "Please wait a moment while your offer is being submitted...",
     success: {
       render:
-        <div className="container w-full">
-          <div>
-            <div>Offer submitted! One "Initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
-            <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
-          </div>
+        <>
+          <div className="pb-2">Offer submitted! One "Initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
+          <div className="pb-3">You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
           <Button
+            className="underline mb-6 text-lg" 
             onClick={() => {
               listForm.reset();
               navigate(`/listings/${id}`)
             }}>
-            Back to the listing
+            Back to listing
           </Button>
-        </div>,
+        </>,
       closeButton: false
     },
     error: "There was a problem submitting you offer, please try again"

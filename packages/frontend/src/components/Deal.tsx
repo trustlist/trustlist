@@ -40,16 +40,14 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
     pending: "Please wait a moment while your deal is approved...",
     success: {
       render:
-        <div className="flex space-around gap-3">
-          <div>
-            <div>You've confirmed the completion of your deal. One "Completed" point will be added to your LP or LO score once both parties have approved.</div>
-            <div>Please submit a review of your transaction during this epoch to build your CB and GV reputation.</div>
-          </div>
-          <button className="font-lg border-1 border-white px-4 py-2"
+        <>
+          <div className="pb-2">You've confirmed the completion of your deal. One "Completed" point will be added to your LP or LO score once both parties have approved.</div>
+          <div className="pb-3">Please submit a review of your transaction during this epoch to build your CB and GV reputation.</div>
+          <Button className="underline mb-6 text-lg"
             onClick={() => window.location.reload()}>
-            close
-          </button>
-        </div>,
+            Close
+          </Button>
+        </>,
       closeButton: false
     },
     error: "There was a problem approving your deal, please try again"

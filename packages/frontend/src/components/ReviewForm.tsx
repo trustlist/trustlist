@@ -84,16 +84,14 @@ export default observer(
       pending: "Please wait a moment while your review is submitted...",
       success: {
         render:
-          <div className="flex space-around gap-3">
-            <div>
-              <div>Review submitted!. One "Completed" point has been added to your CB score.</div>
-              <div>Your GV score will be updated once both members has submitted their review.</div>
-            </div>
-            <button className="font-lg border-1 border-white px-4 py-2"
+          <>
+            <div className='pb-2'>Review submitted!. One "Completed" point has been added to your CB score.</div>
+            <div className='pb-3'>Your GV score will be updated once both members has submitted their review.</div>
+            <Button className="underline mb-6 text-lg"
               onClick={() => window.location.reload()}>
-              close
-            </button>
-          </div>,
+              Close
+            </Button>
+          </>,
         closeButton: false
       },
       error: "There was a problem submitting your review, please try again"

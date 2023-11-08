@@ -443,20 +443,19 @@ const NewListingPage = () => {
     pending: "Please wait a moment while your listing is published...",
     success: {
       render:
-        <div className="flex space-around gap-3">
-          <div>
-            <div>Listing published! One "Initiated" point has been added to your Legitimate Posting score.</div>
-            <div>Please complete your deal during this epoch to build your LP reputation.</div>
-          </div>
-          <button className="text-white font-lg border-1 border-white px-4 py-2"
+        <>
+          <div className="pb-2">Listing published! One "Initiated" point has been added to your Legitimate Posting score.</div>
+          <div className="pb-3">Please complete your deal during this epoch to build your LP reputation.</div>
+          <Button 
+            className="underline mb-6 text-lg"
             onClick={() => {
               listForm.reset();
               changeStep(FormSteps[0])
               navigate('/')
             }}>
             Home
-          </button>
-        </div>,
+          </Button>
+        </>,
       closeButton: false
     },
     error: "There was a problem publishing your listing, please try again"

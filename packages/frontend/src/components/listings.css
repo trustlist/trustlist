@@ -28,11 +28,11 @@
 .listing-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: blue;
+    /* color: blue; */
 }
 
 .listing-amount {
-  color: blue;
+  /* color: blue; */
 }
 
 .complete {
@@ -53,7 +53,7 @@
     height: 1.8rem;
     padding-right: 1.5rem;
     overflow: hidden;
-    color: blue;
+    /* color: blue; */
 }
 
 .thumbnail {

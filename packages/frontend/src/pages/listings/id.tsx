@@ -131,16 +131,15 @@ export default observer(() => {
     pending: "Please wait a moment while your deal is created...",
     success: {
       render:
-        <div className="flex space-around gap-3">
-          <div>
-            <div>Offer accepted! Your contact info will be shown to this member to enable your offline transaction.</div>
-            <div>Please complete your deal during this epoch to build your reputation.</div>
-          </div>
-          <button className="font-lg border-1 border-white px-4 py-2"
+        <>
+          <div className='pb-2'>Offer accepted! Your contact info will be shown to this member to enable your offline transaction.</div>
+          <div className='pb-3'>Please complete your deal during this epoch to build your reputation.</div>
+          <Button 
+            className="underline mb-6 text-lg"
             onClick={() => window.location.reload()}>
-            close
-          </button>
-        </div>,
+            Close
+          </Button>
+        </>,
       closeButton: false
     },
     error: "There was a problem creating your deal, please try again"
