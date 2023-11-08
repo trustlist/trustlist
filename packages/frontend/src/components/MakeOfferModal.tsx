@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScoreReveal from './ScoreReveal'
 import ScoreHide from './ScoreHide'
-import Button from '../components/Button'
+import {Button} from './ui/button'
 import './makeOfferModal.css'
 import useTrustlist from "@/hooks/useTrustlist"
 

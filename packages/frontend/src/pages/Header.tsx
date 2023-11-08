@@ -1,117 +1,143 @@
-import React from 'react'
-import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import MemberDashboardModal from '../components/MemberDashboardModal'
-// import NewListingModal from '../components/NewListingModal'
-import Button from '../components/Button'
+import { useContext, useEffect, useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Tooltip from '../components/Tooltip'
-import './header.css'
-import { User2 } from 'lucide-react'
-import { Pencil } from 'lucide-react'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '../components/ui/button'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
+import { cn } from '@/utils/cn'
+import { formatTime } from '@/utils/time'
+import { InfoIcon, Dot, Loader2, Pencil, User2 } from 'lucide-react'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
 
 export default observer(() => {
-  const user = React.useContext(User)
-  const ui = React.useContext(Interface)
+  const user = useContext(User)
+  const ui = useContext(Interface)
   const navigate = useNavigate()
 
-  const [remainingTime, setRemainingTime] = React.useState<number>(0)
-  // const [showNewListing, setShowNewListing] = React.useState<boolean>(false)
-  const [showMemberDash, setShowMemberDash] = React.useState<boolean>(false)
+  const [remainingTime, setRemainingTime] = useState<string>('')
+  const [isSigningUp, setIsSigningUp] = useState(false);
+
+  const handleSignup = async () => {
+    setIsSigningUp(true);
+    await user.signup();
+    setIsSigningUp(false);
+  }
 
   const updateTimer = () => {
-    if (!user.userState) {
-      setRemainingTime(0)
+    if (!user.userState) { // why is this attached to user state?
+      setRemainingTime('')
       return
     }
     const time = user.userState.sync.calcEpochRemainingTime()
-    setRemainingTime(time)
+    const formattedTime = formatTime(time)
+    setRemainingTime(formattedTime)
   }
 
-  React.useEffect(() => {
-    setInterval(() => {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
       updateTimer()
     }, 1000)
-    if (showMemberDash) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-  }, [showMemberDash])
-
-  const date = new Date()
-  date.setSeconds(date.getSeconds() + remainingTime)
-  const minutes = date.getMinutes()
-  const dateString = `${date.toDateString().slice(4)}  @  ${date.getHours()}:${minutes < 10 ? 0 : ''}${minutes}`
+    return () => clearInterval(intervalId)
+  }, [])
 
   const notify = () => toast.warning("You're not a member yet. Please click JOIN to participate.");
 
   return (
     <>
-      <div className="header">
+      <header className='p-4 md:p-6 flex justify-between items-end'>
         <div className={`${ui.isMobile ? null : 'flex'}`}>
-          <div className="app-title">
-            <Link to="/">trustlist</Link>
-          </div>
+          <div className="md:flex md:gap-x-8 items-end">
+            <div className='flex gap-3'>
+              <Link to="/" className="text-5xl md:text-5xl/10 tracking-tight text-primary" style={{ 'fontFamily': 'Times New Roman' }}>
+                trustlist
+              </Link>
 
-          <div className="epoch-info">
-            <div className='flex items-center gap-2'>
-              <div>
-                epoch: {user.userState?.sync.calcCurrentEpoch()}
-              </div>
-              <Tooltip
-                text='Trustlist epochs are 7 days long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
-                content={
-                  <img
-                      src={require('../../public/info_icon.svg')}
-                      alt="info icon"
-                  />
-                }
-              />
+              <Dialog >
+                <DialogTrigger title='Learn how trustlist works'>
+                  <InfoIcon size={28} className='text-primary' />
+                </DialogTrigger>
+                <DialogContent>
+                  <h4 className='text-xl font-semibold'>What is Trustlist?</h4>
+                  <p className='text-[12px]'>
+                    Trustlist operates similarly to the original Craigslist: members list, find, connect, 
+                    and execute transactions independently. However, it enhances the model of the peer-to-peer 
+                    marketplaces by embedding a dynamic reputation system, aiming to cultivate a community 
+                    brimming with trust - a stark contrast to the often dubious nature of anonymous listings. 
+                    When offline transactions are complete, both parties revisit their deal to provide 
+                    attestations, which build the member's reputation and infuse confidence in the community.
+                  </p>
+                  <p className='text-[12px]'>
+                    New users can sign up by clicking the JOIN button at the top right corner of the screen. 
+                    Members of Trustist are given 3 anoymous identifiers (epoch keys) to use while interacting 
+                    with the application. Using UniRep Protocol's zero-knowledge technology under the hood, Trustlist 
+                    epoch keys insure that users remain anonymous while accumulating reputational data.
+                  </p>
+                  <p className='text-[12px]'>
+                    Trustlist begins a new cycle (epoch) every 3 weeks, and current listings will expire with each 
+                    epoch. Members must complete their transactions and return to submit their reviews before the epoch 
+                    ends in order to have their reputation scores updated with the data associated to that 
+                    transaction. Each new epoch provides members with 3 fresh epoch keys to support continued anonymity.
+                  </p>
+                  <p className='text-[12px]'>
+                    When creating a listing or an offer, members can choose whether to reveal or hide their scores for each 
+                    of 4 reputation metrics. These scores become part of each listing or offer, providing others with information 
+                    that allows them to make informed decisions on whom they engage with. More info on Trustscores can be found 
+                    in the member's Dashboard.  
+                  </p>
+                </DialogContent>
+              </Dialog>
             </div>
-            <div className={`${ui.isMobile ? null : 'flex'}`}>
-              <div>ending:{' '}</div>
-              <div>{dateString}</div>
+
+            <div className="bg-[#F6F4F4] p-2 rounded-sm border border-indigo-500 mt-3 md-mt-0 md:flex">
+              <p className='self-center'>epoch #{user.userState?.sync.calcCurrentEpoch()}</p>
+              {!ui.isMobile ? <Dot color='blue'/> : null}
+              <div className='flex items-center gap-2'>
+                <p>ends in {remainingTime}</p>
+                {/* <Tooltip
+                  text='Trustlist epochs are 3 weeks long. Listings and their related offers and deals will expire at the close of each epoch. Members must transition to the new epoch in order to participate.'
+                  content={
+                    <InfoIcon size={16} className='text-primary' />
+                  }
+                /> */}
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="actions">
-          <Button 
-            onClick={() => user.hasSignedUp ? null : user.signup()}
-            loadingText='joining...'
+        <div className="flex flex-col-reverse md:flex-row gap-2">
+          <Button
+            onClick={() => user.hasSignedUp ? navigate('/dashboard') : notify()}
+            variant={'outline'}
+            className='border border-primary'
           >
-            {user.hasSignedUp ? 'connected' : 'JOIN'}
+            <User2 className='text-primary' size={16} />
+            Dashboard
           </Button>
 
-          <button
-            onClick={() => user.hasSignedUp ? setShowMemberDash(true) : notify()}
-            className='px-3 py-1 font-semibold flex justify-center items-center gap-1 text-sm'
-          >
-            <User2 color='blue'/>
-            <div>
-              <div>member</div>
-              <div>dashboard</div>
-            </div>
-          </button>
-          {showMemberDash && <MemberDashboardModal setShowMemberDash={setShowMemberDash}/>}
-            
-          <button 
+          <Button
             onClick={() => user.hasSignedUp ? navigate('/listings/new') : notify()}
-            className='px-3 py-1 font-semibold flex justify-center items-center gap-2 text-sm'
+            variant={'outline'}
+            className='border border-primary'
           >
-            <Pencil color='blue'/>
-            <div>
-              <div>create</div>
-              <div>listing</div>
-            </div>
-          </button> 
+            <Pencil className='text-primary' size={16} />
+            Add a listing
+          </Button>
+
+          <Button
+            onClick={() => user.hasSignedUp ? null : handleSignup()}
+            className={cn('uppercase text-xs bg-blue-50 text-indigo-700 font-semibold border-2 border-indigo-600 hover:bg-indigo-700 hover:text-indigo-50', user.hasSignedUp && 'rounded-full border border-indigo-300 disabled:opacity-90 disabled:cursor-not-allowed')}
+            disabled={user.hasSignedUp || isSigningUp}
+          >
+            {isSigningUp ? (<span className='animate-spin mr-2'><Loader2 size={16} /></span>) : null}
+            {user.hasSignedUp && (<div className="h-2 w-2 rounded-full bg-green-600 mr-2"></div>)}
+            {user.hasSignedUp ? 'connected' : isSigningUp ? 'Joining...' : 'JOIN'}
+          </Button>
         </div>
-      </div>
+      </header>
 
       {!user.hasSignedUp && <ToastContainer className='header-toast' toastClassName='toast' position='top-right' autoClose={4000} />}
       <Outlet />

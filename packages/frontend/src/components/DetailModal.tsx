@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import MakeOfferModal from './MakeOfferModal'
 import Tooltip from '../components/Tooltip'
-import Button from './Button'
+import {Button} from './ui/button'
 import './detailModal.css'
 import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'

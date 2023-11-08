@@ -8,7 +8,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { useContext, useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { TrustScoreKeyEnum, trustScores } from '@/data'
 import { TrustScoreInfo, TrustScoreKey } from "@/types/local"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,7 @@ import { FieldErrors, FieldValues, UseFormReturn, useForm } from 'react-hook-for
 import 'react-toastify/dist/ReactToastify.css';
 import useTrustlist from "@/hooks/useTrustlist"
 import User from '../contexts/User'
+import { Button } from "@/components/ui/button"
 
 const NewOfferResponseSchema = z.object({
   epoch: z.number(),
@@ -154,10 +155,12 @@ const TrustScoreFormStep = ({ control, trustScores: trustScoresFromData }: Trust
 }
 
 const NewOfferPage = () => {
-  const { listingId, listingTitle }: any = useParams()
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const [searchParams] = useSearchParams()
+  const title = searchParams.get('title')
   const { makeOffer } = useTrustlist()
   const user = useContext(User)
-  const navigate = useNavigate()
   const [trustScoresFromData, setTrustScoresFromData] = useState({ ...trustScores })
 
   const listForm = useForm({
@@ -212,14 +215,14 @@ const NewOfferPage = () => {
     }
 
     const epkNonce = Math.floor(Math.random() * 3)
-    const responderId = user.epochKey(epkNonce) 
+    const responderId = user.epochKey(epkNonce)
 
     return { userUpdated: userStateUpdated, currentEpoch: currentEpoch, userEpochKey: responderId, nonce: epkNonce }
   }
 
   const generateScores = (scoresRevealed: Record<TrustScoreKey, boolean>) => {
     return Object.entries(scoresRevealed).reduce((newScores, [scoreKey, isRevealed]) => {
-      if(isRevealed){
+      if (isRevealed) {
         return { ...newScores, [scoreKey as TrustScoreKey]: trustScoresFromData[scoreKey as TrustScoreKey].score }
       }
       return newScores;
@@ -228,24 +231,23 @@ const NewOfferPage = () => {
 
   const submitOfferAlert = (newData: any) => toast.promise(makeOffer(newData), {
     pending: "Please wait a moment while your offer is being submitted...",
-    success: { render: 
-                <div className="flex space-around gap-3">
-                  <div>
-                    <div>Offer submitted! One "initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
-                    <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
-                  </div>
-                  <button 
-                    className="text-white font-lg border-1 border-white px-4 py-2"
-                    onClick={() => {
-                      listForm.reset();
-                      navigate('/')
-                    }}
-                  >
-                    Home
-                  </button>
-                </div>,
-              closeButton: false },
-    error: "There was a problem submitting your offer, please try again"
+    success: {
+      render:
+        <>
+          <div className="pb-2">Offer submitted! One "Initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
+          <div className="pb-3">You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
+          <Button
+            className="underline mb-6 text-lg" 
+            onClick={() => {
+              listForm.reset();
+              navigate(`/listings/${id}`)
+            }}>
+            Back to listing
+          </Button>
+        </>,
+      closeButton: false
+    },
+    error: "There was a problem submitting you offer, please try again"
   });
 
   const submitOffer = async (data: OfferFormValues) => {
@@ -262,8 +264,8 @@ const NewOfferPage = () => {
         const newData = {
           ...data,
           epoch: currentEpoch,
-          listingId: listingId,
-          listingTitle: listingTitle,
+          listingId: id,
+          listingTitle: title,
           responderId: userEpochKey,
           offerAmount: String(data.offerAmount),
           scoreString: JSON.stringify(currentScores)
@@ -272,22 +274,24 @@ const NewOfferPage = () => {
       } catch (offerError) {
         console.error("Error while publishing post: ", offerError);
       }
-      
+
     } catch (epochError) {
       console.error("Error while getting epoch and key: ", epochError);
     }
   }
 
   return (
-    <Form {...listForm} >
-      <form onSubmit={listForm.handleSubmit(submitOffer, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
-        <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
-        <InputOfferAmount {...listForm} />
-        <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />
-        <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Submit offer</button>
-      </form>
-      <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
-    </Form>
+    <div className='mt-3 border-t-2 border-t-muted'>
+      <Form {...listForm} >
+        <form onSubmit={listForm.handleSubmit(submitOffer, onFormError)} className='flex flex-col p-3 justify-center container py-6 space-y-3 max-w-3xl text-foreground'>
+          <h6 className='text-sm font-semibold tracking-widest uppercase text-foreground/70'>New Offer</h6>
+          <InputOfferAmount {...listForm} />
+          <TrustScoreFormStep {...listForm} trustScores={trustScoresFromData} />
+          <button className='px-2 py-1 bg-blue-600 hover:bg-blue-400 text-background' type="submit">Submit offer</button>
+        </form>
+        <ToastContainer className='listing-toast' toastClassName='toast' bodyClassName='toast-body' position='bottom-center' autoClose={false} />
+      </Form>
+    </div>
   );
 }
 

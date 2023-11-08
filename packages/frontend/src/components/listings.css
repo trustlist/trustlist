@@ -26,24 +26,25 @@
 }
 
 .listing-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: blue;
+    color: rgb(91, 90, 90);
 }
 
 .listing-amount {
-  color: blue;
+  font-size: 0.8rem;
+  color: rgb(61, 61, 61);
 }
 
 .complete {
-    font-size: 0.8rem;
-    color: red;
+    font-size: 0.6rem;
+    color: rgb(229, 58, 58);
     padding: 0.1rem 0 0 0.5rem;
 }
 
 .accepted {
-    font-size: 0.8rem;
-    color: green;
+    font-size: 0.6rem;
+    color: rgb(55, 171, 55);
     padding: 0.1rem 0 0 0.5rem;
 }
 
@@ -53,7 +54,7 @@
     height: 1.8rem;
     padding-right: 1.5rem;
     overflow: hidden;
-    color: blue;
+    color: rgb(61, 61, 61);
 }
 
 .thumbnail {

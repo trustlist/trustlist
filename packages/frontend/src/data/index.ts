@@ -10,7 +10,7 @@ export enum TrustScoreKeyEnum {
 export const trustScores: Record<TrustScoreKey, TrustScoreInfo> = {
     [TrustScoreKeyEnum.LP]: { index: 0, title: 'Legit Posting Score', description: "Percentage of the member's listings that have resulted in successful deals.", score: 0 },
     [TrustScoreKeyEnum.LO]: { index: 1, title: 'Legit Offer Score', description: "The member's record for successfully completing deals after their offer has been accepted.", score: 0 },
-    [TrustScoreKeyEnum.CB]: { index: 2, title: 'Community Building Score', description: "The member's record for submitting reviews of their deals.", score: 0 },
+    [TrustScoreKeyEnum.CB]: { index: 2, title: 'Community Building Score', description: "The member's record for completing reviews of their deals.", score: 0 },
     [TrustScoreKeyEnum.GV]: { index: 3, title: 'Good Vibes Score', description: 'Percentage of all possible points awarded to this member for being friendly, communicative, and respectful.', score: 0 }
 }
 

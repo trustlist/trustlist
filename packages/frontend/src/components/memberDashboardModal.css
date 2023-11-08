@@ -40,6 +40,8 @@ li:hover {
     grid-template-columns: 38% 1fr;
     column-gap: 1.5rem;
     padding: 1rem;
+    margin: 1rem 12rem;
+    align-items: start;
 }
 
 .stats-container {
@@ -96,7 +98,7 @@ li:hover {
 .dash-toast {
   width: 100%;
   position: fixed;
-  top: 30%;
+  top: 50%;
 }
 
 @media only screen and (max-width: 950px) {
@@ -105,6 +107,7 @@ li:hover {
         grid-template-rows: auto auto;
         row-gap: 2.5rem;
         padding: 0rem;
+        margin: 2rem 1rem 3rem;
     }
 
     .stats-container {
