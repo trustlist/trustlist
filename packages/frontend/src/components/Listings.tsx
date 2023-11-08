@@ -89,13 +89,13 @@ export default observer(({ section, category }: Props) => {
                     }
                     {listing.posterDealClosed && listing.responderDealClosed ? 
                       <div style={{ display: 'flex' }}>
-                        <div style={{ textDecoration: 'line-through'}}>${listing.amount}</div>
+                        <div className='listing-amount' style={{ textDecoration: 'line-through'}}>${listing.amount}</div>
                         <div className="complete">deal completed</div>
                       </div>
                     : null}
                     {listing.dealOpened && !listing.posterDealClosed ? 
                       <div style={{ display: 'flex' }}>
-                        <div style={{ textDecoration: 'line-through' }}>${listing.amount}</div>
+                        <div className='listing-amount' style={{ textDecoration: 'line-through' }}>${listing.amount}</div>
                         <div className="accepted">offer accepted</div>
                       </div>
                     : null}

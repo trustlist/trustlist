@@ -37,14 +37,14 @@
 }
 
 .complete {
-    font-size: 0.8rem;
-    color: red;
+    font-size: 0.6rem;
+    color: rgb(229, 58, 58);
     padding: 0.1rem 0 0 0.5rem;
 }
 
 .accepted {
-    font-size: 0.8rem;
-    color: green;
+    font-size: 0.6rem;
+    color: rgb(55, 171, 55);
     padding: 0.1rem 0 0 0.5rem;
 }
 
