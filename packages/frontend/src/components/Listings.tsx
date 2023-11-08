@@ -1,13 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { EyeOff } from 'lucide-react'
-import DetailModal from './DetailModal'
-import Tooltip from './Tooltip'
 import './listings.css'
 import useTrustlist from "@/hooks/useTrustlist"
 import Trustlist from '../contexts/Trustlist'
 import User from '../contexts/User'
 import Interface from '../contexts/interface'
+import { Link } from 'react-router-dom'
 import { TrustScoreKeyEnum } from '@/data'
 
 type Props = {
@@ -34,8 +33,6 @@ export default observer(({ section, category }: Props) => {
   const app = useContext(Trustlist)
   const user = useContext(User)
   const ui = useContext(Interface)
-  const [showDetail, setShowDetail] = useState<boolean>(false)
-  const [detailData, setDetailData] = useState<any>()
   const trustScoreKeys = Object.keys(TrustScoreKeyEnum) as (keyof typeof TrustScoreKeyEnum)[]
   let listingClass = 'listing-item'
 
@@ -44,7 +41,7 @@ export default observer(({ section, category }: Props) => {
       await app.loadSelectedCategory(section, category)
     }
     loadData()
-  }, [section, category, showDetail])
+  }, [section, category])
 
   let listings = []
   if (section === 'for sale') {
@@ -78,14 +75,10 @@ export default observer(({ section, category }: Props) => {
               : null
             }
             return (
-              <>
+              <Link to={`/listings/${listing._id}`}>
                 <div
                   className={listingClass}
                   key={listing._id}
-                  onClick={() => {
-                    setDetailData(listing)
-                    setShowDetail(true)
-                  }}
                 >
                   {!ui.isMobile ? <div className="thumbnail">TL</div> : null}
                   <div>
@@ -130,9 +123,7 @@ export default observer(({ section, category }: Props) => {
                     })}
                   </div>
                 </div>
-
-                {showDetail && <DetailModal listing={detailData} key={detailData._id} setShowDetail={setShowDetail}/>}
-              </>
+              </Link>
             )
           })
         : null}

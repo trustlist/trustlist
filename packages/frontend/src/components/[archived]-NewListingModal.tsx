@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import ScoreReveal from './ScoreReveal'
 import ScoreHide from './ScoreHide'
-import Button from './Button'
+import {Button} from '../components/ui/button'
 // import './newListingModal.css'
 
 import Trustlist from '../contexts/Trustlist'

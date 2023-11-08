@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import ReviewForm from '../components/ReviewForm'
-import Button from '../components/Button'
+import {Button} from '../components/ui/button'
 import './deal.css'
 
 import Trustlist from '../contexts/Trustlist'

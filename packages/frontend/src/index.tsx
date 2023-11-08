@@ -10,6 +10,7 @@ import Deal from './pages/Deal'
 import './index.css'
 import NewListingPage from './pages/NewListing'
 import NewOfferPage from './pages/NewOffer'
+import ListingDetails from './pages/listings/id'
 
 export default function App() {
     return (
@@ -19,7 +20,8 @@ export default function App() {
                     <Route index element={<Home />} />
                     <Route path="dashboard" element={<MemberDashboardPage />} />
                     <Route path="listings/new" element={<NewListingPage />} />
-                    <Route path="offers/:listingId/:listingTitle" element={<NewOfferPage />} />
+                     <Route path="listings/:id" element={<ListingDetails/>} />
+                    <Route path="listings/:id/offers/new" element={<NewOfferPage />} />
                     <Route path="list/:section/:category" element={<List />} />
                     <Route path="deal/:id" element={<Deal />} />
                     {/* <Route path="dashboard" element={<Dashboard />} /> */}

@@ -40,7 +40,8 @@ li:hover {
     grid-template-columns: 38% 1fr;
     column-gap: 1.5rem;
     padding: 1rem;
-    margin: 1rem 4rem;
+    margin: 1rem 12rem;
+    align-items: start;
 }
 
 .stats-container {
