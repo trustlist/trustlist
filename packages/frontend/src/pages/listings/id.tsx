@@ -216,7 +216,7 @@ export default observer(() => {
             <h2 className='text-xl font-semibold'>📃Offers</h2>
             {user.hasSignedUp && listingDetails?.epoch === user.userState?.sync.calcCurrentEpoch() &&
               // prevent user from making an offer on their own post
-              // !memberKeys.includes(posterId) &&
+              !memberKeys.includes(posterId) &&
               // prevent new offers if one has already been accepted
               listingDetails.dealOpened === 0 &&
               (<Link to={`/listings/${listingDetails._id}/offers/new?title=${encodeURIComponent(listingDetails.title)}`}>
