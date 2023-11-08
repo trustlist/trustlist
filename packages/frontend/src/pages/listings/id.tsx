@@ -136,9 +136,9 @@ export default observer(() => {
             <div>Offer accepted! Your contact info will be shown to this member to enable your offline transaction.</div>
             <div>Please complete your deal during this epoch to build your reputation.</div>
           </div>
-          <button className="text-black font-lg border-1 border-white px-4 py-2"
+          <button className="font-lg border-1 border-white px-4 py-2"
             onClick={() => window.location.reload()}>
-            Deal
+            close
           </button>
         </div>,
       closeButton: false

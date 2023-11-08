@@ -8,6 +8,8 @@ import User from '../contexts/User'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Label } from './ui/label'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
   dealId: string
@@ -40,6 +42,62 @@ export default observer(
       'mostly',
       'yeah def',
     ]
+
+    const submitReviewAlert = () => toast.promise(async () => {
+      // +1 to current member's completed CB score
+      await user.requestData(
+        { [2]: 1 },
+        memberKeys.indexOf(
+          currentMemberId
+        ) ?? 0,
+        ''
+      )
+      // +5 to opposite member's initiated and +0-5 to completed GV score
+      const GVscore = (5 << 23) + sentiment
+      if (oppositeMemberReview) {
+        await user.requestData(
+          { [3]: GVscore },
+          memberKeys.indexOf(
+            currentMemberId
+          ) ?? 0,
+          oppositeMemberId
+        )
+        await user.requestData(
+          JSON.parse(
+            oppositeMemberReview
+          ),
+          memberKeys.indexOf(
+            currentMemberId
+          ) ?? 0,
+          ''
+        )
+      }
+      const review = JSON.stringify({
+        [3]: GVscore,
+      })
+      const message = await app.submitReview(
+        dealId,
+        member,
+        review
+      )
+    }, {
+      pending: "Please wait a moment while your review is submitted...",
+      success: {
+        render:
+          <div className="flex space-around gap-3">
+            <div>
+              <div>Review submitted!. One "Completed" point will be added to your LP or LO score once both parties have approved</div>
+              <div>Please submit your review of your transaction during this epoch to build your CB and GV reputation.</div>
+            </div>
+            <button className="font-lg border-1 border-white px-4 py-2"
+              onClick={() => window.location.reload()}>
+              close
+            </button>
+          </div>,
+        closeButton: false
+      },
+      error: "There was a problem submitting your review, please try again"
+    });
 
     return (
       <div className="bg-muted p-3 rounded-sm flex flex-col gap-3">
@@ -87,44 +145,45 @@ export default observer(
                   return
                 }
                 setIsSubmitting(true)
+                submitReviewAlert()
                 // +1 to current member's completed CB score
-                await user.requestData(
-                  { [2]: 1 },
-                  memberKeys.indexOf(
-                    currentMemberId
-                  ) ?? 0,
-                  ''
-                )
-                // +5 to opposite member's initiated and +0-5 to completed GV score
-                const GVscore = (5 << 23) + sentiment
-                if (oppositeMemberReview) {
-                  await user.requestData(
-                    { [3]: GVscore },
-                    memberKeys.indexOf(
-                      currentMemberId
-                    ) ?? 0,
-                    oppositeMemberId
-                  )
-                  await user.requestData(
-                    JSON.parse(
-                      oppositeMemberReview
-                    ),
-                    memberKeys.indexOf(
-                      currentMemberId
-                    ) ?? 0,
-                    ''
-                  )
-                }
-                const review = JSON.stringify({
-                  [3]: GVscore,
-                })
-                const message = await app.submitReview(
-                  dealId,
-                  member,
-                  review
-                )
-                window.alert(message)
-                window.location.reload()
+                // await user.requestData(
+                //   { [2]: 1 },
+                //   memberKeys.indexOf(
+                //     currentMemberId
+                //   ) ?? 0,
+                //   ''
+                // )
+                // // +5 to opposite member's initiated and +0-5 to completed GV score
+                // const GVscore = (5 << 23) + sentiment
+                // if (oppositeMemberReview) {
+                //   await user.requestData(
+                //     { [3]: GVscore },
+                //     memberKeys.indexOf(
+                //       currentMemberId
+                //     ) ?? 0,
+                //     oppositeMemberId
+                //   )
+                //   await user.requestData(
+                //     JSON.parse(
+                //       oppositeMemberReview
+                //     ),
+                //     memberKeys.indexOf(
+                //       currentMemberId
+                //     ) ?? 0,
+                //     ''
+                //   )
+                // }
+                // const review = JSON.stringify({
+                //   [3]: GVscore,
+                // })
+                // const message = await app.submitReview(
+                //   dealId,
+                //   member,
+                //   review
+                // )
+                // window.alert(message)
+                // window.location.reload()
               }}
             >
               {isSubmitting ? 'Adding review...' : 'Add review'}

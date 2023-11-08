@@ -445,7 +445,7 @@ const NewListingPage = () => {
       render:
         <div className="flex space-around gap-3">
           <div>
-            <div>Listing published! One "initiated" point has been added to your Legitimate Posting score.</div>
+            <div>Listing published! One "Initiated" point has been added to your Legitimate Posting score.</div>
             <div>Please complete your deal during this epoch to build your LP reputation.</div>
           </div>
           <button className="text-white font-lg border-1 border-white px-4 py-2"

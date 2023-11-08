@@ -6,6 +6,8 @@ import { MoveHorizontal, MoveVertical } from "lucide-react";
 import { useContext } from "react";
 import ReviewForm from "./ReviewForm";
 import { Button } from "./ui/button";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ListingPropsFromDetails {
   listing: ListingProps
@@ -17,6 +19,41 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
   const memberKeys = [user.epochKey(0), user.epochKey(1), user.epochKey(2)]
   const { _id, amount, offerAmount, posterId, contact, responderId, posterDealClosed, responderDealClosed, posterReview, responderReview } = listing;
 
+  const approveDealAlert = (member: string) => toast.promise(async () => {
+    await closeDeal(_id, member)
+    if (responderDealClosed) {
+      // +1 to responder's completed LO score, +1 to responder's initiated CB score
+      await user.requestData(
+        { [1]: 1, [2]: 1 << 23 },
+        memberKeys.indexOf(posterId) ?? 0,
+        responderId
+      )
+      // +1 to poster's completed LP score, +1 to poster's initiated CB score
+      await user.requestData(
+        { [0]: 1, [2]: 1 << 23 },
+        memberKeys.indexOf(posterId) ?? 0,
+        ''
+      )
+    }
+  }, {
+    pending: "Please wait a moment while your deal is created...",
+    success: {
+      render:
+        <div className="flex space-around gap-3">
+          <div>
+            <div>You've confirmed the completion of your deal. One "Completed" point will be added to your LP or LO score once both parties have approved.</div>
+            <div>Please submit a review of your transaction during this epoch to build your CB and GV reputation.</div>
+          </div>
+          <button className="font-lg border-1 border-white px-4 py-2"
+            onClick={() => window.location.reload()}>
+            close
+          </button>
+        </div>,
+      closeButton: false
+    },
+    error: "There was a problem approving your deal, please try again"
+  });
+  
   return (
     <section className={cn("border border-primary rounded-sm p-4", posterDealClosed && responderDealClosed ? 'border-green-600 border-[1.5px]' : '')}>
       {(!posterDealClosed || !responderDealClosed)
@@ -42,23 +79,24 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
               {memberKeys.includes(posterId) ?
                 <Button
                   onClick={async () => {
-                    const message = await closeDeal(_id, 'poster')
-                    if (responderDealClosed) {
-                      // +1 to responder's completed LO score, +1 to responder's initiated CB score
-                      await user.requestData(
-                        { [1]: 1, [2]: 1 << 23 },
-                        memberKeys.indexOf(posterId) ?? 0,
-                        responderId
-                      )
-                      // +1 to poster's completed LP score, +1 to poster's initiated CB score
-                      await user.requestData(
-                        { [0]: 1, [2]: 1 << 23 },
-                        memberKeys.indexOf(posterId) ?? 0,
-                        ''
-                      )
-                    }
-                    window.alert(message)
-                    window.location.reload()
+                    approveDealAlert('poster')
+                    // const message = await closeDeal(_id, 'poster')
+                    // if (responderDealClosed) {
+                    //   // +1 to responder's completed LO score, +1 to responder's initiated CB score
+                    //   await user.requestData(
+                    //     { [1]: 1, [2]: 1 << 23 },
+                    //     memberKeys.indexOf(posterId) ?? 0,
+                    //     responderId
+                    //   )
+                    //   // +1 to poster's completed LP score, +1 to poster's initiated CB score
+                    //   await user.requestData(
+                    //     { [0]: 1, [2]: 1 << 23 },
+                    //     memberKeys.indexOf(posterId) ?? 0,
+                    //     ''
+                    //   )
+                    // }
+                    // window.alert(message)
+                    // window.location.reload()
                   }}
                 >
                   Approve
@@ -85,23 +123,24 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
               {memberKeys.includes(responderId)
                 ? <Button
                   onClick={async () => {
-                    const message = await closeDeal(_id, 'responder')
-                    if (posterDealClosed) {
-                      // +1 to responder's completed LO score, +1 to responder's initiated CB score
-                      await user.requestData(
-                        { [1]: 1, [2]: 1 << 23 },
-                        memberKeys.indexOf(responderId) ?? 0,
-                        ''
-                      )
-                      // +1 to poster's completed LP score, +1 to poster's initiated CB score
-                      await user.requestData(
-                        { [0]: 1, [2]: 1 << 23 },
-                        memberKeys.indexOf(responderId) ?? 0,
-                        posterId
-                      )
-                    }
-                    window.alert(message)
-                    window.location.reload()
+                    approveDealAlert('responder')
+                    // const message = await closeDeal(_id, 'responder')
+                    // if (posterDealClosed) {
+                    //   // +1 to responder's completed LO score, +1 to responder's initiated CB score
+                    //   await user.requestData(
+                    //     { [1]: 1, [2]: 1 << 23 },
+                    //     memberKeys.indexOf(responderId) ?? 0,
+                    //     ''
+                    //   )
+                    //   // +1 to poster's completed LP score, +1 to poster's initiated CB score
+                    //   await user.requestData(
+                    //     { [0]: 1, [2]: 1 << 23 },
+                    //     memberKeys.indexOf(responderId) ?? 0,
+                    //     posterId
+                    //   )
+                    // }
+                    // window.alert(message)
+                    // window.location.reload()
                   }}
                 >
                   Approve
@@ -142,6 +181,9 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
           />)}
         </div> : null
       }
+
+      <ToastContainer className='dash-toast' toastClassName='toast' bodyClassName='toast-body' position='top-center' autoClose={false} />
+
     </section>
   )
 }

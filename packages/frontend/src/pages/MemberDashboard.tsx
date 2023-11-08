@@ -159,15 +159,15 @@ const MemberDashboardPage = observer(() => {
           <div className="scroll-container">
             {deals && deals.length > 0 ? 
               deals.map((deal: CurrentListing) => (
-                <Link to={`deal/${deal._id}`}>
-                  <li key={deal._id}>
+                <Link to={`/listings/${deal._id}`}>
+                  <div key={deal._id} className='hover:text-primary hover:underline'>
                     {deal.posterDealClosed && deal.responderDealClosed ? 
                       <span style={{ color: 'red' }}>CLOSED -{' '}</span>
                     : 
                       <span style={{ color: 'green' }} >OPEN -{' '}</span>
                     }
                     {deal.title} / ${deal.offerAmount}
-                  </li>
+                  </div>
                 </Link>
               ))
             :
@@ -180,7 +180,7 @@ const MemberDashboardPage = observer(() => {
             {listings && listings.length > 0 ? 
               listings.map((listing: CurrentListing) => (
                 <Link to={`/listings/${listing._id}`}>
-                  <div key={listing._id}>{listing.title} / ${listing.amount}</div>
+                  <div key={listing._id} className='hover:text-primary hover:underline'>{listing.title} / ${listing.amount}</div>
                 </Link>
               ))
             : 
@@ -194,7 +194,7 @@ const MemberDashboardPage = observer(() => {
               offers.map((offer: CurrentOffer) => (
                 <div
                   key={offer._id}
-                  className='cursor-pointer'
+                  className='hover:text-primary hover:underline cursor-pointer'
                   onClick={async () => {
                     await app.loadDealById(offer.listingId)
                     navigate(`/listings/${offer.listingId}`)

@@ -235,7 +235,7 @@ const NewOfferPage = () => {
       render:
         <div className="container w-full">
           <div>
-            <div>Offer submitted! One "initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
+            <div>Offer submitted! One "Initiated" point will be added to your LO score if your offer is accepted by the lister.</div>
             <div>You will have access to the lister's contact info if they accept your offer, open your Dashboard to check the status.  </div>
           </div>
           <Button
