@@ -72,9 +72,9 @@ export default observer(() => {
                   </p>
                   <p className='text-[12px]'>
                     New users can sign up by clicking the JOIN button at the top right corner of the screen. 
-                    Members of Trustist are given 3 anoymous identifiers (epoch keys) to use while interacting 
+                    Members of Trustlist are given 3 anonymous identifiers (epoch keys) to use while interacting 
                     with the application. Using UniRep Protocol's zero-knowledge technology under the hood, Trustlist 
-                    epoch keys insure that users remain anonymous while accumulating reputational data.
+                    epoch keys ensure that users remain anonymous while accumulating reputational data.
                   </p>
                   <p className='text-[12px]'>
                     Trustlist begins a new cycle (epoch) every 3 weeks, and current listings will expire with each 
