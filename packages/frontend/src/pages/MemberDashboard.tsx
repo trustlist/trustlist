@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../components/memberDashboardModal.css'
-import Tooltip from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { InfoIcon } from 'lucide-react'
@@ -68,17 +67,28 @@ const MemberDashboardPage = observer(() => {
                 </DialogTrigger>
                 <DialogContent>
                   <h4 className='text-xl font-semibold'>How are Trustlist scores used?</h4>
-                  <li>reputation metrics</li>
-                  <li>when data is received</li>
-                  <li>current vs provable scores</li>
-                  <li>transition</li>
-                  {/* <p>Trustscores are the backbone of trustlist. There are 4 metrics that keep track of user actions.</p> */}
-                  {/* {trustScoreKeys.map((key) => (
-                    <div key={key}>
-                      <h3 className='text-left text-lg'>{key} — {trustScoreInfo[key].title}</h3>
-                      <p>{trustScoreInfo[key].description}</p>
-                    </div>
-                  ))} */}
+                  <p className='text-[12px]'>
+                    Members will see two Trustscore categories: <i>current</i> and <i>provable</i>. Current 
+                    scores are a representation of the data the member has accumulated since joining, including 
+                    the current epoch. Changes made to the member's on-chain data in the current epoch can be seen 
+                    here in the Dashboard, but cannot be proven with UniRep's zero-knowlege circuits until that 
+                    epoch has ended. <i>Provable</i> scores are updated with these changes when the member transitions 
+                    to the new epoch, and these are the scores that display the member's reputation on their listings 
+                    or offers.
+                  </p>
+                  <p className='text-[12px]'>
+                    Trustlist members accumulate on-chain reputation data as follows:
+                    <li>Legitimate Posting (LP) - 1 "Initiated" point for posting a listing / 1 "Completed" point after closing the deal on that listing</li>
+                    <li>Legitimate Offer (LO) - 1 "Initiated" when their offer is accepted / 1 "Completed" point for closing the deal on that offer</li>
+                    <li>Community Building (CB) - 1 "Initiated" point for closing a deal / 1 "Completed" point for completeing a review for that deal</li>
+                    <li>Good Vibes (GV) - 1 "Initiated" point for receiving a review / 1-5 "GV" ponts given by the other party in that review</li>
+                  </p>
+                  <p className='text-[12px]'>
+                    Trustcores are calculated with the formula <i>(completed / initiated) * 100</i>. For example:
+                    <li>if a member has posted 4 listings and only closed a deal on one of them, their LP Score will be 25%</li>
+                    <li>if a member has participated in 2 deals and returned to complete reviews for both, their CB Score will be 100%</li>
+                    <li>if a member has not collected any (provable) data for a scoring metric, their score for will appear as 'N/A"</li>
+                  </p>
                 </DialogContent>
               </Dialog>
               <h3 className='py-3 text-lg font-semibold'>my latest trust scores:</h3>
@@ -90,15 +100,6 @@ const MemberDashboardPage = observer(() => {
                 <div key={i}>
                   <div className="score-detail">
                     <div style={{ display: 'flex', justifyContent: 'space-between',}}>
-                      {/* <Tooltip
-                        text={desc}
-                        content={
-                          <img
-                            src={require('../../public/info_icon.svg')}
-                            alt="info icon"
-                          />
-                        }
-                      /> */}
                       <div style={{ paddingLeft: '0.3rem', color: 'black'}}>
                         {app.scoreNames[i]}{' '}score:
                       </div>
@@ -145,15 +146,6 @@ const MemberDashboardPage = observer(() => {
                 <div key={i}>
                   <div className="score-detail">
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      {/* <Tooltip
-                        text={desc}
-                        content={
-                          <img
-                            src={require('../../public/info_icon.svg')}
-                            alt="info icon"
-                          />
-                        }
-                      /> */}
                       <div style={{ paddingLeft:'0.3rem', color: 'black' }}>{app.scoreNames[i]}{' '}score:</div>
                     </div>
                     <div className="stat">
