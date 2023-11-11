@@ -61,11 +61,16 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
             <InfoIcon size={20} className='text-primary' />
           </DialogTrigger>
           <DialogContent>
-            <h4 className='text-xl font-semibold'>How do Trustlist deals work?</h4>
-            <li>deal created by poster</li>
-            <li>members get complete LP, LO scores for on approval</li>
-            <li>members are expected to return to complete CB scores</li>
-            <li>GV scores gives after both submit reviews</li>
+            <h4 className='text-xl font-semibold'>How do Trustlist Deals work?</h4>
+            <p>This Deal was created when an offer was accepted my the poster of this listing. The 
+              participating members will receive 1 "Completed" point for their respective LP or LO 
+              scores when they both return to approve this Deal, confirming the success of their offline 
+              transaction. Deal approval will also add 1 "Initiated" point to participating members' CB scores.
+            </p>
+            <p>Deal reveiws will become available after approval of both members. Submitting the review 
+              will add 1 "Completed" point to the member's CV score. GV score points will be after both 
+              members' reviews are complete.
+            </p>
           </DialogContent>
         </Dialog>
         {(!posterDealClosed || !responderDealClosed)
