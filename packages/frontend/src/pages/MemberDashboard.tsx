@@ -78,16 +78,16 @@ const MemberDashboardPage = observer(() => {
                   </p>
                   <p className='text-[12px]'>
                     Trustlist members accumulate on-chain reputation data as follows:
-                    <li>Legitimate Posting (LP) - 1 "Initiated" point for posting a listing / 1 "Completed" point after closing the deal on that listing</li>
-                    <li>Legitimate Offer (LO) - 1 "Initiated" when their offer is accepted / 1 "Completed" point for closing the deal on that offer</li>
-                    <li>Community Building (CB) - 1 "Initiated" point for closing a deal / 1 "Completed" point for completeing a review for that deal</li>
-                    <li>Good Vibes (GV) - 1 "Initiated" point for receiving a review / 1-5 "GV" ponts given by the other party in that review</li>
+                    <li className='text-[11px]'>Legitimate Posting (LP) - 1 "Initiated" point for posting a listing / 1 "Completed" point after closing the deal on that listing</li>
+                    <li className='text-[11px]'>Legitimate Offer (LO) - 1 "Initiated" when their offer is accepted / 1 "Completed" point for closing the deal on that offer</li>
+                    <li className='text-[11px]'>Community Building (CB) - 1 "Initiated" point for closing a deal / 1 "Completed" point for completeing a review for that deal</li>
+                    <li className='text-[11px]'>Good Vibes (GV) - 1 "Initiated" point for receiving a review / 1-5 "GV" ponts given by the other party in that review</li>
                   </p>
                   <p className='text-[12px]'>
-                    Trustcores are calculated with the formula <i>(completed / initiated) * 100</i>. For example:
-                    <li>if a member has posted 4 listings and only closed a deal on one of them, their LP Score will be 25%</li>
-                    <li>if a member has participated in 2 deals and returned to complete reviews for both, their CB Score will be 100%</li>
-                    <li>if a member has not collected any (provable) data for a scoring metric, their score for will appear as 'N/A"</li>
+                    Trustcores are calculated as <i>score = (completed / initiated)*100</i>. For example:
+                    <li className='text-[11px]'>if a member has posted 4 listings and only closed a deal on one of them, their LP Score will be 25%</li>
+                    <li className='text-[11px]'>if a member has participated in 2 deals and returned to complete reviews for both, their CB Score will be 100%</li>
+                    <li className='text-[11px]'>if a member has not collected any (provable) data for a scoring metric, their score for will appear as 'N/A"</li>
                   </p>
                 </DialogContent>
               </Dialog>

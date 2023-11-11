@@ -68,7 +68,7 @@ const Deal = ({ listing }: ListingPropsFromDetails) => {
               transaction. Deal approval will also add 1 "Initiated" point to participating members' CB scores.
             </p>
             <p>Deal reveiws will become available after approval of both members. Submitting the review 
-              will add 1 "Completed" point to the member's CV score. GV score points will be after both 
+              will add 1 "Completed" point to the member's CV score. GV score points will be added after both 
               members' reviews are complete.
             </p>
           </DialogContent>
