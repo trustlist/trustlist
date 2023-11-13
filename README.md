@@ -1,16 +1,20 @@
-# create-unirep-app
+# trustlist
 
-This is a demo app of a [unirep](https://github.com/Unirep/Unirep) attester. In this demo app, users can request data from the example attester. After transition, user can prove how much data he has.
+This is an example application of a [UniRep](https://github.com/Unirep/Unirep) attester. The app attests to user data that becomes a user's reputation score, which helps other users decide who they will engage with.
 
 > See: [Users and Attesters](https://developer.unirep.io/docs/protocol/users-and-attesters)
 
 ## 1. Installation
 
 ```shell
-npx create-unirep-app
+git clone https://github.com/trustlist/trustlist.git
 ```
 
-Then `cd` into the directory that was created.
+Then `cd` into the directory that was created and install packages
+
+```shell
+yarn install
+```
 
 ## 2. Start each daemon
 

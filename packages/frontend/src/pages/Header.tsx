@@ -88,8 +88,8 @@ export default observer(() => {
                     in the member's Dashboard.  
                   </p>
                   <div className='flex justify-around'>
-                    <a href='https://www.notion.so/pse-team/Trustlist-FAQ-10099c372b8b4725b276880b828a48d3' target='blank'>FAQ</a>
-                    <a href='https://discord.gg/UmS33GXkD2' target='blank'>UniRep Discord</a>
+                    <a className='text-primary underline' href='https://www.notion.so/pse-team/Trustlist-FAQ-10099c372b8b4725b276880b828a48d3' target='blank'>FAQ</a>
+                    <a  className='text-primary underline' href='https://discord.gg/UmS33GXkD2' target='blank'>UniRep Discord</a>
                   </div>
                 </DialogContent>
               </Dialog>
