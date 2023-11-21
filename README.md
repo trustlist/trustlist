@@ -52,7 +52,7 @@ in new terminal window, from root:
 yarn frontend start
 ```
 
-It will be running at: http://127.0.0.1:3000/
+It will be running at: http://127.0.0.1:4000/
 
 ## 3. Linter
 
